@@ -46,6 +46,7 @@ assertEquals() {
 }
 
 run_test_suite() {
+  set -e
   for test in $(set | grep '^test' | sed -e 's: .*::')
   do
     declare -F | grep ' setup$' >/dev/null && setup
