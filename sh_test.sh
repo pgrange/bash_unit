@@ -4,6 +4,15 @@
 # 1. source this file
 # 2. call run_test_suite when all your test* functions have been defined
 
+function print_stack() {
+  i=1
+  while ! [ -z ${BASH_SOURCE[$i]} ]
+  do
+    echo ${BASH_SOURCE[$i]}:${FUNCNAME[$i]}\(\):${BASH_LINENO[$i]}
+    i=$(($i + 1))
+  done
+}
+
 run() {
     TEST=$1
     echo -n "Running test $TEST... "
@@ -14,6 +23,7 @@ run() {
 fail() {
     MESSAGE=$1
     echo FAILURE: $MESSAGE
+    print_stack | grep -v ^$BASH_SOURCE
     exit 1
 }
 
