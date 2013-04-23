@@ -60,6 +60,6 @@ run_test_suite() {
   for test in $(set | grep '^test' | sed -e 's: .*::')
   do
     declare -F | grep ' setup$' >/dev/null && setup
-    run $test
+    (run $test)
   done
 }
