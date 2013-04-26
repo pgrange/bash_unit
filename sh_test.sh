@@ -22,7 +22,8 @@ run() {
 
 fail() {
     MESSAGE=$1
-    echo FAILURE: $MESSAGE
+    printf "FAILURE: $MESSAGE"
+    echo
     print_stack | grep -v ^$BASH_SOURCE
     exit 1
 }
@@ -44,15 +45,16 @@ assertFailWithStatus() {
     EXPECTED_STATUS=$1
     ASSERTION=$2
     MESSAGE=$3
-    assertFail "$ASSERTION" "$MESSAGE"
+    (assertFail "$ASSERTION" "$MESSAGE")
     STATUS=$?
-    [ $EXPECTED_STATUS = "$STATUS" ] || fail "$MESSAGE"
+    assertEquals "$EXPECTED_STATUS" "$STATUS" "$MESSAGE"
 }
 
 assertEquals() {
     EXPECTED=$1
     ACTUAL=$2
-    [ "$EXPECTED" = "$ACTUAL" ] || fail "expected $EXPECTED but was $ACTUAL"
+    MESSAGE=$3
+    [ "$EXPECTED" = "$ACTUAL" ] || fail "$MESSAGE\nexpected $EXPECTED but was $ACTUAL"
 }
 
 run_test_suite() {
