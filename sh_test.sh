@@ -38,15 +38,14 @@ assertFail() {
     ASSERTION=$1
     MESSAGE=$2
     eval "$ASSERTION" >/dev/null 2>&1 && fail "$MESSAGE"
-    return $?
+    echo $?
 }
 
 assertFailWithStatus() {
     EXPECTED_STATUS=$1
     ASSERTION=$2
     MESSAGE=$3
-    (assertFail "$ASSERTION" "$MESSAGE")
-    STATUS=$?
+    STATUS=$(assertFail "$ASSERTION" "$MESSAGE")
     assertEquals "$EXPECTED_STATUS" "$STATUS" "$MESSAGE"
 }
 
