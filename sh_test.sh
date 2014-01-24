@@ -21,7 +21,7 @@ run() {
 }
 
 fail() {
-    MESSAGE=$1
+    local MESSAGE=$1
     printf "FAILURE: $MESSAGE"
     echo
     print_stack | grep -v ^$BASH_SOURCE
