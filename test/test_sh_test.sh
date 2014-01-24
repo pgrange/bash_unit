@@ -19,7 +19,7 @@ test_fail_prints_failure_message() {
 	|| fail 'unexpected error message'
 }
 
-test_fail_prints_stack() {
+test_fail_prints_where_is_error() {
   fail | grep --quiet "$0" || fail 'missing source filename' 
   fail | grep --quiet "${FUNCNAME}" || fail 'missing funcname' 
   fail | grep --quiet "${LINENO}" || fail 'missing line number' 
