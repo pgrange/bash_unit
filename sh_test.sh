@@ -49,10 +49,15 @@ assertFailWithStatus() {
 }
 
 assertEquals() {
-    EXPECTED=$1
-    ACTUAL=$2
-    MESSAGE=$3
-    [ "$EXPECTED" = "$ACTUAL" ] || fail "$MESSAGE\nexpected $EXPECTED but was $ACTUAL"
+  assert_equals "$@"
+}
+
+function assert_equals() {
+  local expected=$1
+  local actual=$2
+  local message=$3
+  
+  [ "$expected" = "$actual" ] || fail "$message\nexpected $expected but was $actual"
 }
 
 run_test_suite() {
