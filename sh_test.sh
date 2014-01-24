@@ -34,10 +34,13 @@ assert() {
 }
 
 assertFail() {
-    ASSERTION=$1
-    MESSAGE=$2
-    eval "$ASSERTION" >/dev/null 2>&1 && fail "$MESSAGE"
-    echo $?
+    local assertion=$1
+    local message=$2
+    eval "$assertion" >/dev/null 2>&1 && fail "$message" || true
+}
+
+assert_fail() {
+  assertFail "$@"
 }
 
 assertFailWithStatus() {

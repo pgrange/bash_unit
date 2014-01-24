@@ -15,6 +15,16 @@ test_fail_fails() {
 
 #fail can now be used in the following tests
 
+test_assert_fail_succeeds() {
+  (assert_fail false) || fail 'assert_fail should succeed' 
+}
+
+test_assert_fail_fails() {
+  (assert_fail true >/dev/null) && fail 'assert_fail should fail' || true
+}
+
+#assertFail can now be used in tht following tests
+
 test_assert_equals_fails_when_not_equal() {
   (assert_equals "toto" "tutu" >/dev/null) && fail 'assert_equals should fail' || true
 }
@@ -35,7 +45,6 @@ test_fail_prints_where_is_error() {
   assert_equals "$0:${FUNCNAME}():${LINENO}" \
 	$(fail | tail -n +2 | head -1)
 }
-
 
 run_test_suite
 
