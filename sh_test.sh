@@ -5,10 +5,10 @@
 # 2. call run_test_suite when all your test* functions have been defined
 
 function print_stack() {
-  i=1
+  local i=1
   while ! [ -z ${BASH_SOURCE[$i]} ]
   do
-    echo ${BASH_SOURCE[$i]}:${FUNCNAME[$i]}\(\):${BASH_LINENO[$i]}
+    echo ${BASH_SOURCE[$i]}:${FUNCNAME[$i]}\(\):${BASH_LINENO[$((i-1))]}
     i=$(($i + 1))
   done
 }
@@ -22,8 +22,7 @@ run() {
 
 fail() {
     local MESSAGE=$1
-    printf "FAILURE: $MESSAGE"
-    echo
+    printf "FAILURE: $MESSAGE\n"
     print_stack | grep -v ^$BASH_SOURCE
     exit 1
 }

@@ -13,5 +13,16 @@ test_fail_fails() {
   echo "OK" > /dev/null
 }
 
+test_fail_prints_failure_message() {
+  fail 'failure message' \
+	| grep --quiet '^FAILURE: failure message$' \
+	|| fail 'unexpected error message'
+}
+
+test_fail_prints_stack() {
+  fail | grep --quiet "$0" || fail 'missing source filename' 
+  fail | grep --quiet "${FUNCNAME}" || fail 'missing funcname' 
+  fail | grep --quiet "${LINENO}" || fail 'missing line number' 
+}
 run_test_suite
 
