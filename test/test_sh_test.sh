@@ -23,10 +23,12 @@ test_assert_fail_fails() {
   (assert_fail true >/dev/null) && fail 'assert_fail should fail' || true
 }
 
-#assertFail can now be used in tht following tests
+#assertFail can now be used in the following tests
 
 test_assert_equals_fails_when_not_equal() {
-  (assert_equals "toto" "tutu" >/dev/null) && fail 'assert_equals should fail' || true
+  assert_fail \
+    "(assert_equals toto tutu)" \
+    "assert_equals should fail"
 }
 
 test_assert_equals_succeed_when_equal() {
