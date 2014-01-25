@@ -42,15 +42,17 @@ test_assert_equals_fails_when_not_equal() {
 }
 
 test_assert_equals_succeed_when_equal() {
-  (assert_equals "toto tata" "toto tata" >/dev/null) || fail 'assert_equals should succeed'
+  assert \
+    "(assert_equals 'toto tata' 'toto tata')"\
+    'assert_equals should succeed'
 }
 
 #assert_equals can now be used in the following tests
 
 test_fail_prints_failure_message() {
-  fail 'failure message' \
-	| grep --quiet '^FAILURE: failure message$' \
-	|| fail 'unexpected error message'
+  assert_equals 'FAILURE: failure message' \
+    "$(fail 'failure message' | head -1)" \
+    "unexpected error message"
 }
 
 test_fail_prints_where_is_error() {
