@@ -10,7 +10,7 @@ To write test, write a simple bash script. In this script:
 2. write test functions. Their name have to be prefixed by *test*
 3. call *run_test_suite* function
 
-See test/test_sh_test.sh for an exemple.
+See [test/test_sh_test.sh](test/test_sh_test.sh) for an exemple.
 
 # Test functions
 
