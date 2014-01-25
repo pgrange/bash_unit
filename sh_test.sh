@@ -30,7 +30,7 @@ fail() {
 assert() {
   local assertion=$1
   local message=$2
-  eval "$assertion" >/dev/null 2>&1 || fail "$message"
+  eval "($assertion)" >/dev/null 2>&1 || fail "$message"
 }
 
 assertFail() {
@@ -41,7 +41,7 @@ assertFail() {
 assert_fail() {
   local assertion=$1
   local message=$2
-  eval "$assertion" >/dev/null 2>&1 && fail "$message" || true
+  eval "($assertion)" >/dev/null 2>&1 && fail "$message" || true
 }
 
 assert_status_code() {

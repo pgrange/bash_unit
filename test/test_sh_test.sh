@@ -30,20 +30,20 @@ test_assert_succeeds() {
 }
 
 test_assert_fails() {
-  assert_fail "(assert false)" "assert should fail"
+  assert_fail "assert false" "assert should fail"
 }
 
 #assert can now be used in the following tests
 
 test_assert_equals_fails_when_not_equal() {
   assert_fail \
-    "(assert_equals toto tutu)" \
+    "assert_equals toto tutu" \
     "assert_equals should fail"
 }
 
 test_assert_equals_succeed_when_equal() {
   assert \
-    "(assert_equals 'toto tata' 'toto tata')"\
+    "assert_equals 'toto tata' 'toto tata'"\
     'assert_equals should succeed'
 }
 
@@ -61,12 +61,12 @@ test_fail_prints_where_is_error() {
 }
 
 test_assert_status_code_succeeds() {
-  assert "(assert_status_code 3 'exit 3')" \
+  assert "assert_status_code 3 'exit 3'" \
     "assert_status_code should succeed"
 }
 
 test_assert_status_code_fails() {
-  assert_fail "(assert_status_code 3 true)" \
+  assert_fail "assert_status_code 3 true" \
     "assert_status_code should fail"
 }
 
