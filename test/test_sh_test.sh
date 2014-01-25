@@ -55,7 +55,17 @@ test_fail_prints_failure_message() {
 
 test_fail_prints_where_is_error() {
   assert_equals "$0:${FUNCNAME}():${LINENO}" \
-	$(fail | tail -n +2 | head -1)
+	"$(fail | tail -n +2 | head -1)"
+}
+
+test_assert_status_code_succeeds() {
+  assert "(assert_status_code 3 'exit 3')" \
+    "assert_status_code should succeed"
+}
+
+test_assert_status_code_fails() {
+  assert_fail "(assert_status_code 3 true)" \
+    "assert_status_code should fail"
 }
 
 run_test_suite

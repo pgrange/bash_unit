@@ -44,12 +44,17 @@ assert_fail() {
   eval "$assertion" >/dev/null 2>&1 && fail "$message" || true
 }
 
+assert_status_code() {
+  local expected_status=$1
+  local assertion="$2"
+  local message="$3"
+  local status
+  eval "($assertion)" >/dev/null 2>&1 && status=$? || status=$?
+  assert_equals $expected_status $status "$message"
+}
+
 assertFailWithStatus() {
-    EXPECTED_STATUS=$1
-    ASSERTION=$2
-    MESSAGE=$3
-    STATUS=$(assertFail "$ASSERTION" "$MESSAGE")
-    assertEquals "$EXPECTED_STATUS" "$STATUS" "$MESSAGE"
+  assert_status_code "$@"
 }
 
 assertEquals() {
