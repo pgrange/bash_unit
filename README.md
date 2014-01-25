@@ -1,18 +1,23 @@
-Really tiny test utility functions
+**bash unit testing enterprise edition framework for professionals**
 
-to write tests :
-1. source this file
-2. call run_test_suite when all your test* functions have been defined
+This test enterprise edition framework only works with *bash*.
 
-You can write a setup and/or teardown function that will be executed, 
-respectively, before and after each test is run.
+# Writing unit tests
 
-You can use this functions inside your tests:
+To write test, write a simple bash script. In this script:
+1. source sh_test.sh
+2. write test functions. Their name have to be prefixed by test
+3. call *run_test_suite* function
 
-* fail
-* assert
-* assertFail
-* assertFailWithStatus
-* assertEquals
+See test/test_sh_test.sh for an exemple.
 
-See sh_test.sh source code for more informations.
+# Test functions
+
+See sh_test.sh for a complete and up to date list of assert
+functions. But here are some of this functions:
+
+* fail()
+* assert()
+* assert_fail()
+* assert_status_code()
+* assert_equals()
