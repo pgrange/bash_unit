@@ -23,7 +23,17 @@ test_assert_fail_fails() {
   (assert_fail true >/dev/null) && fail 'assert_fail should fail' || true
 }
 
-#assertFail can now be used in the following tests
+#assert_fail can now be used in the following tests
+
+test_assert_succeeds() {
+  assert true || fail 'assert should succeed'
+}
+
+test_assert_fails() {
+  assert_fail "(assert false)" "assert should fail"
+}
+
+#assert can now be used in the following tests
 
 test_assert_equals_fails_when_not_equal() {
   assert_fail \
