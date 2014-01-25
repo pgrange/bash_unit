@@ -17,8 +17,30 @@ See test/test_sh_test.sh for an exemple.
 See sh_test.sh for a complete and up to date list of assert
 functions. But here are some of this functions:
 
-* fail()
-* assert()
-* assert_fail()
-* assert_status_code()
-* assert_equals()
+    fail [message]
+
+Fails the test and display an optional message.
+
+    assert <command> [message]
+    
+*eval* the command and asserts it does not fail. If the
+the command returns a status code different from 0, the
+test fails and the optional message is diplayed.
+    
+    assert_fail <command> [message]
+
+*eval* the command and asserts it does fail. If the
+the command returns a status code different equal to 0,
+the test fails and the optional message is diplayed.
+
+    assert_status_code <expected status> <command> [message]
+
+*eval* the command and asserts its status code is the
+*expected status code*. If the the command returns a 
+status code different from the expected status code,
+the test fails and the optional message is diplayed.
+
+    assert_equals <expected> <actual> [message]
+    
+Compare *expected* with *actual*. If they are not equal,
+the test fails and the optional message is diplayed.
