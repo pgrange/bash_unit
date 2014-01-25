@@ -4,20 +4,19 @@
 # 1. source this file
 # 2. call run_test_suite when all your test* functions have been defined
 
-function print_stack() {
-  local i=1
-  while ! [ -z ${BASH_SOURCE[$i]} ]
-  do
-    echo ${BASH_SOURCE[$i]}:${FUNCNAME[$i]}\(\):${BASH_LINENO[$((i-1))]}
-    i=$(($i + 1))
-  done
+assertFailWithStatus() {
+  #deprecated: use assert_status_code instead
+  assert_status_code "$@"
 }
 
-run() {
-    TEST=$1
-    echo -n "Running test $TEST... "
-    $TEST
-    echo "SUCCESS"
+assertEquals() {
+  #deprecated: use ssert_equals instead
+  assert_equals "$@"
+}
+
+assertFail() {
+  #deprecated: use assert_fail instead
+  assert_fail "$@"
 }
 
 fail() {
@@ -31,11 +30,6 @@ assert() {
   local assertion=$1
   local message=$2
   eval "($assertion)" >/dev/null 2>&1 || fail "$message"
-}
-
-assertFail() {
-  #deprecated
-  assert_fail "$@"
 }
 
 assert_fail() {
@@ -53,16 +47,7 @@ assert_status_code() {
   assert_equals $expected_status $status "$message"
 }
 
-assertFailWithStatus() {
-  assert_status_code "$@"
-}
-
-assertEquals() {
-  #deprecated
-  assert_equals "$@"
-}
-
-function assert_equals() {
+assert_equals() {
   local expected=$1
   local actual=$2
   local message=$3
@@ -77,4 +62,20 @@ run_test_suite() {
     declare -F | grep ' setup$' >/dev/null && setup
     (run $test)
   done
+}
+
+print_stack() {
+  local i=1
+  while ! [ -z ${BASH_SOURCE[$i]} ]
+  do
+    echo ${BASH_SOURCE[$i]}:${FUNCNAME[$i]}\(\):${BASH_LINENO[$((i-1))]}
+    i=$(($i + 1))
+  done
+}
+
+run() {
+    TEST=$1
+    echo -n "Running test $TEST... "
+    $TEST
+    echo "SUCCESS"
 }
