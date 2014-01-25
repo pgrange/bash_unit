@@ -21,26 +21,27 @@ run() {
 }
 
 fail() {
-    local MESSAGE=$1
-    printf "FAILURE: $MESSAGE\n"
-    print_stack | grep -v ^$BASH_SOURCE
-    exit 1
+  local MESSAGE=$1
+  printf "FAILURE: $MESSAGE\n"
+  print_stack | grep -v ^$BASH_SOURCE
+  exit 1
 }
 
 assert() {
-    local assertion=$1
-    local message=$2
-    eval "$assertion" >/dev/null 2>&1 || fail "$message"
+  local assertion=$1
+  local message=$2
+  eval "$assertion" >/dev/null 2>&1 || fail "$message"
 }
 
 assertFail() {
-    local assertion=$1
-    local message=$2
-    eval "$assertion" >/dev/null 2>&1 && fail "$message" || true
+  #deprecated
+  assert_fail "$@"
 }
 
 assert_fail() {
-  assertFail "$@"
+  local assertion=$1
+  local message=$2
+  eval "$assertion" >/dev/null 2>&1 && fail "$message" || true
 }
 
 assertFailWithStatus() {
@@ -52,6 +53,7 @@ assertFailWithStatus() {
 }
 
 assertEquals() {
+  #deprecated
   assert_equals "$@"
 }
 
