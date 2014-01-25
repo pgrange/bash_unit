@@ -44,3 +44,30 @@ the test fails and the optional message is diplayed.
     
 Compare *expected* with *actual*. If they are not equal,
 the test fails and the optional message is diplayed.
+
+# example
+
+In sh_test directory, run the following code:
+
+    (
+    source sh_test.sh
+    test_obvious_equality_with_assert_equals(){
+      assert_equals a b "a should equal b"
+    }
+
+    test_check_root_in_passwd() {
+      assert "grep root /etc/passwd" "root should be in passwd file"
+    }
+
+    test_check_zorglub_is_not_in_passwd() {
+      assert_fail "grep zorglub /etc/passwd"
+    }
+
+    run_test_suite
+    )
+    
+It should display something like:
+
+    Running test test_check_root_in_passwd... SUCCESS
+    Running test test_check_zorglub_is_not_in_passwd... SUCCESS
+    Running test test_obvious_equality_with_assert_equals... FAILURE: a should equal b expected a but was b
