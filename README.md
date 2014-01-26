@@ -14,6 +14,9 @@ To write test, write a simple bash script. In this script:
 2. write test functions. Their name have to be prefixed by *test*
 3. call *run_test_suite* function
 
+If you write a **setup** function, this function will be executed
+before each test is run.
+
 See [test/test_sh_test.sh](test/test_sh_test.sh) for an exemple.
 
 # Test functions
