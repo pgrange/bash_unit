@@ -2,7 +2,7 @@
 
 install_dir=$(cd $(dirname $0) ; pwd)
 
-source $install_dir/../sh_test.sh
+source $install_dir/../bash_unit.sh
 
 test_fail_fails() {
   (fail >/dev/null) && \

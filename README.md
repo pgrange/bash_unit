@@ -10,15 +10,15 @@ with source file and line number indications to locate the problem.
 
 To write test, write a simple bash script. In this script:
 
-1. source sh_test.sh
+1. source bash_unit.sh
 2. write test functions. Their name have to be prefixed by *test*
 3. call *run_test_suite* function
 
-See [test/test_sh_test.sh](test/test_sh_test.sh) for an exemple.
+See [test/test_bash_unit.sh](test/test_bash_unit.sh) for an exemple.
 
 # Test functions
 
-See sh_test.sh for a complete and up to date list of assert
+See bash_unit.sh for a complete and up to date list of assert
 functions. But here are some of this functions:
 
     fail [message]
@@ -52,12 +52,12 @@ the test fails and the optional message is diplayed.
 # example
 
 Let suppose you write in a file called *sample_test.sh*
-in *sh_test* directory :
+in *bash_unit* directory :
 
     #!/bin/bash
 
     pwd=$(cd $(dirname $0); pwd)
-    source $pwd/sh_test.sh
+    source $pwd/bash_unit.sh
 
     test_obvious_equality_with_assert_equals(){
       assert_equals a b "a should equal b"
