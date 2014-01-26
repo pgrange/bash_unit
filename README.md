@@ -2,6 +2,10 @@
 
 This test enterprise edition framework only works with *bash*.
 
+It allows you to write unit tests (functions starting with *test*),
+run them and, in case of failre, displays the stack trace
+with source file and line number indications to locate the problem.
+
 # Writing unit tests
 
 To write test, write a simple bash script. In this script:
@@ -47,10 +51,14 @@ the test fails and the optional message is diplayed.
 
 # example
 
-In sh_test directory, run the following code:
+Let suppose you write in a file called *sample_test.sh*
+in *sh_test* directory :
 
-    (
-    source sh_test.sh
+    #!/bin/bash
+
+    pwd=$(cd $(dirname $0); pwd)
+    source $pwd/sh_test.sh
+
     test_obvious_equality_with_assert_equals(){
       assert_equals a b "a should equal b"
     }
@@ -64,10 +72,13 @@ In sh_test directory, run the following code:
     }
 
     run_test_suite
-    )
-    
+
+Running this script will show you something like:    
 It should display something like:
 
+    # bash test_sample.sh 
     Running test test_check_root_in_passwd... SUCCESS
     Running test test_check_zorglub_is_not_in_passwd... SUCCESS
     Running test test_obvious_equality_with_assert_equals... FAILURE: a should equal b expected a but was b
+    test_sample.sh:test_obvious_equality_with_assert_equals():7
+    test_sample.sh:main():18
