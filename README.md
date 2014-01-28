@@ -8,21 +8,29 @@ with source file and line number indications to locate the problem.
 
 # Writing unit tests
 
-To write test, write a simple bash script. In this script:
+To write tests, write a simple bash script containing your test
+functions. Their name have to be prefixed by *test*.
 
-1. source bash_unit.sh
-2. write test functions. Their name have to be prefixed by *test*
-3. call *run_test_suite* function
+Use the bash_unit assertion functions in your test functions
+(see below).
 
 If you write a **setup** function, this function will be executed
 before each test is run.
 
 See [test/test_bash_unit.sh](test/test_bash_unit.sh) for an exemple.
 
+# Executing unit tests
+
+To execute your tests, simply call *bash_unit* with all your
+test files as parameter. For instance to run bash_unit tests,
+from bash_unit directory:
+
+    # ./bash_unit test/test_bash_unit.sh
+
 # Test functions
 
-See bash_unit.sh for a complete and up to date list of assert
-functions. But here are some of this functions:
+See [bash_unit](bash_unit) for a complete and up to date list of
+assert functions. But here are some of this functions:
 
     fail [message]
 
@@ -57,11 +65,6 @@ the test fails and the optional message is diplayed.
 Let suppose you write in a file called *sample_test.sh*
 in *bash_unit* directory :
 
-    #!/bin/bash
-
-    pwd=$(cd $(dirname $0); pwd)
-    source $pwd/bash_unit.sh
-
     test_obvious_equality_with_assert_equals(){
       assert_equals a b "a should equal b"
     }
@@ -74,14 +77,14 @@ in *bash_unit* directory :
       assert_fail "grep zorglub /etc/passwd"
     }
 
-    run_test_suite
-
 Running this script will show you something like:    
 It should display something like:
 
-    # bash test_sample.sh 
+    # ./bash_unit test_sample.sh 
+    Running tests in test_sample.sh
     Running test test_check_root_in_passwd... SUCCESS
     Running test test_check_zorglub_is_not_in_passwd... SUCCESS
-    Running test test_obvious_equality_with_assert_equals... FAILURE: a should equal b expected a but was b
-    test_sample.sh:test_obvious_equality_with_assert_equals():7
-    test_sample.sh:main():18
+    Running test test_obvious_equality_with_assert_equals... FAILURE: a should equal b
+    expected a but was b
+    test_sample.sh:test_obvious_equality_with_assert_equals():2
+

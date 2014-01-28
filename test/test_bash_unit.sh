@@ -1,9 +1,5 @@
 #!/bin/bash
 
-install_dir=$(cd $(dirname $0) ; pwd)
-
-source $install_dir/../bash_unit.sh
-
 test_fail_fails() {
   (fail >/dev/null) && \
   (
@@ -56,7 +52,7 @@ test_fail_prints_failure_message() {
 }
 
 test_fail_prints_where_is_error() {
-  assert_equals "$0:${FUNCNAME}():${LINENO}" \
+  assert_equals "${BASH_SOURCE}:${FUNCNAME}():${LINENO}" \
 	"$(fail | tail -n +2 | head -1)"
 }
 
@@ -76,6 +72,3 @@ test_assert_show_stderr_when_failure() {
     "some error message" \
     "$message"
 }
-
-run_test_suite
-

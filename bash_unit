@@ -59,7 +59,7 @@ assert_equals() {
 
 run_test_suite() {
   set -e
-  for test in $(set | grep '^test' | sed -e 's: .*::')
+  for test in $(set | grep  -E '^test.* ()' | sed -e 's: .*::')
   do
     declare -F | grep ' setup$' >/dev/null && setup
     (run $test)
@@ -81,3 +81,11 @@ run() {
     $TEST
     echo "SUCCESS"
 }
+
+#run tests received as parameters
+
+for test in "$@"
+do
+  echo "Running tests in $test"
+  (source "$test"; run_test_suite)
+done
