@@ -70,5 +70,12 @@ test_assert_status_code_fails() {
     "assert_status_code should fail"
 }
 
+test_assert_show_stderr_when_failure() {
+  message="$(assert 'echo some error message >&2; exit 2' | head -1)"
+  assert_equals \
+    "some error message" \
+    "$message"
+}
+
 run_test_suite
 
