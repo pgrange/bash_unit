@@ -40,7 +40,8 @@ Fails the test and display an optional message.
     
 *eval* the command and asserts it does not fail. If the
 the command returns a status code different from 0, the
-test fails and the optional message is diplayed.
+test fails, the stderr output of the tested command is
+displayed before the optional message is diplayed.
     
     assert_fail <command> [message]
 
