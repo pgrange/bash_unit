@@ -3,7 +3,7 @@
 This test enterprise edition framework only works with *bash*.
 
 It allows you to write unit tests (functions starting with *test*),
-run them and, in case of failre, displays the stack trace
+run them and, in case of failure, displays the stack trace
 with source file and line number indications to locate the problem.
 
 # Writing unit tests
