@@ -46,14 +46,14 @@ test_assert_equals_succeed_when_equal() {
 #assert_equals can now be used in the following tests
 
 test_fail_prints_failure_message() {
-  assert_equals 'FAILURE: failure message' \
-    "$(fail 'failure message' | head -1)" \
+  assert_equals 'failure message' \
+    "$(fail 'failure message' | tail -n +2 | head -1)" \
     "unexpected error message"
 }
 
 test_fail_prints_where_is_error() {
   assert_equals "${BASH_SOURCE}:${FUNCNAME}():${LINENO}" \
-	"$(fail | tail -n +2 | head -1)"
+	"$(fail | tail -n +3 | head -1)"
 }
 
 test_assert_status_code_succeeds() {

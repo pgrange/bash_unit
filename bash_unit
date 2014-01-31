@@ -21,7 +21,7 @@ assertFail() {
 
 fail() {
   local MESSAGE=$1
-  printf "FAILURE: $MESSAGE\n"
+  printf "FAILURE:\n$MESSAGE\n"
   print_stack | grep -v ^$BASH_SOURCE
   exit 1
 }
@@ -54,7 +54,8 @@ assert_equals() {
   local actual=$2
   local message=$3
   
-  [ "$expected" = "$actual" ] || fail "$message\nexpected $expected but was $actual"
+  [ "$expected" = "$actual" ] || \
+    fail "$message\nexpected [$expected] but was [$actual]"
 }
 
 run_test_suite() {
