@@ -47,13 +47,13 @@ test_assert_equals_succeed_when_equal() {
 
 test_fail_prints_failure_message() {
   assert_equals 'failure message' \
-    "$(fail 'failure message' | tail -n +2 | head -1)" \
+    "$(fail 'failure message' | line 2)" \
     "unexpected error message"
 }
 
 test_fail_prints_where_is_error() {
   assert_equals "${BASH_SOURCE}:${FUNCNAME}():${LINENO}" \
-	"$(fail | tail -n +3 | head -1)"
+	"$(fail | line 3)"
 }
 
 test_assert_status_code_succeeds() {
@@ -71,4 +71,9 @@ test_assert_show_stderr_when_failure() {
   assert_equals \
     "some error message" \
     "$message"
+}
+
+line() {
+  line_nb=$1
+  tail -n +$line_nb | head -1
 }
