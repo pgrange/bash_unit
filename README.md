@@ -39,20 +39,20 @@ Fails the test and display an optional message.
     assert <command> [message]
     
 *eval* the command and asserts it does not fail. If the
-the command returns a status code different from 0, the
+command returns a status code different from 0, the
 test fails, the stderr output of the tested command is
 displayed before the optional message is diplayed.
     
     assert_fail <command> [message]
 
 *eval* the command and asserts it does fail. If the
-the command returns a status code different equal to 0,
+command returns a status code different equal to 0,
 the test fails and the optional message is diplayed.
 
     assert_status_code <expected status> <command> [message]
 
 *eval* the command and asserts its status code is the
-*expected status code*. If the the command returns a 
+*expected status code*. If the command returns a 
 status code different from the expected status code,
 the test fails and the optional message is diplayed.
 
@@ -78,8 +78,7 @@ in *bash_unit* directory :
       assert_fail "grep zorglub /etc/passwd"
     }
 
-Running this script will show you something like:    
-It should display something like:
+Running this script will show you something like:
 
     # ./bash_unit test_sample.sh 
     Running tests in test_sample.sh
