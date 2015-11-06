@@ -88,7 +88,7 @@ in *bash_unit* directory :
 
 Running this script will show you something like:
 
-    # ./bash_unit test_sample.sh 
+    # ./bash_unit sample_test.sh 
     Running tests in test_sample.sh
     Running test test_check_root_in_passwd... SUCCESS
     Running test test_check_zorglub_is_not_in_passwd... SUCCESS
