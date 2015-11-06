@@ -63,9 +63,9 @@ the test fails and the optional message is diplayed.
 
     fake <command> <replacement code>
 
-Fakes the command *<command>* and replaces it with
-*<replacement code>* for the rest of the execution of
-your test. For instance this will display *hello world*:
+Fakes *command* and replaces it with *replacement code* 
+for the rest of the execution of your test. For instance,
+the following code will display *hello world*:
 
     fake ps echo hello world; ps
 
