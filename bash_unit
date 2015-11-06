@@ -58,6 +58,12 @@ assert_equals() {
     fail "$message\nexpected [$expected] but was [$actual]"
 }
 
+fake() {
+  local command=$1
+  shift
+  eval "function $command() { $@ ; }"
+}
+
 run_test_suite() {
   set -e
   for test in $(set | grep  -E '^test.* ()' | sed -e 's: .*::')

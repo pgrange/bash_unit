@@ -73,6 +73,17 @@ test_assert_show_stderr_when_failure() {
     "$message"
 }
 
+test_fake_actually_fakes_the_command() {
+  fake ps echo expected
+  assert_equals "expected" $(ps)
+}
+
+test_fake_can_fake_inline() {
+  assert_equals \
+    "expected" \
+    $(fake ps echo expected ; ps)
+}
+
 line() {
   line_nb=$1
   tail -n +$line_nb | head -1

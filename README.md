@@ -61,6 +61,14 @@ the test fails and the optional message is diplayed.
 Compare *expected* with *actual*. If they are not equal,
 the test fails and the optional message is diplayed.
 
+    fake <command> <replacement code>
+
+Fakes the command *<command>* and replaces it with
+*<replacement code>* for the rest of the execution of
+your test. For instance this will display *hello world*:
+
+    fake ps echo hello world; ps
+
 # example
 
 Let suppose you write in a file called *sample_test.sh*
