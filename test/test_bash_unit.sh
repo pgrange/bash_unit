@@ -84,6 +84,23 @@ test_fake_can_fake_inline() {
     $(fake ps echo expected ; ps)
 }
 
+test_fake_exports_faked_in_subshells() {
+  fake ps echo expected
+  assert_equals \
+    expected \
+    $( bash -c ps )
+}
+
+test_fake_echo_stdin_when_no_params() {
+  fake ps << EOF
+  PID TTY          TIME CMD
+ 7801 pts/9    00:00:00 bash
+ 7818 pts/9    00:00:00 ps
+EOF
+
+  assert_equals 2 $(ps | grep pts | wc -l)
+}
+
 line() {
   line_nb=$1
   tail -n +$line_nb | head -1

@@ -61,13 +61,22 @@ the test fails and the optional message is diplayed.
 Compare *expected* with *actual*. If they are not equal,
 the test fails and the optional message is diplayed.
 
-    fake <command> <replacement code>
+    fake <command> [replacement code]
 
 Fakes *command* and replaces it with *replacement code* 
-for the rest of the execution of your test. For instance,
-the following code will display *hello world*:
+(if code is specified) for the rest of the execution of
+your test. If no *replacement code* is specified, then
+it replaces *command* by one that echo stdin of fake.
+
+For instance, the following code will display *hello world*:
 
     fake ps echo hello world; ps
+
+And the following code will display *hello world* to:
+
+    fake ps << EOF
+    hello world
+    EOF
 
 # example
 

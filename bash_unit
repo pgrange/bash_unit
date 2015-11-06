@@ -61,7 +61,13 @@ assert_equals() {
 fake() {
   local command=$1
   shift
-  eval "function $command() { $@ ; }"
+  if [ $# -gt 0 ]
+  then
+    eval "function $command() { $@ ; }"
+  else
+    eval "function $command() { echo \"$(cat)\" ; }"
+  fi
+  export -f $command
 }
 
 run_test_suite() {
