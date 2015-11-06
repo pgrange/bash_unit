@@ -62,6 +62,7 @@ fake() {
   local command=$1
   shift
   eval "function $command() { $@ ; }"
+  export -f $command
 }
 
 run_test_suite() {

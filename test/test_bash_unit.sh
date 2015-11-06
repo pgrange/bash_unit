@@ -84,6 +84,13 @@ test_fake_can_fake_inline() {
     $(fake ps echo expected ; ps)
 }
 
+test_fake_exports_faked_in_subshells() {
+  fake ps echo expected
+  assert_equals \
+    expected \
+    $( bash -c ps )
+}
+
 line() {
   line_nb=$1
   tail -n +$line_nb | head -1
