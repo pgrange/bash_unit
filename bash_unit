@@ -63,7 +63,7 @@ fake() {
   shift
   if [ $# -gt 0 ]
   then
-    eval "function $command() { $@ ; }"
+    eval "function $command() { export FAKE_PARAMS=\"\$@\" ; $@ ; }"
   else
     eval "function $command() { echo \"$(cat)\" ; }"
   fi

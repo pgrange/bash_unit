@@ -91,6 +91,16 @@ test_fake_exports_faked_in_subshells() {
     $( bash -c ps )
 }
 
+test_fake_transmits_params_to_fake_code() {
+  function _ps() {
+    assert_equals "aux" "$FAKE_PARAMS"
+  }
+  export -f _ps
+  fake ps _ps
+
+  ps aux
+}
+
 test_fake_echo_stdin_when_no_params() {
   fake ps << EOF
   PID TTY          TIME CMD
