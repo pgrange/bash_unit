@@ -53,7 +53,7 @@ test_fail_prints_failure_message() {
 
 test_fail_prints_where_is_error() {
   assert_equals "${BASH_SOURCE}:${FUNCNAME}():${LINENO}" \
-	"$(fail | line 3)"
+	"$(fail | line 2)"
 }
 
 test_assert_status_code_succeeds() {
@@ -109,6 +109,28 @@ test_fake_echo_stdin_when_no_params() {
 EOF
 
   assert_equals 2 $(ps | grep pts | wc -l)
+}
+
+test_run_all_tests_even_in_case_of_failure() {
+  bash_unit_output=$($0 <(cat << EOF
+function test_succeed() { assert true ; }
+function test_fails()   { assert false ; }
+EOF
+) | sed -e 's:/dev/fd/[0-9]*:test_file:')
+
+  assert_equals "\
+Running tests in test_file
+Running test_fails... FAILURE
+test_file:test_fails():2
+Running test_succeed... SUCCESS" "$bash_unit_output" 
+}
+
+test_exit_code_not_0_in_case_of_failure() {
+  assert_fail "$0 <(cat << EOF
+function test_succeed() { assert true ; }
+function test_fails()   { assert false ; }
+EOF
+)"
 }
 
 line() {

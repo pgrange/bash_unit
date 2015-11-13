@@ -17,7 +17,8 @@ assertFail() {
 
 fail() {
   local MESSAGE=$1
-  printf "FAILURE:\n$MESSAGE\n"
+  echo "FAILURE"
+  [[ -z "$MESSAGE" ]] || echo "$MESSAGE"
   print_stack | grep -v ^$BASH_SOURCE
   exit 1
 }
@@ -67,12 +68,14 @@ fake() {
 }
 
 run_test_suite() {
-  set -e
+  local failure=0
   for test in $(set | grep  -E '^test.* ()' | sed -e 's: .*::')
   do
     declare -F | grep ' setup$' >/dev/null && setup
     (run $test)
+    failure=$(( $? || $failure))
   done
+  return $failure
 }
 
 print_stack() {
@@ -85,16 +88,21 @@ print_stack() {
 }
 
 run() {
+    set -e
     TEST=$1
     echo -n "Running $TEST... "
     $TEST
+    [ ! $? ] && FAILURE=true
     echo "SUCCESS"
 }
 
 #run tests received as parameters
 
+failure=0
 for test in "$@"
 do
   echo "Running tests in $test"
   (source "$test"; run_test_suite)
+  failure=$(( $? || $failure))
 done
+exit $failure
