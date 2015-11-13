@@ -1,8 +1,4 @@
 #!/bin/bash
-# test utility function
-# to write tests :
-# 1. source this file
-# 2. call run_test_suite when all your test* functions have been defined
 
 assertFailWithStatus() {
   #deprecated: use assert_status_code instead
