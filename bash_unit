@@ -86,7 +86,7 @@ print_stack() {
 
 run() {
     TEST=$1
-    echo -n "Running test $TEST... "
+    echo -n "Running $TEST... "
     $TEST
     echo "SUCCESS"
 }
