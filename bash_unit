@@ -1,5 +1,11 @@
 #!/bin/bash
 
+NOCOLOR="\e[0m"
+RED="\e[91m"
+GREEN="\e[92m"
+YELLOW="\e[93m"
+BLUE="\e[94m"
+
 assertFailWithStatus() {
   #deprecated: use assert_status_code instead
   assert_status_code "$@"
@@ -17,9 +23,9 @@ assertFail() {
 
 fail() {
   local MESSAGE=$1
-  echo "FAILURE"
-  [[ -z "$MESSAGE" ]] || echo "$MESSAGE"
-  print_stack | grep -v ^$BASH_SOURCE
+  format "$RED" "FAILURE"
+  [[ -z "$MESSAGE" ]] || printf "$MESSAGE\n"
+  print_stack | grep -v ^$BASH_SOURCE | format "$YELLOW"
   exit 1
 }
 
@@ -50,9 +56,10 @@ assert_equals() {
   local expected=$1
   local actual=$2
   local message=$3
+  [[ -z $message ]] || message="$message\n"
   
   [ "$expected" = "$actual" ] || \
-    fail "$message\nexpected [$expected] but was [$actual]"
+    fail "$message expected [$expected] but was [$actual]"
 }
 
 fake() {
@@ -87,13 +94,25 @@ print_stack() {
   done
 }
 
+format() {
+  local color=$1
+  shift
+  if [ -t 1 ] ; then echo -en "$color" ; fi
+  if [ $# -gt 0 ]
+  then
+    echo $*
+  else
+    cat
+  fi
+  if [ -t 1 ] ; then echo -en "$NOCOLOR" ; fi
+}
+
 run() {
     set -e
     TEST=$1
-    echo -n "Running $TEST... "
+    echo -n "Running $TEST... " | format "$BLUE"
     $TEST
-    [ ! $? ] && FAILURE=true
-    echo "SUCCESS"
+    format "$GREEN" "SUCCESS"
 }
 
 #run tests received as parameters
