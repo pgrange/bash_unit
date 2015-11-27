@@ -2,21 +2,60 @@
 
 cd $(dirname $0)
 
-doc_2_bash() {
-  local doc_file=$1
-  sed -e '/```bash/,/```/{//!b};d' $doc_file
+prepare_tests() {
+  mkdir /tmp/$$
+  local block=0
+  local remaining=/tmp/$$/remaining
+  local swap=/tmp/$$/swap
+  local test_output=/tmp/$$/test_output
+  local expected_output=/tmp/$$/expected_output
+  cat doc.md > $remaining
+
+  while grep '^```bash$' $remaining >/dev/null
+  do
+    block=$(($block+1))
+    run_doc_test  $remaining $swap > $test_output$block
+    doc_to_output $remaining $swap > $expected_output$block
+    eval 'function test_block_'"$block"'() {
+        assert "diff -u '"$expected_output$block"' '"$test_output$block"' >&2"
+      }'
+  done
 }
 
-doc_2_output() {
-  local doc_file=$1
-  sed -e '/```shell/,/```/{//!b};d' $doc_file
+function run_doc_test() {
+  local remaining="$1"
+  local swap="$2"
+  $0 <(
+    cat "$remaining" | _next_code "$swap"
+  ) | tail -n +2 | sed -e 's:/dev/fd/[0-9]*:doc:g' 
+  cat "$swap" > "$remaining"
 }
 
-run_doc_tests() {
-  local doc_file=$1
-  $0 <(doc_2_bash $doc_file) | sed -e 's:/dev/fd/[0-9]*:doc:g'
+function doc_to_output() {
+  local remaining="$1"
+  local swap="$2"
+  cat "$remaining" | _next_output "$swap"
+  cat "$swap" > "$remaining"
+ }
+
+function _next_code() {
+  local remaining="$1"
+  _next_quote_section '```bash' "$remaining"
 }
 
-test_running_doc_output_as_expected() {
-  assert "diff -u <(run_doc_tests doc.md) <(doc_2_output doc.md) >&2"
+function _next_output() {
+  local remaining="$1"
+  _next_quote_section '```shell' "$remaining"
 }
+
+function _next_quote_section() {
+  local quote_pattern=$1
+  local remaining=$2
+  sed '1 , /^'"$quote_pattern"'$/ d' |\
+  sed '
+  /^```$/ , $ w/'"$remaining"'
+  1,/^```$/ !d;//d
+  '
+}
+
+prepare_tests
