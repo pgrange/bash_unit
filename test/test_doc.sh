@@ -1,5 +1,8 @@
 #!/bin/bash
 
+TEST_PATTERN='```bash|```test'
+OUTPUT_PATTERN='```output'
+
 cd $(dirname $0)
 
 prepare_tests() {
@@ -11,7 +14,7 @@ prepare_tests() {
   local expected_output=/tmp/$$/expected_output
   cat doc.md > $remaining
 
-  while grep '^```bash$' $remaining >/dev/null
+  while grep -E '^'"$TEST_PATTERN"'$' $remaining >/dev/null
   do
     block=$(($block+1))
     run_doc_test  $remaining $swap > $test_output$block
@@ -40,19 +43,19 @@ function doc_to_output() {
 
 function _next_code() {
   local remaining="$1"
-  _next_quote_section '```bash' "$remaining"
+  _next_quote_section "$TEST_PATTERN" "$remaining"
 }
 
 function _next_output() {
   local remaining="$1"
-  _next_quote_section '```shell' "$remaining"
+  _next_quote_section "$OUTPUT_PATTERN" "$remaining"
 }
 
 function _next_quote_section() {
   local quote_pattern=$1
   local remaining=$2
-  sed '1 , /^'"$quote_pattern"'$/ d' |\
-  sed '
+  sed -E '1 , /^'"$quote_pattern"'$/ d' |\
+  sed -E '
   /^```$/ , $ w/'"$remaining"'
   1,/^```$/ !d;//d
   '
