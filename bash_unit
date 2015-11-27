@@ -24,7 +24,7 @@ assertFail() {
 fail() {
   local MESSAGE=$1
   format "$RED" "FAILURE"
-  [[ -z "$MESSAGE" ]] || printf "$MESSAGE\n"
+  [[ -z "$MESSAGE" ]] || printf -- "$MESSAGE\n"
   print_stack | grep -v ^$BASH_SOURCE | format "$YELLOW"
   exit 1
 }
@@ -34,7 +34,7 @@ assert() {
   local message=$2
   local tmp_file=/tmp/$$.assert.stderr
   eval "($assertion)" >/dev/null 2>$tmp_file || \
-    (cat $tmp_file; rm $tmp_file; fail "$message")
+    (message="$message$(cat $tmp_file)"; rm $tmp_file; fail "$message")
 }
 
 assert_fail() {
