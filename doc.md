@@ -237,14 +237,14 @@ fake ps echo hello world; ps
 hello world
 ```
 
-```bash
+```sh
 fake ps << EOF
-helo world
+hello world
 EOF
 ```
 
-```output
-helo world
+```
+hello world
 ```
 
 This may be usefull if you need to simulate an environment for you code under test.
