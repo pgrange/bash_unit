@@ -1,3 +1,9 @@
+**bash unit testing enterprise edition framework for professionals**
+
+It allows you to write unit tests (functions starting with *test*),
+run them and, in case of failure, displays the stack trace
+with source file and line number indications to locate the problem.
+
 # How to run tests
 
 To run tests, simply call bash_unit with all your tests files as parameter. For instance to run bash_unit tests, from bash_unit directory:
