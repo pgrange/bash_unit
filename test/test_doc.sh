@@ -12,7 +12,7 @@ prepare_tests() {
   local swap=/tmp/$$/swap
   local test_output=/tmp/$$/test_output
   local expected_output=/tmp/$$/expected_output
-  cat doc.md > $remaining
+  cat README.md > $remaining
 
   while grep -E '^'"$TEST_PATTERN"'$' $remaining >/dev/null
   do
