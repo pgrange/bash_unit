@@ -227,24 +227,72 @@ doc:test_obvious_inequality_with_assert_equals():2
 
     fake <command> [replacement code]
 
-Fakes *command* and replaces it with replacement code (if code is specified) for the rest of the execution of your test. If no replacement code is specified, then it replaces command by one that echo stdin of fake.
+Fakes *command* and replaces it with replacement code (if code is specified) for the rest of the execution of your test. If no replacement code is specified, then it replaces command by one that echo stdin of fake. This may be usefull if you need to simulate an environment for you code under test.
+
+For instance:
 
 ```bash
-fake ps echo hello world; ps
+fake ps echo hello world
+ps
+```
+
+will output:
+
+```output
+hello world
+```
+
+We can do the same using *stdin* of fake:
+
+```bash
+fake ps << EOF
+hello world
+EOF
+ps
 ```
 
 ```output
 hello world
 ```
 
-```sh
-fake ps << EOF
-hello world
+## Using stdin
+
+Here is an exemple, parameterizing fake with its *stdin* to test that code fails when some process does not run and succeeds otherwise:
+
+```bash
+code() {
+  ps | grep apache
+}
+
+test_code_succeeds_if_apache_runs() {
+  fake ps <<EOF
+  PID TTY          TIME CMD
+13525 pts/7    00:00:01 bash
+24162 pts/7    00:00:00 ps
+ 8387 ?            0:00 /usr/sbin/apache2 -k start
 EOF
-```
+
+  assert code "code should succeed when apache is running"
+}
+
+test_code_fails_if_apache_does_not_run() {
+  fake ps <<EOF
+  PID TTY          TIME CMD
+13525 pts/7    00:00:01 bash
+24162 pts/7    00:00:00 ps
+EOF
+
+  assert_fail code "code should fail when apache is not running"
+}
 
 ```
-hello world
+
+```output
+Running test_code_fails_if_apache_does_not_run... SUCCESS
+Running test_code_succeeds_if_apache_runs... SUCCESS
 ```
 
-This may be usefull if you need to simulate an environment for you code under test.
+## Checking parameters
+
+*fake* stores parameters given to the fake in the global variable *FAKE_PARAMS* so that you can check or use them if you wish.
+
