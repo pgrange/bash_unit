@@ -70,6 +70,14 @@ run_test_suite() {
   return $failure
 }
 
+run_test() {
+    set -e
+    local TEST=$1
+    echo -n "Running $TEST... " | format "$BLUE"
+    $TEST
+    format "$GREEN" "SUCCESS"
+}
+
 print_stack() {
   local i=1
   while ! [ -z ${BASH_SOURCE[$i]} ]
@@ -90,14 +98,6 @@ format() {
     cat
   fi
   if [ -t 1 ] ; then echo -en "$NOCOLOR" ; fi
-}
-
-run_test() {
-    set -e
-    local TEST=$1
-    echo -n "Running $TEST... " | format "$BLUE"
-    $TEST
-    format "$GREEN" "SUCCESS"
 }
 
 #run tests received as parameters
