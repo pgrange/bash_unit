@@ -73,11 +73,11 @@ run_test_suite() {
 }
 
 run_test() {
-    set -e
-    local TEST=$1
-    echo -n "Running $TEST... " | format "$BLUE"
-    $TEST
-    format "$GREEN" "SUCCESS"
+  set -e
+  local TEST=$1
+  echo -n "Running $TEST... " | format "$BLUE"
+  $TEST
+  format "$GREEN" "SUCCESS"
 }
 
 print_stack() {
