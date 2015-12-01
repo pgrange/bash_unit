@@ -6,21 +6,6 @@ GREEN="\e[92m"
 YELLOW="\e[93m"
 BLUE="\e[94m"
 
-assertFailWithStatus() {
-  #deprecated: use assert_status_code instead
-  assert_status_code "$@"
-}
-
-assertEquals() {
-  #deprecated: use ssert_equals instead
-  assert_equals "$@"
-}
-
-assertFail() {
-  #deprecated: use assert_fail instead
-  assert_fail "$@"
-}
-
 fail() {
   local MESSAGE=$1
   format "$RED" "FAILURE"
@@ -79,7 +64,7 @@ run_test_suite() {
   for test in $(set | grep  -E '^test.* ()' | sed -e 's: .*::')
   do
     declare -F | grep ' setup$' >/dev/null && setup
-    (run $test)
+    (run_test $test)
     failure=$(( $? || $failure))
   done
   return $failure
@@ -107,9 +92,9 @@ format() {
   if [ -t 1 ] ; then echo -en "$NOCOLOR" ; fi
 }
 
-run() {
+run_test() {
     set -e
-    TEST=$1
+    local TEST=$1
     echo -n "Running $TEST... " | format "$BLUE"
     $TEST
     format "$GREEN" "SUCCESS"
