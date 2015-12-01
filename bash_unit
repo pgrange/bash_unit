@@ -63,8 +63,10 @@ run_test_suite() {
   local failure=0
   for test in $(set | grep  -E '^test.* ()' | sed -e 's: .*::')
   do
-    declare -F | grep ' setup$' >/dev/null && setup
-    (run_test $test)
+    (
+      declare -F | grep ' setup$' >/dev/null && setup
+      run_test $test
+    )
     failure=$(( $? || $failure))
   done
   return $failure
