@@ -170,7 +170,7 @@ test_code_does_not_write_cool_in_the_file() {
 test_code_does_not_write_this_in_the_file() {
   code
 
-  assert_fail "grep this /tmp/the_file"
+  assert_fail "grep this /tmp/the_file" "should not write 'this' in /tmp/the_file"
 }
 ```
 
@@ -233,7 +233,7 @@ doc:test_obvious_inequality_with_assert_equals():2
 
     fake <command> [replacement code]
 
-Fakes *command* and replaces it with replacement code (if code is specified) for the rest of the execution of your test. If no replacement code is specified, then it replaces command by one that echo stdin of fake. This may be usefull if you need to simulate an environment for you code under test.
+Fakes *command* and replaces it with replacement code (if code is specified) for the rest of the execution of your test. If no replacement code is specified, then it replaces command by one that echoes stdin of fake. This may be usefull if you need to simulate an environment for you code under test.
 
 For instance:
 
@@ -261,13 +261,17 @@ ps
 hello world
 ```
 
+It has been asked wether using *fake* results in creating actual fakes or stubs or mocks? or may be spies? or may be they are dummies?
+The first answer to this question is: it depends. The second is: read this
+[great and detailed literature](https://www.google.fr/search?q=fake%20mock%20stub&tbm=isch) on this subjet.
+
 ## Using stdin
 
 Here is an exemple, parameterizing fake with its *stdin* to test that code fails when some process does not run and succeeds otherwise:
 
 ```bash
 code() {
-  ps | grep apache
+  ps a | grep apache
 }
 
 test_code_succeeds_if_apache_runs() {
@@ -298,7 +302,233 @@ Running test_code_fails_if_apache_does_not_run... SUCCESS
 Running test_code_succeeds_if_apache_runs... SUCCESS
 ```
 
-## Checking parameters
+## Using a function
 
-*fake* stores parameters given to the fake in the global variable *FAKE_PARAMS* so that you can check or use them if you wish.
+In a previous exemple, we faked *ps* by specifiyng code inline:
+
+```bash
+fake ps echo hello world
+ps
+```
+
+```output
+hello world
+```
+
+If you need to write more complex code to fake your command, you may abstract this code in a function:
+
+```bash
+_ps() {
+  echo hello world
+}
+fake ps _ps
+ps
+```
+
+```output
+hello world
+```
+
+Be carefull however that your *_ps* function is not exported to sub-processes. It means that, depending on how your code under test works, *_ps* may not be defined in the context where *ps* will be called. For instance:
+
+```bash
+_ps() {
+  echo hello world
+}
+fake ps _ps
+
+bash -c ps
+```
+
+```output
+bash: line 1: _ps: command not found
+```
+
+It depends on your code under test but it is safer to just export functions needed by your fake so that they are available in sub-processes:
+
+```bash
+_ps() {
+  echo hello world
+}
+export -f _ps
+fake ps _ps
+
+bash -c ps
+```
+
+```output
+hello world
+```
+
+*fake* is also limited by the fact that it defines a *bash* function to
+override the actual command. In some context the command can not be
+overriden by a function. For instance if your code under test relies on *exec* to launch *ps*, *fake* will have no effect.
+
+## *fake* parameters
+
+*fake* stores parameters given to the fake in the global variable *FAKE_PARAMS* so that you can use them inside your fake.
+
+It may be usefull if you need to adapt the behavior on the given parameters.
+
+It can also help in asserting the values of these parameters... but this may be quite tricky.
+
+For instance, in our previous code that checks apache is running, we have an issue since our code does not use *ps* with the appropriate parameters. So we will try to check that parameters given to ps are *ax*.
+
+To do that, the first naive approch would be:
+
+```bash
+code() {
+  ps a | grep apache
+}
+
+test_code_gives_ps_appropriate_parameters() {
+  _ps() {
+    cat <<EOF
+  PID TTY          TIME CMD
+13525 pts/7    00:00:01 bash
+24162 pts/7    00:00:00 ps
+ 8387 ?            0:00 /usr/sbin/apache2 -k start
+EOF
+    assert_equals ax "$FAKE_PARAMS"
+  }
+  export -f _ps
+  fake ps _ps
+
+  code >/dev/null
+}
+```
+
+This test calls *code*, which calls *ps*, which is actually implemented by *_ps*. Since *code* does not use *ax* but only *a* as parameters, this test should fail. But...
+
+```output
+Running test_code_gives_ps_appropriate_parameters... SUCCESS
+```
+
+The problem here is that *ps* fail (because of the failed *assert_equals* assertion). But *ps* is piped with *grep*:
+
+```shell
+code() {
+  ps a | grep apache
+}
+```
+
+With bash, the result code of a pipeline equals the result code of the last command of the pipeline. The last command is *grep* and since grep succeeds, the failure of *_ps* is lost and our test succeeds.
+
+An alternative may be to activate bash *pipefail* option but this may introduce unwanted side effects. We can also simply not output anything in *_ps* so that *grep* fails:
+
+```bash
+code() {
+  ps a | grep apache
+}
+
+test_code_gives_ps_appropriate_parameters() {
+  _ps() {
+    assert_equals ax "$FAKE_PARAMS"
+  }
+  export -f _ps
+  fake ps _ps
+
+  code >/dev/null
+}
+```
+
+The problem here is that we use a trick to make the code under test fail but the
+failure has nothing to do with the actual *assert_equals* failure. This is really
+bad, don't do that.
+
+Moreover, *assert_equals* output is captured by *ps* and this just messes with the display of our test results:
+
+```output
+Running test_code_gives_ps_appropriate_parameters... 
+```
+
+The only correct alternative is for the fake *ps* to write *FAKE_PARAMS* in a file descriptor
+so that your test can grab them after code execution and assert their value. For instance
+by writing to a file:
+
+```bash
+code() {
+  ps a | grep apache
+}
+
+test_code_gives_ps_appropriate_parameters() {
+  _ps() {
+    echo $FAKE_PARAMS > /tmp/fake_params
+  }
+  export -f _ps
+  fake ps _ps
+
+  code || true
+
+  assert_equals ax "$(head -n1 /tmp/fake_params)"
+}
+
+setup() {
+  rm /tmp/fake_params
+}
+```
+
+Here our fake writes to */tmp/fake*. We delete this file in *setup* to be
+sure that we do not get inapropriate data from a previous test. We assert
+that the first line of */tmp/fake* equals *ax*. Also, note that we know
+that *code* will fail and write this to ignore the error: `code || true`.
+
+
+```output
+Running test_code_gives_ps_appropriate_parameters... FAILURE
+ expected [ax] but was [a]
+doc:test_code_gives_ps_appropriate_parameters():14
+```
+
+We can also compact the fake definition:
+
+```bash
+code() {
+  ps a | grep apache
+}
+
+test_code_gives_ps_appropriate_parameters() {
+  fake ps 'echo $FAKE_PARAMS >/tmp/fake_params'
+
+  code || true
+
+  assert_equals ax "$(head -n1 /tmp/fake_params)"
+}
+
+setup() {
+  rm /tmp/fake_params
+}
+```
+
+```output
+Running test_code_gives_ps_appropriate_parameters... FAILURE
+ expected [ax] but was [a]
+doc:test_code_gives_ps_appropriate_parameters():10
+```
+
+Finally, we can avoid the */tmp/fake_params* temporary file by using *coproc*:
+
+```bash
+code() {
+  ps a | grep apache
+}
+
+test_get_data_from_fake() {
+  #Fasten you seat belt...
+  coproc cat
+  exec {test_channel}>&${COPROC[1]}
+  fake ps 'echo $FAKE_PARAMS >&$test_channel'
+
+  code || true
+
+  assert_equals ax "$(head -n1 <&${COPROC[0]})"
+}
+
+```
+
+```output
+Running test_get_data_from_fake... FAILURE
+ expected [ax] but was [a]
+doc:test_get_data_from_fake():13
+```
 

@@ -2,6 +2,7 @@
 
 TEST_PATTERN='```bash|```test'
 OUTPUT_PATTERN='```output'
+LANG=C
 
 cd $(dirname $0)
 
@@ -17,7 +18,7 @@ prepare_tests() {
   while grep -E '^'"$TEST_PATTERN"'$' $remaining >/dev/null
   do
     block=$(($block+1))
-    run_doc_test  $remaining $swap > $test_output$block
+    run_doc_test  $remaining $swap |& sed '$a\' > $test_output$block
     doc_to_output $remaining $swap > $expected_output$block
     eval 'function test_block_'"$block"'() {
         assert "diff -u '"$expected_output$block"' '"$test_output$block"' >&2"
