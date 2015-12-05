@@ -4,6 +4,25 @@ It allows you to write unit tests (functions starting with *test*),
 run them and, in case of failure, displays the stack trace
 with source file and line number indications to locate the problem.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Contents**
+
+- [How to run tests](#how-to-run-tests)
+- [How to write tests](#how-to-write-tests)
+- [Test functions](#test-functions)
+  - [*fail*](#fail)
+  - [*assert*](#assert)
+  - [*assert_fail*](#assert_fail)
+  - [*assert_status_code*](#assert_status_code)
+  - [*assert_equals*](#assert_equals)
+- [*fake* function](#fake-function)
+  - [Using stdin](#using-stdin)
+  - [Using a function](#using-a-function)
+  - [*fake* parameters](#fake-parameters)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # How to run tests
 
 To run tests, simply call bash_unit with all your tests files as parameter. For instance to run bash_unit tests, from bash_unit directory:
