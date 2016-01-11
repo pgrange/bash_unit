@@ -483,7 +483,7 @@ test_code_gives_ps_appropriate_parameters() {
 }
 
 setup() {
-  rm /tmp/fake_params
+  rm -f /tmp/fake_params
 }
 ```
 
@@ -515,7 +515,7 @@ test_code_gives_ps_appropriate_parameters() {
 }
 
 setup() {
-  rm /tmp/fake_params
+  rm -f /tmp/fake_params
 }
 ```
 
