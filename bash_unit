@@ -61,7 +61,7 @@ fake() {
 
 run_test_suite() {
   local failure=0
-  for test in $(set | grep  -E '^test.* ()' | sed -e 's: .*::')
+  for test in $(set | grep  -E '^test.* ()' | grep -E "$test_pattern" | sed -e 's: .*::')
   do
     (
       declare -F | grep ' setup$' >/dev/null && setup
@@ -102,13 +102,44 @@ format() {
   if [ -t 1 ] ; then echo -en "$NOCOLOR" ; fi
 }
 
-#run tests received as parameters
+usage() {
+  echo "$1" >&2
+  echo "$0 [-p <pattern1>] [-p <pattern2>]... <test_file1> <test_file2>..." >&2
+  echo >&2
+  echo "Runs tests in test files that match patterns" >&2
+  echo "See https://github.com/pgrange/bash_unit" >&2
+  exit 1
+}
 
-failure=0
-for test in "$@"
+test_pattern=""
+separator=""
+while getopts "p:" option
 do
-  echo "Running tests in $test"
-  (source "$test"; run_test_suite)
+  case "$option" in
+    p)
+      test_pattern="${test_pattern}${separator}${OPTARG}"
+      separator="|"
+      ;;
+    ?|:)
+      usage
+      ;;
+  esac
+done
+shift $((OPTIND-1))
+
+#check test files exist and is readable
+for test_file in "$@"
+do
+  test -e $test_file || usage "file does not exist: $test_file"
+  test -r $test_file || usage "can not read file: $test_file"
+done
+
+#run tests received as parameters
+failure=0
+for test_file in "$@"
+do
+  echo "Running tests in $test_file"
+  (source "$test_file"; run_test_suite)
   failure=$(( $? || $failure))
 done
 exit $failure

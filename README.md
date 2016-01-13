@@ -42,16 +42,42 @@ Running test_assert_show_stderr_when_failure... SUCCESS
 Running test_assert_status_code_fails... SUCCESS
 Running test_assert_status_code_succeeds... SUCCESS
 Running test_assert_succeeds... SUCCESS
+Running test_display_usage_when_test_file_does_not_exist... SUCCESS
 Running test_exit_code_not_0_in_case_of_failure... SUCCESS
 Running test_fail_fails... SUCCESS
 Running test_fail_prints_failure_message... SUCCESS
 Running test_fail_prints_where_is_error... SUCCESS
+Running test_fails_when_test_file_does_not_exist... SUCCESS
 Running test_fake_actually_fakes_the_command... SUCCESS
 Running test_fake_can_fake_inline... SUCCESS
 Running test_fake_echo_stdin_when_no_params... SUCCESS
 Running test_fake_exports_faked_in_subshells... SUCCESS
 Running test_fake_transmits_params_to_fake_code... SUCCESS
+Running test_run_all_file_parameters... SUCCESS
 Running test_run_all_tests_even_in_case_of_failure... SUCCESS
+Running test_run_only_tests_that_match_pattern... SUCCESS
+```
+
+You might also want to run only specific tests, you may do so with the
+*-p* option. This option accepts a pattern as parameter and filters test
+functions against this pattern.
+
+```test
+./bash_unit -p fail_fails -p assert test/test_bash_unit.sh
+```
+
+```output
+Running tests in test/test_bash_unit.sh
+Running test_assert_equals_fails_when_not_equal... SUCCESS
+Running test_assert_equals_succeed_when_equal... SUCCESS
+Running test_assert_fail_fails... SUCCESS
+Running test_assert_fail_succeeds... SUCCESS
+Running test_assert_fails... SUCCESS
+Running test_assert_show_stderr_when_failure... SUCCESS
+Running test_assert_status_code_fails... SUCCESS
+Running test_assert_status_code_succeeds... SUCCESS
+Running test_assert_succeeds... SUCCESS
+Running test_fail_fails... SUCCESS
 ```
 
 # How to write tests

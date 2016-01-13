@@ -133,6 +133,44 @@ EOF
 )"
 }
 
+test_run_all_file_parameters() {
+  bash_unit_output=$($0 \
+    <(echo "test_one() { echo -n ; }") \
+    <(echo "test_two() { echo -n ; }") \
+    | sed -e 's:/dev/fd/[0-9]*:test_file:' \
+  )
+
+  assert_equals "\
+Running tests in test_file
+Running test_one... SUCCESS
+Running tests in test_file
+Running test_two... SUCCESS" "$bash_unit_output" 
+}
+
+test_run_only_tests_that_match_pattern() {
+  bash_unit_output=$($0 -p one \
+    <(echo "test_one() { echo -n ; }") \
+    <(echo "test_two() { echo -n ; }") \
+    | sed -e 's:/dev/fd/[0-9]*:test_file:' \
+  )
+
+  assert_equals "\
+Running tests in test_file
+Running test_one... SUCCESS
+Running tests in test_file" "$bash_unit_output" 
+}
+
+test_fails_when_test_file_does_not_exist() {
+  assert_fail "$0 /not_exist/not_exist"
+}
+
+test_display_usage_when_test_file_does_not_exist() {
+  bash_unit_output=$($0 /not_exist/not_exist 2>&1 >/dev/null | line 1)
+
+  assert_equals "file does not exist: /not_exist/not_exist"\
+                "$bash_unit_output" 
+}
+
 line() {
   line_nb=$1
   tail -n +$line_nb | head -1
