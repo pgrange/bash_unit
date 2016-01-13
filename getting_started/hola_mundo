@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "No ablo espanol" >&2
+exit 1
