@@ -2,6 +2,6 @@ This is a sample project to get started with bash_unit.
 
 To try it:
 
-    svn export https://github.com/pgrange/bash_unit/trunk/getting_started # yes svn...
-    cd getting_started
+    git clone https://github.com/pgrange/bash_unit.git
+    cd bash_unit/getting_started
     ./bash_unit tests/test_*
