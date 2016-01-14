@@ -4,6 +4,9 @@ It allows you to write unit tests (functions starting with *test*),
 run them and, in case of failure, displays the stack trace
 with source file and line number indications to locate the problem.
 
+You might want to take a look at [how to get started](getting_started)
+before continuing reading this documentation.
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Contents**
