@@ -7,6 +7,8 @@ with source file and line number indications to locate the problem.
 You might want to take a look at [how to get started](getting_started)
 before continuing reading this documentation.
 
+*(by the way, the documentation you are reading is itself tested with bash-unit)*
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Contents**
