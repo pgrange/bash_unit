@@ -283,7 +283,7 @@ doc:test_obvious_inequality_with_assert_equals():2
 
     fake <command> [replacement code]
 
-Fakes *command* and replaces it with replacement code (if code is specified) for the rest of the execution of your test. If no replacement code is specified, then it replaces command by one that echoes stdin of fake. This may be usefull if you need to simulate an environment for you code under test.
+Fakes *command* and replaces it with *replacement code* (if code is specified) for the rest of the execution of your test. If no replacement code is specified, then it replaces command by one that echoes stdin of fake. This may be usefull if you need to simulate an environment for you code under test.
 
 For instance:
 
