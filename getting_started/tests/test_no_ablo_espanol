@@ -6,4 +6,8 @@ test_should_tell_no_ablo_espanol() {
   assert_equals "No ablo espanol" "$(./hola_mundo 2>&1)"
 }
 
+# Change to directory where bash_unit so
+# that we can use our scripts under test
+# more easily
+
 cd $(dirname $0)

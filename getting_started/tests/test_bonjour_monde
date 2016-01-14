@@ -2,4 +2,8 @@ test_should_print_bonjour_monde() {
   assert_equals "Bonjour monde !" "$(./bonjour_monde)"
 }
 
+# Change to directory where bash_unit so
+# that we can use our scripts under test
+# more easily
+
 cd $(dirname $0)
