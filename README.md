@@ -31,11 +31,11 @@ before continuing reading this documentation.
 To run tests, simply call bash_unit with all your tests files as parameter. For instance to run bash_unit tests, from bash_unit directory:
 
 ```test
-./bash_unit test/test_bash_unit.sh
+./bash_unit tests/test_bash_unit.sh
 ```
 
 ```output
-Running tests in test/test_bash_unit.sh
+Running tests in tests/test_bash_unit.sh
 Running test_assert_equals_fails_when_not_equal... SUCCESS
 Running test_assert_equals_succeed_when_equal... SUCCESS
 Running test_assert_fail_fails... SUCCESS
@@ -66,11 +66,11 @@ You might also want to run only specific tests, you may do so with the
 functions against this pattern.
 
 ```test
-./bash_unit -p fail_fails -p assert test/test_bash_unit.sh
+./bash_unit -p fail_fails -p assert tests/test_bash_unit.sh
 ```
 
 ```output
-Running tests in test/test_bash_unit.sh
+Running tests in tests/test_bash_unit.sh
 Running test_assert_equals_fails_when_not_equal... SUCCESS
 Running test_assert_equals_succeed_when_equal... SUCCESS
 Running test_assert_fail_fails... SUCCESS
