@@ -66,6 +66,7 @@ run_test_suite() {
     (
       declare -F | grep ' setup$' >/dev/null && setup
       run_test $test
+      declare -F | grep ' teardown$' >/dev/null && teardown
     )
     failure=$(( $? || $failure))
   done

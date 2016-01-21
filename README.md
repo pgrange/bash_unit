@@ -91,7 +91,11 @@ Write your test functions in a file. The name of a test function has to start wi
 
 Use the bash_unit assertion functions in your test functions, see below.
 
-You may write a *setup* function that will be exectuted before each test is run. If you need to set someting up only once for all tests, simply write your code outside any test function, this is a bash script.
+You may write a *setup* function that will be exectuted before each test is run.
+
+You may write a *teardown* function that will be exectuted after each test is run.
+
+If you need to set someting up only once for all tests, simply write your code outside any test function, this is a bash script.
 
 You may need to change the behavior of some commands to create conditions for your code under test to behave as expected. The *fake* function may help you to do that, see bellow.
 
