@@ -118,7 +118,7 @@ test_can_fail() {
 ```output
 Running test_can_fail... FAILURE
 this test failed on purpose
-doc:test_can_fail():2
+doc:2:test_can_fail()
 ```
 
 ## *assert*
@@ -143,7 +143,7 @@ test_assert_succeed() {
 ```output
 Running test_assert_fails... FAILURE
 this test failed, obvioulsy
-doc:test_assert_fails():2
+doc:2:test_assert_fails()
 Running test_assert_succeed... SUCCESS
 ```
 
@@ -171,7 +171,7 @@ test_code_makes_the_file_executable() {
 Running test_code_creates_the_file... SUCCESS
 Running test_code_makes_the_file_executable... FAILURE
 /tmp/the_file should be executable
-doc:test_code_makes_the_file_executable():14
+doc:14:test_code_makes_the_file_executable()
 ```
 
 It may also be fun to use assert to check for the expected content of a file.
@@ -194,7 +194,7 @@ Running test_code_write_appropriate_content_in_the_file... FAILURE
 < this is cool
 ---
 > not so cool
-doc:test_code_write_appropriate_content_in_the_file():8
+doc:8:test_code_write_appropriate_content_in_the_file()
 ```
 
 Note how we redirect standard output of *diff* to *stderr*. This is because *assert*
@@ -231,7 +231,7 @@ test_code_does_not_write_this_in_the_file() {
 ```output
 Running test_code_does_not_write_cool_in_the_file... FAILURE
 should not write 'cool' in /tmp/the_file
-doc:test_code_does_not_write_cool_in_the_file():8
+doc:8:test_code_does_not_write_cool_in_the_file()
 Running test_code_does_not_write_this_in_the_file... SUCCESS
 ```
 
@@ -256,7 +256,7 @@ test_code_should_fail_with_code_25() {
 ```output
 Running test_code_should_fail_with_code_25... FAILURE
  expected [25] but was [23]
-doc:test_code_should_fail_with_code_25():6
+doc:6:test_code_should_fail_with_code_25()
 ```
 
 ## *assert_equals*
@@ -280,7 +280,7 @@ Running test_obvious_equality_with_assert_equals... SUCCESS
 Running test_obvious_inequality_with_assert_equals... FAILURE
 a string should be another string
  expected [a string] but was [another string]
-doc:test_obvious_inequality_with_assert_equals():2
+doc:2:test_obvious_inequality_with_assert_equals()
 ```
 
 #*fake* function
@@ -531,7 +531,7 @@ that *code* will fail and write this to ignore the error: `code || true`.
 ```output
 Running test_code_gives_ps_appropriate_parameters... FAILURE
  expected [ax] but was [a]
-doc:test_code_gives_ps_appropriate_parameters():14
+doc:14:test_code_gives_ps_appropriate_parameters()
 ```
 
 We can also compact the fake definition:
@@ -557,7 +557,7 @@ setup() {
 ```output
 Running test_code_gives_ps_appropriate_parameters... FAILURE
  expected [ax] but was [a]
-doc:test_code_gives_ps_appropriate_parameters():10
+doc:10:test_code_gives_ps_appropriate_parameters()
 ```
 
 Finally, we can avoid the */tmp/fake_params* temporary file by using *coproc*:
@@ -583,6 +583,6 @@ test_get_data_from_fake() {
 ```output
 Running test_get_data_from_fake... FAILURE
  expected [ax] but was [a]
-doc:test_get_data_from_fake():13
+doc:13:test_get_data_from_fake()
 ```
 
