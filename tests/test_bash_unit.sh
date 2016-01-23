@@ -52,7 +52,7 @@ test_fail_prints_failure_message() {
 }
 
 test_fail_prints_where_is_error() {
-  assert_equals "${BASH_SOURCE}:${FUNCNAME}():${LINENO}" \
+  assert_equals "${BASH_SOURCE}:${LINENO}:${FUNCNAME}()" \
 	"$(fail | line 2)"
 }
 
@@ -121,7 +121,7 @@ EOF
   assert_equals "\
 Running tests in test_file
 Running test_fails... FAILURE
-test_file:test_fails():2
+test_file:2:test_fails()
 Running test_succeed... SUCCESS" "$bash_unit_output" 
 }
 

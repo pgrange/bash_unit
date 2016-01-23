@@ -20,6 +20,7 @@ assert() {
   local tmp_file=/tmp/$$.assert.stderr
   eval "($assertion)" >/dev/null 2>$tmp_file || \
     (message="$message$(cat $tmp_file)"; rm $tmp_file; fail "$message")
+  rm $tmp_file
 }
 
 assert_fail() {
@@ -66,7 +67,7 @@ run_test_suite() {
     (
       declare -F | grep ' setup$' >/dev/null && setup
       run_test $test
-      declare -F | grep ' teardown$' >/dev/null && teardown
+		declare -F | grep ' teardown$' >/dev/null && teardown
     )
     failure=$(( $? || $failure))
   done
@@ -85,7 +86,7 @@ print_stack() {
   local i=1
   while ! [ -z ${BASH_SOURCE[$i]} ]
   do
-    echo ${BASH_SOURCE[$i]}:${FUNCNAME[$i]}\(\):${BASH_LINENO[$((i-1))]}
+    echo ${BASH_SOURCE[$i]}:${BASH_LINENO[$((i-1))]}:${FUNCNAME[$i]}\(\)
     i=$(($i + 1))
   done
 }
