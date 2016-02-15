@@ -65,9 +65,12 @@ run_test_suite() {
   for test in $(set | grep  -E '^test.* ()' | grep -E "$test_pattern" | sed -e 's: .*::')
   do
     (
+      local status
       declare -F | grep ' setup$' >/dev/null && setup
       run_test $test
-		declare -F | grep ' teardown$' >/dev/null && teardown
+      status=$?
+      declare -F | grep ' teardown$' >/dev/null && teardown
+      return $status
     )
     failure=$(( $? || $failure))
   done

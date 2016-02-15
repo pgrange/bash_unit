@@ -171,6 +171,11 @@ test_display_usage_when_test_file_does_not_exist() {
                 "$bash_unit_output" 
 }
 
+test_bash_unit_succeed_when_no_failure_even_if_no_teardown() {
+  #FIX https://github.com/pgrange/bash_unit/issues/8
+  assert "$0 <(echo 'test_success() { echo -n ; }')"
+}
+
 line() {
   line_nb=$1
   tail -n +$line_nb | head -1
