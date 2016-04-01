@@ -176,6 +176,12 @@ test_bash_unit_succeed_when_no_failure_even_if_no_teardown() {
   assert "$0 <(echo 'test_success() { echo -n ; }')"
 }
 
+test_bash_unit_runs_teardown_even_in_case_of_failure() {
+  #FIX https://github.com/pgrange/bash_unit/issues/10
+  assert_equals "ran teardown" \
+    "$($0 <(echo 'test_fail() { fail ; } ; teardown() { echo "ran teardown" >&2 ; }') 2>&1 >/dev/null)"
+}
+
 line() {
   line_nb=$1
   tail -n +$line_nb | head -1

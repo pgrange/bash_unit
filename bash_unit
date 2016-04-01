@@ -27,7 +27,7 @@ fail() {
   format "$RED" "FAILURE"
   [[ -z "$MESSAGE" ]] || printf -- "$MESSAGE\n"
   print_stack | grep -v ^$BASH_SOURCE | format "$YELLOW"
-  exit 1
+  return 1
 }
 
 assert() {
@@ -42,7 +42,10 @@ assert() {
 assert_fail() {
   local assertion=$1
   local message=$2
-  eval "($assertion)" >/dev/null 2>&1 && fail "$message" || true
+  if eval "($assertion)" >/dev/null 2>&1
+  then
+   fail "$message"
+  fi
 }
 
 assert_status_code() {

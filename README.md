@@ -47,6 +47,7 @@ Running test_assert_show_stderr_when_failure... SUCCESS
 Running test_assert_status_code_fails... SUCCESS
 Running test_assert_status_code_succeeds... SUCCESS
 Running test_assert_succeeds... SUCCESS
+Running test_bash_unit_runs_teardown_even_in_case_of_failure... SUCCESS
 Running test_bash_unit_succeed_when_no_failure_even_if_no_teardown... SUCCESS
 Running test_display_usage_when_test_file_does_not_exist... SUCCESS
 Running test_exit_code_not_0_in_case_of_failure... SUCCESS
