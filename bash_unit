@@ -81,12 +81,11 @@ run_test_suite() {
   for test in $(set | grep  -E '^test.* ()' | grep -E "$test_pattern" | sed -e 's: .*::')
   do
     (
-      local status
+      local status=0
       declare -F | grep ' setup$' >/dev/null && setup
-      run_test $test
-      status=$?
+      run_test $test || status=$?
       declare -F | grep ' teardown$' >/dev/null && teardown
-      return $status
+      exit $status
     )
     failure=$(( $? || $failure))
   done
@@ -97,8 +96,7 @@ run_test() {
   set -e
   local TEST=$1
   echo -n "Running $TEST... " | format "$BLUE"
-  $TEST
-  format "$GREEN" "SUCCESS"
+  $TEST && format "$GREEN" "SUCCESS"
 }
 
 print_stack() {
