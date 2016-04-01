@@ -35,8 +35,8 @@ assert() {
   local message=$2
   local tmp_file=/tmp/$$.assert.stderr
   eval "($assertion)" >/dev/null 2>$tmp_file || \
-    (message="$message$(cat $tmp_file)"; rm $tmp_file; fail "$message")
-  rm -f $tmp_file 2>/dev/null
+    (message="$message$(cat $tmp_file)"; rm $tmp_file; fail "$message") && \
+    rm -f $tmp_file 2>/dev/null
 }
 
 assert_fail() {
