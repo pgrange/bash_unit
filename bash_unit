@@ -27,7 +27,7 @@ fail() {
   format "$RED" "FAILURE"
   [[ -z "$MESSAGE" ]] || printf -- "$MESSAGE\n"
   print_stack | grep -v ^$BASH_SOURCE | format "$YELLOW"
-  return 1
+  exit 1
 }
 
 assert() {
@@ -86,7 +86,7 @@ run_test_suite() {
     (
       local status=0
       declare -F | grep ' setup$' >/dev/null && setup
-      run_test $test || status=$?
+      (run_test $test) || status=$?
       declare -F | grep ' teardown$' >/dev/null && teardown
       exit $status
     )

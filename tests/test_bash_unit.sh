@@ -182,6 +182,13 @@ test_bash_unit_runs_teardown_even_in_case_of_failure() {
     "$($0 <(echo 'test_fail() { fail ; } ; teardown() { echo "ran teardown" >&2 ; }') 2>&1 >/dev/null)"
 }
 
+test_one_test_should_stop_after_first_assertion_failure() {
+  #FIX https://github.com/pgrange/bash_unit/issues/10
+  assert_equals "before failure" \
+    "$($0 <(echo 'test_fail() { echo "before failure" >&2 ; fail ; echo "after failure" >&2 ; }') 2>&1 >/dev/null)"
+
+}
+
 line() {
   line_nb=$1
   tail -n +$line_nb | head -1
