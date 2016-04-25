@@ -21,6 +21,7 @@ before continuing reading this documentation.
   - [*assert_fail*](#assert_fail)
   - [*assert_status_code*](#assert_status_code)
   - [*assert_equals*](#assert_equals)
+  - [*assert_not_equals*](#assert_not_equals)
 - [*fake* function](#fake-function)
   - [Using stdin](#using-stdin)
   - [Using a function](#using-a-function)
@@ -283,6 +284,30 @@ Running test_obvious_inequality_with_assert_equals... FAILURE
 a string should be another string
  expected [a string] but was [another string]
 doc:2:test_obvious_inequality_with_assert_equals()
+```
+
+## *assert_not_equals*
+
+    assert_not_equals <unexpected> <actual> [message]
+
+Asserts for inequality of the two strings *unexpected* and *actual*.
+
+```bash
+test_obvious_equality_with_assert_not_equals(){
+  assert_not_equals "a string" "a string" "a string should be different from another string"
+}
+test_obvious_inequality_with_assert_not_equals(){
+  assert_not_equals a b
+}
+
+```
+
+```output
+Running test_obvious_equality_with_assert_not_equals... FAILURE
+a string should be different from another string
+ expected different value than [a string] but was the same
+doc:2:test_obvious_equality_with_assert_not_equals()
+Running test_obvious_inequality_with_assert_not_equals... SUCCESS
 ```
 
 #*fake* function
