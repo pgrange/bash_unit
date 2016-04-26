@@ -74,6 +74,16 @@ assert_equals() {
   fi
 }
 
+assert_not_equals() {
+  local unexpected=$1
+  local actual=$2
+  local message=$3
+  [[ -z $message ]] || message="$message\n"
+
+  [ "$unexpected" != "$actual" ] || \
+    fail "$message expected different value than [$unexpected] but was the same"
+}
+
 fake() {
   local command=$1
   shift

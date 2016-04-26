@@ -45,6 +45,18 @@ test_assert_equals_succeed_when_equal() {
 
 #assert_equals can now be used in the following tests
 
+test_assert_not_equals_fails_when_equal() {
+  assert_fail \
+    "assert_not_equals toto toto" \
+    "assert_not_equals should fail"
+}
+
+test_assert_not_equals_succeeds_when_not_equal() {
+  assert \
+    "assert_not_equals 'toto tata' 'toto tutu'"\
+    'assert_not_equals should succeed'
+}
+
 test_fail_prints_failure_message() {
   assert_equals 'failure message' \
     "$(fail 'failure message' | line 2)" \
