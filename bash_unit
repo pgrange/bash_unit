@@ -33,10 +33,15 @@ fail() {
 assert() {
   local assertion=$1
   local message=$2
-  local tmp_file=/tmp/$$.assert.stderr
-  eval "($assertion)" >/dev/null 2>$tmp_file || \
-    (message="$message$(cat $tmp_file)"; rm $tmp_file; fail "$message") && \
-    rm -f $tmp_file 2>/dev/null
+  local tmp_file=$(mktemp)
+  if ! eval "($assertion)" >/dev/null 2>$tmp_file
+  then
+    message="$message$(cat $tmp_file)"
+    rm $tmp_file
+    fail "$message"
+  else
+    rm $tmp_file
+  fi
 }
 
 assert_fail() {
@@ -63,8 +68,10 @@ assert_equals() {
   local message=$3
   [[ -z $message ]] || message="$message\n"
   
-  [ "$expected" = "$actual" ] || \
+  if [ "$expected" != "$actual" ]
+  then
     fail "$message expected [$expected] but was [$actual]"
+  fi
 }
 
 fake() {
