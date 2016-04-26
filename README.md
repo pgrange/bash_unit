@@ -44,6 +44,8 @@ Running test_assert_equals_succeed_when_equal... SUCCESS
 Running test_assert_fail_fails... SUCCESS
 Running test_assert_fail_succeeds... SUCCESS
 Running test_assert_fails... SUCCESS
+Running test_assert_not_equals_fails_when_equal... SUCCESS
+Running test_assert_not_equals_succeeds_when_not_equal... SUCCESS
 Running test_assert_show_stderr_when_failure... SUCCESS
 Running test_assert_status_code_fails... SUCCESS
 Running test_assert_status_code_succeeds... SUCCESS
@@ -82,6 +84,8 @@ Running test_assert_equals_succeed_when_equal... SUCCESS
 Running test_assert_fail_fails... SUCCESS
 Running test_assert_fail_succeeds... SUCCESS
 Running test_assert_fails... SUCCESS
+Running test_assert_not_equals_fails_when_equal... SUCCESS
+Running test_assert_not_equals_succeeds_when_not_equal... SUCCESS
 Running test_assert_show_stderr_when_failure... SUCCESS
 Running test_assert_status_code_fails... SUCCESS
 Running test_assert_status_code_succeeds... SUCCESS
