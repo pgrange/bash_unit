@@ -16,11 +16,11 @@
 #
 #  https://github.com/pgrange/bash_unit
 
-NOCOLOR="\e[0m"
-RED="\e[91m"
-GREEN="\e[92m"
-YELLOW="\e[93m"
-BLUE="\e[94m"
+NOCOLOR="[0m"
+RED="[91m"
+GREEN="[92m"
+YELLOW="[93m"
+BLUE="[94m"
 
 fail() {
   local MESSAGE=$1
