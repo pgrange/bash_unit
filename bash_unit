@@ -16,11 +16,12 @@
 #
 #  https://github.com/pgrange/bash_unit
 
-NOCOLOR="\e[0m"
-RED="\e[91m"
-GREEN="\e[92m"
-YELLOW="\e[93m"
-BLUE="\e[94m"
+ESCAPE=$(printf "\033")
+NOCOLOR="${ESCAPE}[0m"
+RED="${ESCAPE}[91m"
+GREEN="${ESCAPE}[92m"
+YELLOW="${ESCAPE}[93m"
+BLUE="${ESCAPE}[94m"
 
 fail() {
   local MESSAGE=$1
