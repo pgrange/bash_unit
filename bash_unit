@@ -55,10 +55,16 @@ assert() {
 assert_fail() {
   local assertion=$1
   local message=$2
-  if eval "($assertion)" >/dev/null 2>&1
-  then
-   fail "$message"
-  fi
+  (
+    local stdout=$(mktemp)
+    local stderr=$(mktemp)
+    trap "rm  -f $stdout $stderr" EXIT
+
+    if eval "($assertion)" >$stdout 2>$stderr
+    then
+      fail "$message" $stdout $stderr
+    fi
+  )
 }
 
 assert_status_code() {
