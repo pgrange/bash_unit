@@ -38,7 +38,9 @@ assert() {
   local stderr=$(mktemp)
   if ! eval "($assertion)" >$stdout 2>$stderr
   then
-    message="$message$(cat $stdout)$(cat $stderr)"
+    [ -z $message ] || message="$message\n"
+    [ -s $stdout  ] && message="$message$(cat $stdout | sed 's:^:out> :')\n"
+    [ -s $stderr  ] && message="$message$(cat $stderr | sed 's:^:err> :')\n"
     rm $stdout $stderr
     fail "$message"
   else
