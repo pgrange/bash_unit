@@ -30,8 +30,8 @@ fail() {
 
   format "$RED" "FAILURE"
   [[ -z $message  ]] || printf -- "$message\n"
-  [[ ! -z $stdout ]] && [ -s $stdout ] && cat $stdout | sed 's:^:out> :'
-  [[ ! -z $stderr ]] && [ -s $stderr ] && cat $stderr | sed 's:^:err> :'
+  [[ ! -z $stdout ]] && [ -s $stdout ] && cat $stdout | sed 's:^:out> :' | format $GREEN
+  [[ ! -z $stderr ]] && [ -s $stderr ] && cat $stderr | sed 's:^:err> :' | format $RED
 
   print_stack | grep -v ^$BASH_SOURCE | format "$YELLOW"
   exit 1
