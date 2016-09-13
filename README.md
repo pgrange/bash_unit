@@ -42,12 +42,14 @@ Running tests in tests/test_bash_unit.sh
 Running test_assert_equals_fails_when_not_equal... SUCCESS
 Running test_assert_equals_succeed_when_equal... SUCCESS
 Running test_assert_fail_fails... SUCCESS
+Running test_assert_fail_shows_stdout_stderr_on_failure... SUCCESS
 Running test_assert_fail_succeeds... SUCCESS
 Running test_assert_fails... SUCCESS
 Running test_assert_not_equals_fails_when_equal... SUCCESS
 Running test_assert_not_equals_succeeds_when_not_equal... SUCCESS
-Running test_assert_show_stderr_when_failure... SUCCESS
+Running test_assert_shows_stdout_stderr_on_failure... SUCCESS
 Running test_assert_status_code_fails... SUCCESS
+Running test_assert_status_code_shows_stdout_stderr_on_failure... SUCCESS
 Running test_assert_status_code_succeeds... SUCCESS
 Running test_assert_succeeds... SUCCESS
 Running test_bash_unit_runs_teardown_even_in_case_of_failure... SUCCESS
@@ -82,12 +84,14 @@ Running tests in tests/test_bash_unit.sh
 Running test_assert_equals_fails_when_not_equal... SUCCESS
 Running test_assert_equals_succeed_when_equal... SUCCESS
 Running test_assert_fail_fails... SUCCESS
+Running test_assert_fail_shows_stdout_stderr_on_failure... SUCCESS
 Running test_assert_fail_succeeds... SUCCESS
 Running test_assert_fails... SUCCESS
 Running test_assert_not_equals_fails_when_equal... SUCCESS
 Running test_assert_not_equals_succeeds_when_not_equal... SUCCESS
-Running test_assert_show_stderr_when_failure... SUCCESS
+Running test_assert_shows_stdout_stderr_on_failure... SUCCESS
 Running test_assert_status_code_fails... SUCCESS
+Running test_assert_status_code_shows_stdout_stderr_on_failure... SUCCESS
 Running test_assert_status_code_succeeds... SUCCESS
 Running test_assert_succeeds... SUCCESS
 Running test_fail_fails... SUCCESS
@@ -138,7 +142,7 @@ Evaluate *assertion* and fails if *assertion* fails.
 
 *assertion* fails if its evaluation returns a status code different from 0.
 
-In case of failure, the standard error of the evaluated *assertion* is displayed. The optional message is also displayed.
+In case of failure, the standard output and error of the evaluated *assertion* is displayed. The optional message is also displayed.
 
 ```bash
 test_assert_fails() {
@@ -193,21 +197,18 @@ code() {
 test_code_write_appropriate_content_in_the_file() {
   code
 
-  assert "diff <(echo 'this is cool') /tmp/the_file >&2"
+  assert "diff <(echo 'this is cool') /tmp/the_file"
 }
 ```
 
 ```output
 Running test_code_write_appropriate_content_in_the_file... FAILURE
-1c1
-< this is cool
----
-> not so cool
+out> 1c1
+out> < this is cool
+out> ---
+out> > not so cool
 doc:8:test_code_write_appropriate_content_in_the_file()
 ```
-
-Note how we redirect standard output of *diff* to *stderr*. This is because *assert*
-will only display *stderr* in case of failure but *diff* displays differences on *stdout*.
 
 ## *assert_fail*
 
@@ -217,7 +218,7 @@ Asserts that *assertion* fails. This is the opposite of *assert*.
 
 *assertion* fails if its evaluation returns a status code different from 0.
 
-If the evaluated expression does not fail, then *assert_fail* will fail and display an optional message.
+If the evaluated expression does not fail, then *assert_fail* will fail and display the standard output and error of the evaluated *assertion*. The optional message is also displayed.
 
 ```bash
 code() {
@@ -240,6 +241,7 @@ test_code_does_not_write_this_in_the_file() {
 ```output
 Running test_code_does_not_write_cool_in_the_file... FAILURE
 should not write 'cool' in /tmp/the_file
+out> not so cool
 doc:8:test_code_does_not_write_cool_in_the_file()
 Running test_code_does_not_write_this_in_the_file... SUCCESS
 ```
@@ -251,6 +253,8 @@ Running test_code_does_not_write_this_in_the_file... SUCCESS
 Checks for a precise status code of the evaluation of *assertion*.
 
 It may be usefull if you want to distinguish between several error conditions in your code.
+
+In case of failure, the standard output and error of the evaluated *assertion* is displayed. The optional message is also displayed.
 
 ```bash
 code() {
@@ -264,7 +268,7 @@ test_code_should_fail_with_code_25() {
 
 ```output
 Running test_code_should_fail_with_code_25... FAILURE
- expected [25] but was [23]
+ expected status code 25 but was 23
 doc:6:test_code_should_fail_with_code_25()
 ```
 
