@@ -34,14 +34,15 @@ fail() {
 assert() {
   local assertion=$1
   local message=$2
-  local tmp_file=$(mktemp)
-  if ! eval "($assertion)" >/dev/null 2>$tmp_file
+  local stdout=$(mktemp)
+  local stderr=$(mktemp)
+  if ! eval "($assertion)" >$stdout 2>$stderr
   then
-    message="$message$(cat $tmp_file)"
-    rm $tmp_file
+    message="$message$(cat $stdout)$(cat $stderr)"
+    rm $stdout $stderr
     fail "$message"
   else
-    rm $tmp_file
+    rm $stdout $stderr
   fi
 }
 
