@@ -21,7 +21,7 @@ prepare_tests() {
     run_doc_test  $remaining $swap |& sed '$a\' > $test_output$block
     doc_to_output $remaining $swap > $expected_output$block
     eval 'function test_block_'"$block"'() {
-        assert "diff -u '"$expected_output$block"' '"$test_output$block"' >&2"
+        assert "diff -u '"$expected_output$block"' '"$test_output$block"'"
       }'
   done
 }
