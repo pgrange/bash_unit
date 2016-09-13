@@ -24,9 +24,16 @@ YELLOW="${ESCAPE}[93m"
 BLUE="${ESCAPE}[94m"
 
 fail() {
-  local MESSAGE=$1
+  local message=$1
+  local stdout=$2
+  local stderr=$3
+
   format "$RED" "FAILURE"
-  [[ -z "$MESSAGE" ]] || printf -- "$MESSAGE\n"
+  [[ -z $message  ]] || printf -- "$message\n"
+  [[ ! -z $stdout ]] && [ -s $stdout ] && cat $stdout | sed 's:^:out> :'
+  [[ ! -z $stderr ]] && [ -s $stderr ] && cat $stderr | sed 's:^:err> :'
+  rm -f $stdout $stderr
+
   print_stack | grep -v ^$BASH_SOURCE | format "$YELLOW"
   exit 1
 }
@@ -38,11 +45,7 @@ assert() {
   local stderr=$(mktemp)
   if ! eval "($assertion)" >$stdout 2>$stderr
   then
-    [ -z $message ] || message="$message\n"
-    [ -s $stdout  ] && message="$message$(cat $stdout | sed 's:^:out> :')\n"
-    [ -s $stderr  ] && message="$message$(cat $stderr | sed 's:^:err> :')\n"
-    rm $stdout $stderr
-    fail "$message"
+    fail "$message" $stdout $stderr
   else
     rm $stdout $stderr
   fi
