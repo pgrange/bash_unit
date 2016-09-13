@@ -44,7 +44,7 @@ assert() {
   _assert_expression \
     "$assertion" \
     "[ \$status == 0 ]" \
-    "$message"
+    "\"$message\""
 }
 
 assert_fail() {
@@ -54,7 +54,7 @@ assert_fail() {
   _assert_expression \
     "$assertion" \
     "[ \$status != 0 ]" \
-    "$message"
+    "\"$message\""
 }
 
 assert_status_code() {
@@ -65,7 +65,7 @@ assert_status_code() {
   _assert_expression \
     "$assertion" \
     "[ \$status == $expected_status ]" \
-    "$message expected status code $expected_status but was \$status"
+    "\"$message\" expected status code $expected_status but was \$status"
 }
 
 _assert_expression() {
