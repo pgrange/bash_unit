@@ -32,7 +32,6 @@ fail() {
   [[ -z $message  ]] || printf -- "$message\n"
   [[ ! -z $stdout ]] && [ -s $stdout ] && cat $stdout | sed 's:^:out> :'
   [[ ! -z $stderr ]] && [ -s $stderr ] && cat $stderr | sed 's:^:err> :'
-  rm -f $stdout $stderr
 
   print_stack | grep -v ^$BASH_SOURCE | format "$YELLOW"
   exit 1
@@ -41,14 +40,16 @@ fail() {
 assert() {
   local assertion=$1
   local message=$2
-  local stdout=$(mktemp)
-  local stderr=$(mktemp)
-  if ! eval "($assertion)" >$stdout 2>$stderr
-  then
-    fail "$message" $stdout $stderr
-  else
-    rm $stdout $stderr
-  fi
+  (
+    local stdout=$(mktemp)
+    local stderr=$(mktemp)
+    trap "rm  -f $stdout $stderr" EXIT
+
+    if ! eval "($assertion)" >$stdout 2>$stderr
+    then
+      fail "$message" $stdout $stderr
+    fi
+  )
 }
 
 assert_fail() {
