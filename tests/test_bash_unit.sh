@@ -78,10 +78,13 @@ test_assert_status_code_fails() {
     "assert_status_code should fail"
 }
 
-test_assert_show_stderr_when_failure() {
-  message="$(assert 'echo some error message >&2; exit 2' | sed '2 !d')"
-  assert_equals \
-    "some error message" \
+test_assert_show_stdout_stderr_on_failure() {
+  message="$(assert 'echo some error message >&2; echo some ok message; echo anotther ok message; exit 2' | sed '$d')"
+  assert_equals "\
+FAILURE
+out> some ok message
+out> another ok message
+err> some error message" \
     "$message"
 }
 
