@@ -102,7 +102,7 @@ test_assert_status_code_shows_stdout_stderr_on_failure() {
   message="$(assert_status_code 1 'echo some error message >&2; echo some ok message; echo another ok message; exit 2' | sed '$d')"
   assert_equals "\
 FAILURE
- expected status code 1 but was 2
+expected status code 1 but was 2
 out> some ok message
 out> another ok message
 err> some error message" \

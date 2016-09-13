@@ -40,37 +40,38 @@ fail() {
 assert() {
   local assertion=$1
   local message=$2
-  (
-    local stdout=$(mktemp)
-    local stderr=$(mktemp)
-    trap "rm  -f $stdout $stderr" EXIT
 
-    if ! eval "($assertion)" >$stdout 2>$stderr
-    then
-      fail "$message" $stdout $stderr
-    fi
-  )
+  _assert_expression \
+    "$assertion" \
+    "[ \$status == 0 ]" \
+    "$message"
 }
 
 assert_fail() {
   local assertion=$1
   local message=$2
-  (
-    local stdout=$(mktemp)
-    local stderr=$(mktemp)
-    trap "rm  -f $stdout $stderr" EXIT
 
-    if eval "($assertion)" >$stdout 2>$stderr
-    then
-      fail "$message" $stdout $stderr
-    fi
-  )
+  _assert_expression \
+    "$assertion" \
+    "[ \$status != 0 ]" \
+    "$message"
 }
 
 assert_status_code() {
   local expected_status=$1
   local assertion="$2"
   local message="$3"
+
+  _assert_expression \
+    "$assertion" \
+    "[ \$status == $expected_status ]" \
+    "$message expected status code $expected_status but was \$status"
+}
+
+_assert_expression() {
+  local assertion=$1
+  local condition=$2
+  local message=$3
   (
     local stdout=$(mktemp)
     local stderr=$(mktemp)
@@ -78,9 +79,9 @@ assert_status_code() {
 
     local status
     eval "($assertion)" >$stdout 2>$stderr && status=$? || status=$?
-    if [ "$expected_status" != "$status" ]
+    if ! eval $condition
     then
-      fail "$message expected status code $expected_status but was $status" $stdout $stderr
+      fail "$(eval echo $message)" $stdout $stderr
     fi
   )
 }
