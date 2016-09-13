@@ -78,8 +78,18 @@ test_assert_status_code_fails() {
     "assert_status_code should fail"
 }
 
-test_assert_show_stdout_stderr_on_failure() {
+test_assert_shows_stdout_stderr_on_failure() {
   message="$(assert 'echo some error message >&2; echo some ok message; echo another ok message; exit 2' | sed '$d')"
+  assert_equals "\
+FAILURE
+out> some ok message
+out> another ok message
+err> some error message" \
+    "$message"
+}
+
+test_assert_fail_shows_stdout_stderr_on_failure() {
+  message="$(assert_fail 'echo some error message >&2; echo some ok message; echo another ok message' | sed '$d')"
   assert_equals "\
 FAILURE
 out> some ok message
