@@ -13,6 +13,7 @@ before continuing reading this documentation.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Contents**
 
+- [How to install bash_unit](#How-to-install-bash_unit)
 - [How to run tests](#how-to-run-tests)
 - [How to write tests](#how-to-write-tests)
 - [Test functions](#test-functions)
@@ -29,11 +30,13 @@ before continuing reading this documentation.
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Install
+# How to install bash_unit
 
-Simply download and run install.sh on your computer :
+This will install bash_unit in your current working directory:
 
     bash <(curl -s https://raw.githubusercontent.com/pgrange/bash_unit/master/install.sh)
+
+You can also download it from the [release page](https://github.com/pgrange/bash_unit/releases).
 
 # How to run tests
 
