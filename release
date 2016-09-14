@@ -1,0 +1,39 @@
+#!/bin/bash -e
+
+token_file=token
+
+usage() {
+  local message=$1
+
+  cat >&2 <<EOF
+$message
+
+  $0 <version>
+Publishes a new release of bash_unit on github.
+Version must respect [Semantic Versioning](http://semver.org/)
+A token file must exist in the current working directory. This file must be of the form:
+user=<user>
+token=<token>
+
+<user> is your github account.
+<token> is your github api token. See https://github.com/settings/tokens
+EOF
+
+  exit 1
+}
+
+version=$1
+
+[[ -z $version ]] && usage "No version specified on command line"
+echo $version | grep -E '^v[0-9]*\.[0-9]*\.[0-9]*$' >/dev/null || usage "Invalid format for version: $version"
+[ -r $token_file ] || usage "$token_file file does not exist" 
+
+source $token_file
+
+[[ -z $user ]]  && usage "user not found in file $token_file"
+[[ -z $token ]] && usage "token not found in file $token_file"
+
+curl  -u $user:$token -XPOST https://api.github.com/repos/pgrange/bash_unit/releases -d "
+{
+  \"tag_name\": \"$version\"
+}"
