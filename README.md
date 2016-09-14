@@ -29,6 +29,12 @@ before continuing reading this documentation.
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+# Install
+
+Simply download and run install.sh on your computer :
+
+    bash <(curl -s https://raw.githubusercontent.com/guillaumevincent/bash_unit/master/install.sh)
+
 # How to run tests
 
 To run tests, simply call bash_unit with all your tests files as parameter. For instance to run bash_unit tests, from bash_unit directory:
