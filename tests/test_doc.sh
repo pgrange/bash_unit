@@ -4,7 +4,7 @@ TEST_PATTERN='```bash|```test'
 OUTPUT_PATTERN='```output'
 LANG=C
 
-cd $(dirname $0)
+BASH_UNIT=./bash_unit
 
 prepare_tests() {
   mkdir /tmp/$$
@@ -29,7 +29,7 @@ prepare_tests() {
 function run_doc_test() {
   local remaining="$1"
   local swap="$2"
-  $0 <(
+  $BASH_UNIT <(
     cat "$remaining" | _next_code "$swap"
   ) | tail -n +2 | sed -e 's:/dev/fd/[0-9]*:doc:g' 
   cat "$swap" > "$remaining"
@@ -62,4 +62,5 @@ function _next_quote_section() {
   '
 }
 
+cd $(dirname $0)
 prepare_tests

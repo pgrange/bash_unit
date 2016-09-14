@@ -202,7 +202,11 @@ failure=0
 for test_file in "$@"
 do
   echo "Running tests in $test_file"
-  (source "$test_file"; run_test_suite)
+  (
+    source "$test_file"
+    cd $(dirname "$test_file")
+    run_test_suite
+  )
   failure=$(( $? || $failure))
 done
 exit $failure

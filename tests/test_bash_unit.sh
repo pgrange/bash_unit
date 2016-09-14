@@ -148,7 +148,7 @@ EOF
 }
 
 test_run_all_tests_even_in_case_of_failure() {
-  bash_unit_output=$($0 <(cat << EOF
+  bash_unit_output=$($BASH_UNIT <(cat << EOF
 function test_succeed() { assert true ; }
 function test_fails()   { assert false ; }
 EOF
@@ -162,7 +162,7 @@ Running test_succeed... SUCCESS" "$bash_unit_output"
 }
 
 test_exit_code_not_0_in_case_of_failure() {
-  assert_fail "$0 <(cat << EOF
+  assert_fail "$BASH_UNIT <(cat << EOF
 function test_succeed() { assert true ; }
 function test_fails()   { assert false ; }
 EOF
@@ -170,7 +170,7 @@ EOF
 }
 
 test_run_all_file_parameters() {
-  bash_unit_output=$($0 \
+  bash_unit_output=$($BASH_UNIT \
     <(echo "test_one() { echo -n ; }") \
     <(echo "test_two() { echo -n ; }") \
     | sed -e 's:/dev/fd/[0-9]*:test_file:' \
@@ -184,7 +184,7 @@ Running test_two... SUCCESS" "$bash_unit_output"
 }
 
 test_run_only_tests_that_match_pattern() {
-  bash_unit_output=$($0 -p one \
+  bash_unit_output=$($BASH_UNIT -p one \
     <(echo "test_one() { echo -n ; }") \
     <(echo "test_two() { echo -n ; }") \
     | sed -e 's:/dev/fd/[0-9]*:test_file:' \
@@ -197,11 +197,11 @@ Running tests in test_file" "$bash_unit_output"
 }
 
 test_fails_when_test_file_does_not_exist() {
-  assert_fail "$0 /not_exist/not_exist"
+  assert_fail "$BASH_UNIT /not_exist/not_exist"
 }
 
 test_display_usage_when_test_file_does_not_exist() {
-  bash_unit_output=$($0 /not_exist/not_exist 2>&1 >/dev/null | line 1)
+  bash_unit_output=$($BASH_UNIT /not_exist/not_exist 2>&1 >/dev/null | line 1)
 
   assert_equals "file does not exist: /not_exist/not_exist"\
                 "$bash_unit_output" 
@@ -209,23 +209,30 @@ test_display_usage_when_test_file_does_not_exist() {
 
 test_bash_unit_succeed_when_no_failure_even_if_no_teardown() {
   #FIX https://github.com/pgrange/bash_unit/issues/8
-  assert "$0 <(echo 'test_success() { echo -n ; }')"
+  assert "$BASH_UNIT <(echo 'test_success() { echo -n ; }')"
 }
 
 test_bash_unit_runs_teardown_even_in_case_of_failure() {
   #FIX https://github.com/pgrange/bash_unit/issues/10
   assert_equals "ran teardown" \
-    "$($0 <(echo 'test_fail() { fail ; } ; teardown() { echo "ran teardown" >&2 ; }') 2>&1 >/dev/null)"
+    "$($BASH_UNIT <(echo 'test_fail() { fail ; } ; teardown() { echo "ran teardown" >&2 ; }') 2>&1 >/dev/null)"
 }
 
 test_one_test_should_stop_after_first_assertion_failure() {
   #FIX https://github.com/pgrange/bash_unit/issues/10
   assert_equals "before failure" \
-    "$($0 <(echo 'test_fail() { echo "before failure" >&2 ; fail ; echo "after failure" >&2 ; }') 2>&1 >/dev/null)"
+    "$($BASH_UNIT <(echo 'test_fail() { echo "before failure" >&2 ; fail ; echo "after failure" >&2 ; }') 2>&1 >/dev/null)"
 
+}
+
+test_bash_unit_changes_cwd_to_current_test_file_directory() {
+  assert "ls ../tests/$(basename $BASH_SOURCE)" \
+    "bash_unit should change current working directory to match the directory of the currenlty running test"
 }
 
 line() {
   line_nb=$1
   tail -n +$line_nb | head -1
 }
+
+BASH_UNIT=../bash_unit

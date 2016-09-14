@@ -1,9 +1,3 @@
 test_should_print_hello_world() {
-  assert_equals "Hello world!" "$(./hello_world)"
+  assert_equals "Hello world!" "$(../hello_world)"
 }
-
-# Change to directory where bash_unit so
-# that we can use our scripts under test
-# more easily
-
-cd $(dirname 0)

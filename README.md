@@ -61,6 +61,7 @@ Running test_assert_status_code_fails... SUCCESS
 Running test_assert_status_code_shows_stdout_stderr_on_failure... SUCCESS
 Running test_assert_status_code_succeeds... SUCCESS
 Running test_assert_succeeds... SUCCESS
+Running test_bash_unit_changes_cwd_to_current_test_file_directory... SUCCESS
 Running test_bash_unit_runs_teardown_even_in_case_of_failure... SUCCESS
 Running test_bash_unit_succeed_when_no_failure_even_if_no_teardown... SUCCESS
 Running test_display_usage_when_test_file_does_not_exist... SUCCESS
@@ -118,6 +119,8 @@ You may write a *setup* function that will be exectuted before each test is run.
 You may write a *teardown* function that will be exectuted after each test is run.
 
 If you need to set someting up only once for all tests, simply write your code outside any test function, this is a bash script.
+
+bash_unit changes the current working directory to the one of the running test file. If you need to access files from your test code, for instance the script under test, use path relative to the test file.
 
 You may need to change the behavior of some commands to create conditions for your code under test to behave as expected. The *fake* function may help you to do that, see bellow.
 
