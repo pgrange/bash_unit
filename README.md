@@ -33,7 +33,7 @@ before continuing reading this documentation.
 
 Simply download and run install.sh on your computer :
 
-    bash <(curl -s https://raw.githubusercontent.com/guillaumevincent/bash_unit/master/install.sh)
+    bash <(curl -s https://raw.githubusercontent.com/pgrange/bash_unit/master/install.sh)
 
 # How to run tests
 

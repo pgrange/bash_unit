@@ -2,7 +2,7 @@
 
 echo "downloading bash_unit"
 current_working_dir=$PWD
-tarball_url=$(curl -s https://api.github.com/repos/guillaumevincent/bash_unit/releases | grep tarball_url | head -n 1 | cut -d '"' -f 4)
+tarball_url=$(curl -s https://api.github.com/repos/pgrange/bash_unit/releases | grep tarball_url | head -n 1 | cut -d '"' -f 4)
 tmp_dir=`mktemp -d 2>/dev/null || mktemp -d -t 'tmpdir'`
 cd $tmp_dir
 curl -Ls $tarball_url | tar -xz
