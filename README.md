@@ -13,7 +13,7 @@ before continuing reading this documentation.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Contents**
 
-- [How to install bash_unit](#How-to-install-bash_unit)
+- [How to install bash_unit](#how-to-install-bash_unit)
 - [How to run tests](#how-to-run-tests)
 - [How to write tests](#how-to-write-tests)
 - [Test functions](#test-functions)
