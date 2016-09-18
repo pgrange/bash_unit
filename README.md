@@ -38,6 +38,12 @@ This will install bash_unit in your current working directory:
 
 You can also download it from the [release page](https://github.com/pgrange/bash_unit/releases).
 
+## installing on Archlinux
+
+bash_unit package is available on Archlinux through AUR. In order to install, issue the following command :
+
+    yaourt -Sys bash_unit
+
 # How to run tests
 
 To run tests, simply call bash_unit with all your tests files as parameter. For instance to run bash_unit tests, from bash_unit directory:
