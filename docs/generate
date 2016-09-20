@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+LANG=C pod2man \
+  -c "bash_unit man page" \
+  -d "$(date +'%d %B %Y')" \
+  -n man \
+  -r 1.0 \
+  bash_unit.pod > man/man1/bash_unit.1
+
