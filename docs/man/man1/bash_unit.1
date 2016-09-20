@@ -5,16 +5,16 @@
 bash_unit \- run unit tests
 .SH SYNOPSIS
 .B bash_unit
-[ -p TEST_NAME ... ]
+[ -p TEST_PATTERN ... ]
 .RI TESTS_FILE
 .SH DESCRIPTION
 bash_unit runs the tests writen in the tests_file given as argument. Tests file format is described below in the TESTS FILE section.
 
-You can limit the tests to be run by naming them with the -p option. This option can be specified mutiple times in order to launch a subset of tests.
+You can limit the tests to be run with the -p option. This option can be specified mutiple times in order to launch a subset of tests.
 .SH OPTIONS
 .TP
-.BI \-p " " TEST_NAME
-Default bash_unit behaviour is to run every test found in tests_file. This option will limit bash_unit to the specified tests.
+.BI \-p " " TEST_PATTERN
+Default bash_unit behaviour is to run every test found in tests_file. This option will limit bash_unit to the tests which name matches the specified pattern.
 .SH TESTS FILE
 TESTS FILE is a bash script only containing functions. There are some
 .I RESERVED FUNCTION NAMES
