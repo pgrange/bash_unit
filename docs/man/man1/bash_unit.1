@@ -1,0 +1,63 @@
+.\" Manpage for bash_unit.
+.\" Contact n0vember at half-9 dot net to correct errors or typos
+.TH man 1 "17 September 2016" "1.0" "bash_unit man page"
+.SH NAME
+bash_unit \- run unit tests
+.SH SYNOPSIS
+.B bash_unit
+[ -p TEST_NAME ... ]
+.RI TESTS_FILE
+.SH DESCRIPTION
+bash_unit runs the tests writen in the tests_file given as argument. Tests file format is described below in the TESTS FILE section.
+
+You can limit the tests to be run by naming them with the -p option. This option can be specified mutiple times in order to launch a subset of tests.
+.SH OPTIONS
+.TP
+.BI \-p " " TEST_NAME
+Default bash_unit behaviour is to run every test found in tests_file. This option will limit bash_unit to the specified tests.
+.SH TESTS FILE
+TESTS FILE is a bash script only containing functions. There are some
+.I RESERVED FUNCTION NAMES
+and the
+.I TESTS FUNCTIONS.
+All
+.I TESTS FUNCTIONS
+are called one by one during the testing process whereas functions with
+.I RESERVED FUNCTION NAMES
+are called to prepare the testing environment.
+.SH TESTS FUNCTIONS
+tests functions are basic shell functions returning 0 exit code when test is succesfull and any other value if unsuccesfull. They can use
+.I TESTING FUNCTIONS.
+You can also add regular bash functions to call in your tests.
+.SH RESERVED FUNCTION NAMES
+.TP
+.B setup
+.SH TESTING FUNCTIONS
+.I TESTS FUNCTIONS
+you write can (and should) use bash_unit
+.I TESTING FUNCTIONS.
+This functions are :
+.TP
+.B assert
+.TP
+.B fail
+.TP
+.B assert_fail
+.TP
+.B assert_status_code
+.TP
+.B assert_equals
+.TP
+.TP
+.B fake
+.B assert_not_equals
+.SH SEE ALSO
+The best documentation is to be found on the github project page :
+
+https://github.com/pgrange/bash_unit
+.SH BUGS
+No known bugs. Bugs may be reported using the github issues process here :
+
+https://github.com/pgrange/bash_unit/issues
+.SH AUTHOR
+Pascal Grange (pascal at grange dot nom dot fr)
