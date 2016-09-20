@@ -1,0 +1,66 @@
+=head1 NAME
+
+bash_unit - run unit tests
+
+=head1 SYNOPSIS
+
+bash_unit [ -p TEST_NAME ... ] TESTS_FILE
+
+=head1 DESCRIPTION
+
+bash_unit runs the tests writen in the tests_file given as argument. Tests file format is described below in the TESTS FILE section.
+
+You can limit the tests to be run by naming them with the -p option. This option can be specified mutiple times in order to launch a subset of tests.
+
+=head1 OPTIONS
+
+-p TEST_NAME
+Default bash_unit behaviour is to run every test found in tests_file. This option will limit bash_unit to the specified tests.
+
+=head1 TESTS FILE
+
+TESTS  FILE  is  a  bash script only containing functions. There are some RESERVED FUNCTION NAMES and the TESTS FUNCTIONS.  All TESTS FUNCTIONS are called one by one during the testing process whereas functions with RESERVED
+FUNCTION NAMES are called to prepare the testing environment.
+
+=head1 TESTS FUNCTIONS
+
+tests functions are basic shell functions returning 0 exit code when test is succesfull and any other value if unsuccesfull. They can use TESTING FUNCTIONS.  You can also add regular bash functions to call in your tests.
+
+=head1 RESERVED FUNCTION NAMES
+
+=head2 setup
+
+=head1 TESTING FUNCTIONS
+
+TESTS FUNCTIONS you write can (and should) use bash_unit TESTING FUNCTIONS.  This functions are :
+
+=head2 assert
+
+=head2 fail
+
+=head2 assert_fail
+
+=head2 assert_status_code
+
+=head2 assert_equals
+
+=head2 assert_not_equals
+
+=head2 fake
+
+=head1 SEE ALSO
+
+The best documentation is to be found on the github project page :
+
+https://github.com/pgrange/bash_unit
+
+=head1 BUGS
+
+No known bugs. Bugs may be reported using the github issues process here :
+
+https://github.com/pgrange/bash_unit/issues
+
+=head1 AUTHOR
+
+Pascal Grange (pascal at grange dot nom dot fr)
+
