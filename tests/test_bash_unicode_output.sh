@@ -1,7 +1,5 @@
 #!/bin/bash
 
-OUTPUT="UNICODE"
-
 test_can_fail() {
   fail "this test failed on purpose"
 }
