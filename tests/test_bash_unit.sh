@@ -225,6 +225,13 @@ test_one_test_should_stop_after_first_assertion_failure() {
 
 }
 
+test_one_test_should_stop_when_assert_fails() {
+  #FIX https://github.com/pgrange/bash_unit/issues/26
+  assert_equals "before failure" \
+    "$($BASH_UNIT <(echo 'test_fail() { echo "before failure" >&2 ; assert false ; echo "after failure" >&2 ; }') 2>&1 >/dev/null)"
+
+}
+
 test_bash_unit_changes_cwd_to_current_test_file_directory() {
   assert "ls ../tests/$(basename $BASH_SOURCE)" \
     "bash_unit should change current working directory to match the directory of the currenlty running test"
