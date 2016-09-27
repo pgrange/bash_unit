@@ -82,6 +82,7 @@ Running test_fake_echo_stdin_when_no_params... SUCCESS
 Running test_fake_exports_faked_in_subshells... SUCCESS
 Running test_fake_transmits_params_to_fake_code... SUCCESS
 Running test_one_test_should_stop_after_first_assertion_failure... SUCCESS
+Running test_one_test_should_stop_when_assert_fails... SUCCESS
 Running test_run_all_file_parameters... SUCCESS
 Running test_run_all_tests_even_in_case_of_failure... SUCCESS
 Running test_run_only_tests_that_match_pattern... SUCCESS
@@ -112,6 +113,7 @@ Running test_assert_status_code_succeeds... SUCCESS
 Running test_assert_succeeds... SUCCESS
 Running test_fail_fails... SUCCESS
 Running test_one_test_should_stop_after_first_assertion_failure... SUCCESS
+Running test_one_test_should_stop_when_assert_fails... SUCCESS
 ```
 
 # How to write tests

@@ -83,7 +83,7 @@ _assert_expression() {
     then
       fail "$(eval echo $message)" $stdout $stderr
     fi
-  )
+  ) || exit $?
 }
 
 assert_equals() {
