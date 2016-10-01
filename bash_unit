@@ -23,12 +23,22 @@ GREEN="${ESCAPE}[92m"
 YELLOW="${ESCAPE}[93m"
 BLUE="${ESCAPE}[94m"
 
+FAILED="${ESCAPE}${RED}\u2717"
+SUCCESS="${ESCAPE}${GREEN}\u2714"
+
+# Could be TEXT or UNICODE
+OUTPUT=${OUTPUT:="TEXT"}
+
 fail() {
   local message=$1
   local stdout=$2
   local stderr=$3
 
-  format "$RED" "FAILURE"
+  if [ ${OUTPUT} == "TEXT" ]; then
+      format "$RED" "FAILURE"
+  else
+      echo -e "$FAILED"
+  fi
   [[ -z $message  ]] || printf -- "$message\n"
   [[ ! -z $stdout ]] && [ -s $stdout ] && cat $stdout | sed 's:^:out> :' | format $GREEN
   [[ ! -z $stderr ]] && [ -s $stderr ] && cat $stderr | sed 's:^:err> :' | format $RED
@@ -91,7 +101,7 @@ assert_equals() {
   local actual=$2
   local message=$3
   [[ -z $message ]] || message="$message\n"
-  
+
   if [ "$expected" != "$actual" ]
   then
     fail "$message expected [$expected] but was [$actual]"
@@ -140,7 +150,11 @@ run_test() {
   set -e
   local TEST=$1
   echo -n "Running $TEST... " | format "$BLUE"
-  $TEST && format "$GREEN" "SUCCESS"
+    if [ ${OUTPUT} == "TEXT" ]; then
+      $TEST && format "$GREEN" "SUCCESS"
+  else
+      $TEST && echo -e "$SUCCESS"
+  fi
 }
 
 print_stack() {
