@@ -23,17 +23,26 @@ GREEN="${ESCAPE}[92m"
 YELLOW="${ESCAPE}[93m"
 BLUE="${ESCAPE}[94m"
 
+# All tests informations must be sent to the following three
+# file descriptors:
+# LOG -> all test logs, such as SUCCESS, FAILURE, stacktrace...
+# OUT -> all code under test outputs relevant in the context
+# ERR -> all code under test error outputs relevant in the context
+exec {LOG}>&1
+exec {OUT}>&1
+exec {ERR}>&1
+
 fail() {
   local message=$1
   local stdout=$2
   local stderr=$3
 
-  format "$RED" "FAILURE"
-  [[ -z $message  ]] || printf -- "$message\n"
-  [[ ! -z $stdout ]] && [ -s $stdout ] && cat $stdout | sed 's:^:out> :' | format $GREEN
-  [[ ! -z $stderr ]] && [ -s $stderr ] && cat $stderr | sed 's:^:err> :' | format $RED
+  format "$RED" "FAILURE" >&$LOG
+  [[ -z $message  ]] || printf -- "$message\n" >&$LOG
+  [[ ! -z $stdout ]] && [ -s $stdout ] && cat $stdout | sed 's:^:out> :' | format $GREEN >&$OUT
+  [[ ! -z $stderr ]] && [ -s $stderr ] && cat $stderr | sed 's:^:err> :' | format $RED   >&$ERR
 
-  print_stack | grep -v ^$BASH_SOURCE | format "$YELLOW"
+  print_stack | grep -v ^$BASH_SOURCE | format "$YELLOW" >&$LOG
   exit 1
 }
 

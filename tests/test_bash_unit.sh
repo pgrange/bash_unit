@@ -1,7 +1,7 @@
 #!/bin/bash
 
 test_fail_fails() {
-  (fail >/dev/null) && \
+  with_bash_unit_muted fail && \
   (
     echo "FAILURE: fail must fail !!!"
     exit 1
@@ -16,7 +16,7 @@ test_assert_fail_succeeds() {
 }
 
 test_assert_fail_fails() {
-  (assert_fail true >/dev/null) && fail 'assert_fail should fail' || true
+  with_bash_unit_muted assert_fail true && fail 'assert_fail should fail' || true
 }
 
 #assert_fail can now be used in the following tests
@@ -26,14 +26,14 @@ test_assert_succeeds() {
 }
 
 test_assert_fails() {
-  assert_fail "assert false" "assert should fail"
+  assert_fail "with_bash_unit_muted assert false" "assert should fail"
 }
 
 #assert can now be used in the following tests
 
 test_assert_equals_fails_when_not_equal() {
   assert_fail \
-    "assert_equals toto tutu" \
+    "with_bash_unit_muted assert_equals toto tutu" \
     "assert_equals should fail"
 }
 
@@ -47,7 +47,7 @@ test_assert_equals_succeed_when_equal() {
 
 test_assert_not_equals_fails_when_equal() {
   assert_fail \
-    "assert_not_equals toto toto" \
+    "with_bash_unit_muted assert_not_equals toto toto" \
     "assert_not_equals should fail"
 }
 
@@ -58,14 +58,15 @@ test_assert_not_equals_succeeds_when_not_equal() {
 }
 
 test_fail_prints_failure_message() {
-  assert_equals 'failure message' \
-    "$(fail 'failure message' | line 2)" \
+  message=$(with_bash_unit_log fail 'failure message' | line 2)
+
+  assert_equals 'failure message' "$message" \
     "unexpected error message"
 }
 
 test_fail_prints_where_is_error() {
   assert_equals "${BASH_SOURCE}:${LINENO}:${FUNCNAME}()" \
-	"$(fail | line 2)"
+    "$(with_bash_unit_log fail | last_line)"
 }
 
 test_assert_status_code_succeeds() {
@@ -74,38 +75,28 @@ test_assert_status_code_succeeds() {
 }
 
 test_assert_status_code_fails() {
-  assert_fail "assert_status_code 3 true" \
+  assert_fail "with_bash_unit_muted assert_status_code 3 true" \
     "assert_status_code should fail"
 }
 
-test_assert_shows_stdout_stderr_on_failure() {
-  message="$(assert 'echo some error message >&2; echo some ok message; echo another ok message; exit 2' | sed '$d')"
+test_assert_shows_stderr_on_failure() {
+  message="$(with_bash_unit_err \
+    assert 'echo some error message >&2; echo some ok message; echo another ok message; exit 2'
+  )"
+
   assert_equals "\
-FAILURE
-out> some ok message
-out> another ok message
 err> some error message" \
     "$message"
 }
 
-test_assert_fail_shows_stdout_stderr_on_failure() {
-  message="$(assert_fail 'echo some error message >&2; echo some ok message; echo another ok message' | sed '$d')"
-  assert_equals "\
-FAILURE
-out> some ok message
-out> another ok message
-err> some error message" \
-    "$message"
-}
+test_assert_shows_stdout_on_failure() {
+  message="$(with_bash_unit_out \
+    assert 'echo some error message >&2; echo some ok message; echo another ok message; exit 2'
+  )"
 
-test_assert_status_code_shows_stdout_stderr_on_failure() {
-  message="$(assert_status_code 1 'echo some error message >&2; echo some ok message; echo another ok message; exit 2' | sed '$d')"
   assert_equals "\
-FAILURE
- expected status code 1 but was 2
 out> some ok message
-out> another ok message
-err> some error message" \
+out> another ok message" \
     "$message"
 }
 
@@ -240,6 +231,56 @@ test_bash_unit_changes_cwd_to_current_test_file_directory() {
 line() {
   line_nb=$1
   tail -n +$line_nb | head -1
+}
+
+last_line() {
+  tail -1
+}
+
+with_bash_unit_muted() {
+  with_bash_unit_redirected "$@"
+}
+
+with_bash_unit_err() {
+  with_bash_unit_redirected -e '&1' "$@"
+}
+
+with_bash_unit_out() {
+  with_bash_unit_redirected -o '&1' "$@"
+}
+
+with_bash_unit_log() {
+  with_bash_unit_redirected -l '&1' "$@"
+}
+
+with_bash_unit_redirected() {
+  local log=/dev/null
+  local out=/dev/null
+  local err=/dev/null
+
+  unset OPTIND
+  while getopts "l:o:e:" option
+  do
+    case "$option" in
+      l)
+        log=$OPTARG
+        ;;
+      o)
+        out=$OPTARG
+        ;;
+      e)
+        err=$OPTARG
+        ;;
+    esac
+  done
+  shift $((OPTIND-1))
+
+  (
+    eval "exec {LOG}>$log"
+    eval "exec {OUT}>$out"
+    eval "exec {ERR}>$err"
+    "$@"
+  )
 }
 
 BASH_UNIT=../bash_unit

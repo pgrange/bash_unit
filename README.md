@@ -57,14 +57,13 @@ Running tests in tests/test_bash_unit.sh
 Running test_assert_equals_fails_when_not_equal... SUCCESS
 Running test_assert_equals_succeed_when_equal... SUCCESS
 Running test_assert_fail_fails... SUCCESS
-Running test_assert_fail_shows_stdout_stderr_on_failure... SUCCESS
 Running test_assert_fail_succeeds... SUCCESS
 Running test_assert_fails... SUCCESS
 Running test_assert_not_equals_fails_when_equal... SUCCESS
 Running test_assert_not_equals_succeeds_when_not_equal... SUCCESS
-Running test_assert_shows_stdout_stderr_on_failure... SUCCESS
+Running test_assert_shows_stderr_on_failure... SUCCESS
+Running test_assert_shows_stdout_on_failure... SUCCESS
 Running test_assert_status_code_fails... SUCCESS
-Running test_assert_status_code_shows_stdout_stderr_on_failure... SUCCESS
 Running test_assert_status_code_succeeds... SUCCESS
 Running test_assert_succeeds... SUCCESS
 Running test_bash_unit_changes_cwd_to_current_test_file_directory... SUCCESS
@@ -101,14 +100,13 @@ Running tests in tests/test_bash_unit.sh
 Running test_assert_equals_fails_when_not_equal... SUCCESS
 Running test_assert_equals_succeed_when_equal... SUCCESS
 Running test_assert_fail_fails... SUCCESS
-Running test_assert_fail_shows_stdout_stderr_on_failure... SUCCESS
 Running test_assert_fail_succeeds... SUCCESS
 Running test_assert_fails... SUCCESS
 Running test_assert_not_equals_fails_when_equal... SUCCESS
 Running test_assert_not_equals_succeeds_when_not_equal... SUCCESS
-Running test_assert_shows_stdout_stderr_on_failure... SUCCESS
+Running test_assert_shows_stderr_on_failure... SUCCESS
+Running test_assert_shows_stdout_on_failure... SUCCESS
 Running test_assert_status_code_fails... SUCCESS
-Running test_assert_status_code_shows_stdout_stderr_on_failure... SUCCESS
 Running test_assert_status_code_succeeds... SUCCESS
 Running test_assert_succeeds... SUCCESS
 Running test_fail_fails... SUCCESS
@@ -512,9 +510,15 @@ EOF
 This test calls *code*, which calls *ps*, which is actually implemented by *_ps*. Since *code* does not use *ax* but only *a* as parameters, this test should fail. But...
 
 ```output
-Running test_code_gives_ps_appropriate_parameters... SUCCESS
+Running test_code_gives_ps_appropriate_parameters... FAILURE
+ expected [ax] but was [a]
+doc:13:_ps()
+doc:2:code()
+doc:18:test_code_gives_ps_appropriate_parameters()
+SUCCESS
 ```
 
+This test displays FAILURE but it actually succeed, see SUCCESS at the end.
 The problem here is that *ps* fail (because of the failed *assert_equals* assertion). But *ps* is piped with *grep*:
 
 ```shell
@@ -523,7 +527,7 @@ code() {
 }
 ```
 
-With bash, the result code of a pipeline equals the result code of the last command of the pipeline. The last command is *grep* and since grep succeeds, the failure of *_ps* is lost and our test succeeds.
+With bash, the result code of a pipeline equals the result code of the last command of the pipeline. The last command is *grep* and since grep succeeds, the failure of *_ps* is lost and our test succeeds. We have only succeeded in messing with the test output, nothig more.
 
 An alternative may be to activate bash *pipefail* option but this may introduce unwanted side effects. We can also simply not output anything in *_ps* so that *grep* fails:
 
@@ -547,10 +551,14 @@ The problem here is that we use a trick to make the code under test fail but the
 failure has nothing to do with the actual *assert_equals* failure. This is really
 bad, don't do that.
 
-Moreover, *assert_equals* output is captured by *ps* and this just messes with the display of our test results:
+Even if the output really looks like what we would expect, don't do that:
 
 ```output
-Running test_code_gives_ps_appropriate_parameters... 
+Running test_code_gives_ps_appropriate_parameters... FAILURE
+ expected [ax] but was [a]
+doc:7:_ps()
+doc:2:code()
+doc:12:test_code_gives_ps_appropriate_parameters()
 ```
 
 The only correct alternative is for the fake *ps* to write *FAKE_PARAMS* in a file descriptor
