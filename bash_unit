@@ -148,9 +148,21 @@ run_test_suite() {
 run_test() {
   set -e
   local TEST=$1
-  echo -n "Running $TEST... " | format "$BLUE"
-  $TEST && format "$GREEN" "SUCCESS"
+  notify_test_starting "$TEST"
+  $TEST && notify_test_succeeded "$TEST" >&$LOG
 }
+
+usage() {
+  echo "$1" >&2
+  echo "$0 [-f <output format<] [-p <pattern1>] [-p <pattern2>]... <test_file1> <test_file2>..." >&2
+  echo >&2
+  echo "Runs tests in test files that match <pattern>s" >&2
+  echo "<output format> is optionnal only supported value is tap" >&2
+  echo "See https://github.com/pgrange/bash_unit" >&2
+  exit 1
+}
+
+# Formating
 
 print_stack() {
   local i=1
@@ -174,23 +186,49 @@ format() {
   if [ -t 1 ] ; then echo -en "$NOCOLOR" ; fi
 }
 
-usage() {
-  echo "$1" >&2
-  echo "$0 [-p <pattern1>] [-p <pattern2>]... <test_file1> <test_file2>..." >&2
-  echo >&2
-  echo "Runs tests in test files that match patterns" >&2
-  echo "See https://github.com/pgrange/bash_unit" >&2
-  exit 1
+notify_suite_starting() {
+  test_file="$1"
+  echo "Running tests in $test_file" >&$LOG
 }
 
+notify_test_starting() {
+  local test="$1"
+  echo -n "Running $test... " | format "$BLUE" >&$LOG
+}
+
+notify_test_succeeded() {
+  local test="$1"
+  format "$GREEN" "SUCCESS" >&$LOG
+}
+
+tap_notify_suite_starting() {
+  test_file="$1"
+  echo "#      Running tests in $test_file" >&$LOG
+}
+
+tap_notify_test_starting() {
+  echo -n
+}
+
+tap_notify_test_succeeded() {
+  local test="$1"
+  echo -n "ok" | format "$GREEN" >&$LOG
+  echo -n "     " >&$LOG
+  echo "$test" >&$LOG
+}
+
+output_format=default
 test_pattern=""
 separator=""
-while getopts "p:" option
+while getopts "p:f:" option
 do
   case "$option" in
     p)
       test_pattern="${test_pattern}${separator}${OPTARG}"
       separator="|"
+      ;;
+    f)
+      output_format="${OPTARG}"
       ;;
     ?|:)
       usage
@@ -206,11 +244,25 @@ do
   test -r $test_file || usage "can not read file: $test_file"
 done
 
+#set output format
+case "$output_format" in
+  default)
+    ;;
+  tap)
+    notify_suite_starting() { tap_notify_suite_starting "$@"; }
+    notify_test_starting() { tap_notify_test_starting "$@"; }
+    notify_test_succeeded() { tap_notify_test_succeeded "$@";}
+    ;;
+  *)
+    usage "unsupproted output format: $output_format"
+    ;;
+esac
+
 #run tests received as parameters
 failure=0
 for test_file in "$@"
 do
-  echo "Running tests in $test_file"
+  notify_suite_starting "$test_file"
   (
     source "$test_file"
     cd $(dirname "$test_file")
