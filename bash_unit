@@ -29,6 +29,7 @@ BLUE="${ESCAPE}[94m"
 # OUT -> all code under test outputs relevant in the context
 # ERR -> all code under test error outputs relevant in the context
 exec {LOG}>&1
+exec {STACK}>&1
 exec {OUT}>&1
 exec {ERR}>&1
 
@@ -42,7 +43,7 @@ fail() {
   [[ ! -z $stdout ]] && [ -s $stdout ] && cat $stdout | sed 's:^:out> :' | format $GREEN >&$OUT
   [[ ! -z $stderr ]] && [ -s $stderr ] && cat $stderr | sed 's:^:err> :' | format $RED   >&$ERR
 
-  print_stack | grep -v ^$BASH_SOURCE | format "$YELLOW" >&$LOG
+  print_stack | grep -v ^$BASH_SOURCE | format "$YELLOW" >&$STACK
   exit 1
 }
 

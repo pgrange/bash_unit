@@ -66,7 +66,7 @@ test_fail_prints_failure_message() {
 
 test_fail_prints_where_is_error() {
   assert_equals "${BASH_SOURCE}:${LINENO}:${FUNCNAME}()" \
-    "$(with_bash_unit_log fail | last_line)"
+    "$(with_bash_unit_stack fail | last_line)"
 }
 
 test_assert_status_code_succeeds() {
@@ -253,17 +253,25 @@ with_bash_unit_log() {
   with_bash_unit_redirected -l '&1' "$@"
 }
 
+with_bash_unit_stack() {
+  with_bash_unit_redirected -s '&1' "$@"
+}
+
 with_bash_unit_redirected() {
   local log=/dev/null
+  local stack=/dev/null
   local out=/dev/null
   local err=/dev/null
 
   unset OPTIND
-  while getopts "l:o:e:" option
+  while getopts "l:s:o:e:" option
   do
     case "$option" in
       l)
         log=$OPTARG
+        ;;
+      s)
+        stack=$OPTARG
         ;;
       o)
         out=$OPTARG
@@ -277,6 +285,7 @@ with_bash_unit_redirected() {
 
   (
     eval "exec {LOG}>$log"
+    eval "exec {STACK}>$stack"
     eval "exec {OUT}>$out"
     eval "exec {ERR}>$err"
     "$@"
