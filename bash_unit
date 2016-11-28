@@ -42,7 +42,7 @@ fail() {
   [[ ! -z $stdout ]] && [ -s $stdout ] && cat $stdout | notify_stdout
   [[ ! -z $stderr ]] && [ -s $stderr ] && cat $stderr | notify_stderr
 
-  print_stack | grep -v ^$BASH_SOURCE | notify_stack
+  stacktrace | notify_stack
   exit 1
 }
 
@@ -129,6 +129,15 @@ fake() {
   export -f $command
 }
 
+stacktrace() {
+  local i=1
+  while ! [ -z ${BASH_SOURCE[$i]} ]
+  do
+    echo ${BASH_SOURCE[$i]}:${BASH_LINENO[$((i-1))]}:${FUNCNAME[$i]}\(\)
+    i=$(($i + 1))
+  done | grep -v ^$BASH_SOURCE
+}
+
 run_test_suite() {
   local failure=0
   for test in $(set | grep  -E '^test.* ()' | grep -E "$test_pattern" | sed -e 's: .*::')
@@ -163,16 +172,7 @@ usage() {
 
 # Formating
 
-print_stack() {
-  local i=1
-  while ! [ -z ${BASH_SOURCE[$i]} ]
-  do
-    echo ${BASH_SOURCE[$i]}:${BASH_LINENO[$((i-1))]}:${FUNCNAME[$i]}\(\)
-    i=$(($i + 1))
-  done
-}
-
-format() {
+color() {
   local color=$1
   shift
   if [ -t 1 ] ; then echo -en "$color" ; fi
@@ -185,76 +185,68 @@ format() {
   if [ -t 1 ] ; then echo -en "$NOCOLOR" ; fi
 }
 
-notify_suite_starting() {
-  test_file="$1"
-  echo "Running tests in $test_file" >&$LOG
+text_format() {
+  notify_suite_starting() {
+    test_file="$1"
+    echo "Running tests in $test_file" >&$LOG
+  }
+  notify_test_starting() {
+    local test="$1"
+    echo -n "Running $test... " | color "$BLUE" >&$LOG
+  }
+  notify_test_succeeded() {
+    color "$GREEN" "SUCCESS" >&$LOG
+  }
+  notify_test_failed() {
+    local message="$2"
+    color "$RED" "FAILURE" >&$LOG
+    [[ -z $message  ]] || printf -- "$message\n" >&$LOG
+  }
+  notify_stdout() {
+    sed 's:^:out> :' | color $GREEN >&$OUT
+  }
+  notify_stderr() {
+    sed 's:^:err> :' | color $RED   >&$ERR
+  }
+  notify_stack() {
+    color "$YELLOW" >&$STACK
+  }
 }
 
-notify_test_starting() {
-  local test="$1"
-  echo -n "Running $test... " | format "$BLUE" >&$LOG
+tap_format() {
+  notify_suite_starting() {
+    test_file="$1"
+    echo "# Running tests in $test_file" >&$LOG
+  }
+  notify_test_starting() {
+    echo -n
+  }
+  notify_test_succeeded() {
+    local test="$1"
+    echo -n "ok" | color "$GREEN" >&$LOG
+    echo -n ' - ' >&$LOG
+    echo "$test" | color "$BLUE" >&$LOG
+  }
+  notify_test_failed() {
+    local test="$1"
+    local message="$2"
+    echo -n "not ok" | color "$RED" >&$LOG
+    echo -n " - " >&$LOG
+    echo "$test" >&$LOG
+    [[ -z $message  ]] || printf -- "$message\n" | sed -u -e 's/^/# /' >&$LOG
+  }
+  notify_stdout() {
+    sed 's:^:# out> :' | color $GREEN >&$OUT
+  }
+  notify_stderr() {
+    sed 's:^:# err> :' | color $RED   >&$ERR
+  }
+  notify_stack() {
+    sed 's:^:# :' | color "$YELLOW"   >&$STACK
+  }
 }
 
-notify_test_succeeded() {
-  format "$GREEN" "SUCCESS" >&$LOG
-}
-
-notify_test_failed() {
-  local message="$2"
-  format "$RED" "FAILURE" >&$LOG
-  [[ -z $message  ]] || printf -- "$message\n" >&$LOG
-}
-
-notify_stdout() {
-  sed 's:^:out> :' | format $GREEN >&$OUT
-}
-
-notify_stderr() {
-  sed 's:^:err> :' | format $RED   >&$ERR
-}
-
-notify_stack() {
-  format "$YELLOW" >&$STACK
-}
-
-tap_notify_suite_starting() {
-  test_file="$1"
-  echo "# Running tests in $test_file" >&$LOG
-}
-
-tap_notify_test_starting() {
-  echo -n
-}
-
-tap_notify_test_succeeded() {
-  local test="$1"
-  echo -n "ok" | format "$GREEN" >&$LOG
-  echo -n ' - ' >&$LOG
-  echo "$test" | format "$BLUE" >&$LOG
-}
-
-tap_notify_test_failed() {
-  local test="$1"
-  local message="$2"
-  echo -n "not ok" | format "$RED" >&$LOG
-  echo -n " - " >&$LOG
-  echo "$test" >&$LOG
-  [[ -z $message  ]] || printf -- "$message\n" | sed -u -e 's/^/# /' >&$LOG
-}
-
-tap_notify_stdout() {
-  sed 's:^:# out> :' | format $GREEN >&$OUT
-}
-
-tap_notify_stderr() {
-  sed 's:^:# err> :' | format $RED   >&$ERR
-}
-
-tap_notify_stack() {
-  sed 's:^:# :' | format "$YELLOW"   >&$STACK
-}
-
-output_format=default
+output_format=text
 test_pattern=""
 separator=""
 while getopts "p:f:" option
@@ -274,25 +266,18 @@ do
 done
 shift $((OPTIND-1))
 
-#check test files exist and is readable
 for test_file in "$@"
 do
   test -e $test_file || usage "file does not exist: $test_file"
   test -r $test_file || usage "can not read file: $test_file"
 done
 
-#set output format
 case "$output_format" in
-  default)
+  text)
+    text_format
     ;;
   tap)
-    notify_suite_starting() { tap_notify_suite_starting "$@" ; }
-    notify_test_starting()  { tap_notify_test_starting  "$@" ; }
-    notify_test_succeeded() { tap_notify_test_succeeded "$@" ; }
-    notify_test_failed()    { tap_notify_test_failed    "$@" ; }
-    notify_stdout()         { tap_notify_stdout         "$@" ; }
-    notify_stderr()         { tap_notify_stderr         "$@" ; }
-    notify_stack()          { tap_notify_stack          "$@" ; }
+    tap_format
     ;;
   *)
     usage "unsupproted output format: $output_format"
