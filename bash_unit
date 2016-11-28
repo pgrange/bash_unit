@@ -38,12 +38,11 @@ fail() {
   local stdout=$2
   local stderr=$3
 
-  format "$RED" "FAILURE" >&$LOG
-  [[ -z $message  ]] || printf -- "$message\n" >&$LOG
-  [[ ! -z $stdout ]] && [ -s $stdout ] && cat $stdout | sed 's:^:out> :' | format $GREEN >&$OUT
-  [[ ! -z $stderr ]] && [ -s $stderr ] && cat $stderr | sed 's:^:err> :' | format $RED   >&$ERR
+  notify_test_failed $__bash_unit_current_test__ "$message"
+  [[ ! -z $stdout ]] && [ -s $stdout ] && cat $stdout | notify_stdout
+  [[ ! -z $stderr ]] && [ -s $stderr ] && cat $stderr | notify_stderr
 
-  print_stack | grep -v ^$BASH_SOURCE | format "$YELLOW" >&$STACK
+  print_stack | grep -v ^$BASH_SOURCE | notify_stack
   exit 1
 }
 
@@ -137,7 +136,7 @@ run_test_suite() {
     (
       local status=0
       declare -F | grep ' setup$' >/dev/null && setup
-      (run_test $test) || status=$?
+      (__bash_unit_current_test__="$test" run_test) || status=$?
       declare -F | grep ' teardown$' >/dev/null && teardown
       exit $status
     )
@@ -148,9 +147,8 @@ run_test_suite() {
 
 run_test() {
   set -e
-  local TEST=$1
-  notify_test_starting "$TEST"
-  $TEST && notify_test_succeeded "$TEST" >&$LOG
+  notify_test_starting "$__bash_unit_current_test__"
+  $__bash_unit_current_test__ && notify_test_succeeded "$__bash_unit_current_test__"
 }
 
 usage() {
@@ -198,13 +196,30 @@ notify_test_starting() {
 }
 
 notify_test_succeeded() {
-  local test="$1"
   format "$GREEN" "SUCCESS" >&$LOG
+}
+
+notify_test_failed() {
+  local message="$2"
+  format "$RED" "FAILURE" >&$LOG
+  [[ -z $message  ]] || printf -- "$message\n" >&$LOG
+}
+
+notify_stdout() {
+  sed 's:^:out> :' | format $GREEN >&$OUT
+}
+
+notify_stderr() {
+  sed 's:^:err> :' | format $RED   >&$ERR
+}
+
+notify_stack() {
+  format "$YELLOW" >&$STACK
 }
 
 tap_notify_suite_starting() {
   test_file="$1"
-  echo "#      Running tests in $test_file" >&$LOG
+  echo "# Running tests in $test_file" >&$LOG
 }
 
 tap_notify_test_starting() {
@@ -214,8 +229,29 @@ tap_notify_test_starting() {
 tap_notify_test_succeeded() {
   local test="$1"
   echo -n "ok" | format "$GREEN" >&$LOG
-  echo -n "     " >&$LOG
+  echo -n ' - ' >&$LOG
+  echo "$test" | format "$BLUE" >&$LOG
+}
+
+tap_notify_test_failed() {
+  local test="$1"
+  local message="$2"
+  echo -n "not ok" | format "$RED" >&$LOG
+  echo -n " - " >&$LOG
   echo "$test" >&$LOG
+  [[ -z $message  ]] || printf -- "$message\n" | sed -u -e 's/^/# /' >&$LOG
+}
+
+tap_notify_stdout() {
+  sed 's:^:# out> :' | format $GREEN >&$OUT
+}
+
+tap_notify_stderr() {
+  sed 's:^:# err> :' | format $RED   >&$ERR
+}
+
+tap_notify_stack() {
+  sed 's:^:# :' | format "$YELLOW"   >&$STACK
 }
 
 output_format=default
@@ -250,9 +286,13 @@ case "$output_format" in
   default)
     ;;
   tap)
-    notify_suite_starting() { tap_notify_suite_starting "$@"; }
-    notify_test_starting() { tap_notify_test_starting "$@"; }
-    notify_test_succeeded() { tap_notify_test_succeeded "$@";}
+    notify_suite_starting() { tap_notify_suite_starting "$@" ; }
+    notify_test_starting()  { tap_notify_test_starting  "$@" ; }
+    notify_test_succeeded() { tap_notify_test_succeeded "$@" ; }
+    notify_test_failed()    { tap_notify_test_failed    "$@" ; }
+    notify_stdout()         { tap_notify_stdout         "$@" ; }
+    notify_stderr()         { tap_notify_stderr         "$@" ; }
+    notify_stack()          { tap_notify_stack          "$@" ; }
     ;;
   *)
     usage "unsupproted output format: $output_format"
