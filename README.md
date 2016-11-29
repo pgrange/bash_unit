@@ -114,6 +114,48 @@ Running test_one_test_should_stop_after_first_assertion_failure... SUCCESS
 Running test_one_test_should_stop_when_assert_fails... SUCCESS
 ```
 
+bash_unit supports the [Test Anything Protocol](http://testanything.org/) so you can ask for a tap formatted
+output with the *-f* option.
+
+```test
+./bash_unit -f tap tests/test_bash_unit.sh
+```
+
+```output
+# Running tests in tests/test_bash_unit.sh
+ok - test_assert_equals_fails_when_not_equal
+ok - test_assert_equals_succeed_when_equal
+ok - test_assert_fail_fails
+ok - test_assert_fail_succeeds
+ok - test_assert_fails
+ok - test_assert_not_equals_fails_when_equal
+ok - test_assert_not_equals_succeeds_when_not_equal
+ok - test_assert_shows_stderr_on_failure
+ok - test_assert_shows_stdout_on_failure
+ok - test_assert_status_code_fails
+ok - test_assert_status_code_succeeds
+ok - test_assert_succeeds
+ok - test_bash_unit_changes_cwd_to_current_test_file_directory
+ok - test_bash_unit_runs_teardown_even_in_case_of_failure
+ok - test_bash_unit_succeed_when_no_failure_even_if_no_teardown
+ok - test_display_usage_when_test_file_does_not_exist
+ok - test_exit_code_not_0_in_case_of_failure
+ok - test_fail_fails
+ok - test_fail_prints_failure_message
+ok - test_fail_prints_where_is_error
+ok - test_fails_when_test_file_does_not_exist
+ok - test_fake_actually_fakes_the_command
+ok - test_fake_can_fake_inline
+ok - test_fake_echo_stdin_when_no_params
+ok - test_fake_exports_faked_in_subshells
+ok - test_fake_transmits_params_to_fake_code
+ok - test_one_test_should_stop_after_first_assertion_failure
+ok - test_one_test_should_stop_when_assert_fails
+ok - test_run_all_file_parameters
+ok - test_run_all_tests_even_in_case_of_failure
+ok - test_run_only_tests_that_match_pattern
+```
+
 # How to write tests
 
 Write your test functions in a file. The name of a test function has to start with *test*. Only functions starting with *test* will be tested.
