@@ -510,15 +510,9 @@ EOF
 This test calls *code*, which calls *ps*, which is actually implemented by *_ps*. Since *code* does not use *ax* but only *a* as parameters, this test should fail. But...
 
 ```output
-Running test_code_gives_ps_appropriate_parameters... FAILURE
- expected [ax] but was [a]
-doc:13:_ps()
-doc:2:code()
-doc:18:test_code_gives_ps_appropriate_parameters()
-SUCCESS
+Running test_code_gives_ps_appropriate_parameters... SUCCESS
 ```
 
-This test displays FAILURE but it actually succeed, see SUCCESS at the end.
 The problem here is that *ps* fail (because of the failed *assert_equals* assertion). But *ps* is piped with *grep*:
 
 ```shell
@@ -551,14 +545,10 @@ The problem here is that we use a trick to make the code under test fail but the
 failure has nothing to do with the actual *assert_equals* failure. This is really
 bad, don't do that.
 
-Even if the output really looks like what we would expect, don't do that:
+Moreover, *assert_equals* output is captured by *ps* and this just messes with the display of our test results:
 
 ```output
-Running test_code_gives_ps_appropriate_parameters... FAILURE
- expected [ax] but was [a]
-doc:7:_ps()
-doc:2:code()
-doc:12:test_code_gives_ps_appropriate_parameters()
+Running test_code_gives_ps_appropriate_parameters... 
 ```
 
 The only correct alternative is for the fake *ps* to write *FAKE_PARAMS* in a file descriptor

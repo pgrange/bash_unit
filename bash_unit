@@ -23,16 +23,6 @@ GREEN="${ESCAPE}[92m"
 YELLOW="${ESCAPE}[93m"
 BLUE="${ESCAPE}[94m"
 
-# All tests informations must be sent to the following three
-# file descriptors:
-# LOG -> all test logs, such as SUCCESS, FAILURE, stacktrace...
-# OUT -> all code under test outputs relevant in the context
-# ERR -> all code under test error outputs relevant in the context
-exec {LOG}>&1
-exec {STACK}>&1
-exec {OUT}>&1
-exec {ERR}>&1
-
 fail() {
   local message=$1
   local stdout=$2
@@ -188,61 +178,61 @@ color() {
 text_format() {
   notify_suite_starting() {
     test_file="$1"
-    echo "Running tests in $test_file" >&$LOG
+    echo "Running tests in $test_file"
   }
   notify_test_starting() {
     local test="$1"
-    echo -n "Running $test... " | color "$BLUE" >&$LOG
+    echo -n "Running $test... " | color "$BLUE"
   }
   notify_test_succeeded() {
-    color "$GREEN" "SUCCESS" >&$LOG
+    color "$GREEN" "SUCCESS"
   }
   notify_test_failed() {
     local message="$2"
-    color "$RED" "FAILURE" >&$LOG
-    [[ -z $message  ]] || printf -- "$message\n" >&$LOG
+    color "$RED" "FAILURE"
+    [[ -z $message  ]] || printf -- "$message\n"
   }
   notify_stdout() {
-    sed 's:^:out> :' | color $GREEN >&$OUT
+    sed 's:^:out> :' | color $GREEN
   }
   notify_stderr() {
-    sed 's:^:err> :' | color $RED   >&$ERR
+    sed 's:^:err> :' | color $RED
   }
   notify_stack() {
-    color "$YELLOW" >&$STACK
+    color "$YELLOW"
   }
 }
 
 tap_format() {
   notify_suite_starting() {
     test_file="$1"
-    echo "# Running tests in $test_file" >&$LOG
+    echo "# Running tests in $test_file"
   }
   notify_test_starting() {
     echo -n
   }
   notify_test_succeeded() {
     local test="$1"
-    echo -n "ok" | color "$GREEN" >&$LOG
-    echo -n ' - ' >&$LOG
-    echo "$test" | color "$BLUE" >&$LOG
+    echo -n "ok" | color "$GREEN"
+    echo -n ' - '
+    echo "$test" | color "$BLUE"
   }
   notify_test_failed() {
     local test="$1"
     local message="$2"
-    echo -n "not ok" | color "$RED" >&$LOG
-    echo -n " - " >&$LOG
-    echo "$test" >&$LOG
-    [[ -z $message  ]] || printf -- "$message\n" | sed -u -e 's/^/# /' >&$LOG
+    echo -n "not ok" | color "$RED"
+    echo -n " - "
+    echo "$test"
+    [[ -z $message  ]] || printf -- "$message\n" | sed -u -e 's/^/# /'
   }
   notify_stdout() {
-    sed 's:^:# out> :' | color $GREEN >&$OUT
+    sed 's:^:# out> :' | color $GREEN
   }
   notify_stderr() {
-    sed 's:^:# err> :' | color $RED   >&$ERR
+    sed 's:^:# err> :' | color $RED
   }
   notify_stack() {
-    sed 's:^:# :' | color "$YELLOW"   >&$STACK
+    sed 's:^:# :' | color "$YELLOW"
   }
 }
 

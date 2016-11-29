@@ -85,7 +85,7 @@ test_assert_shows_stderr_on_failure() {
   )"
 
   assert_equals "\
-err> some error message" \
+some error message" \
     "$message"
 }
 
@@ -95,8 +95,8 @@ test_assert_shows_stdout_on_failure() {
   )"
 
   assert_equals "\
-out> some ok message
-out> another ok message" \
+some ok message
+another ok message" \
     "$message"
 }
 
@@ -238,58 +238,79 @@ last_line() {
 }
 
 with_bash_unit_muted() {
-  with_bash_unit_redirected "$@"
+  with_bash_unit_notifications_muted "$@"
 }
 
 with_bash_unit_err() {
-  with_bash_unit_redirected -e '&1' "$@"
+  with_bash_unit_notifications_muted -e "$@"
 }
 
 with_bash_unit_out() {
-  with_bash_unit_redirected -o '&1' "$@"
+  with_bash_unit_notifications_muted -o "$@"
 }
 
 with_bash_unit_log() {
-  with_bash_unit_redirected -l '&1' "$@"
+  with_bash_unit_notifications_muted -l "$@"
 }
 
 with_bash_unit_stack() {
-  with_bash_unit_redirected -s '&1' "$@"
+  with_bash_unit_notifications_muted -s "$@"
 }
 
-with_bash_unit_redirected() {
-  local log=/dev/null
-  local stack=/dev/null
-  local out=/dev/null
-  local err=/dev/null
-
-  unset OPTIND
-  while getopts "l:s:o:e:" option
-  do
-    case "$option" in
-      l)
-        log=$OPTARG
-        ;;
-      s)
-        stack=$OPTARG
-        ;;
-      o)
-        out=$OPTARG
-        ;;
-      e)
-        err=$OPTARG
-        ;;
-    esac
-  done
-  shift $((OPTIND-1))
-
+with_bash_unit_notifications_muted() {
   (
-    eval "exec {LOG}>$log"
-    eval "exec {STACK}>$stack"
-    eval "exec {OUT}>$out"
-    eval "exec {ERR}>$err"
+    mute
+    unset OPTIND
+    while getopts "lsoe" option
+    do
+      case "$option" in
+        l)
+          unmute_logs
+          ;;
+        s)
+          unmute_stack
+          ;;
+        o)
+          unmute_out
+          ;;
+        e)
+          unmute_err
+          ;;
+      esac
+    done
+    shift $((OPTIND-1))
+
     "$@"
   )
+}
+
+unmute_logs() {
+  notify_suite_starting() { echo "Running tests in $1" ; }
+  notify_test_starting () { echo -n "Running $1... " ; }
+  notify_test_succeeded() { echo "SUCCESS" ; }
+  notify_test_failed   () { echo "FAILURE" ; echo $2 ; }
+}
+
+unmute_stack() {
+  notify_stack() { cat ; }
+}
+
+unmute_out() {
+  notify_stdout() { cat ; }
+}
+
+unmute_err() {
+  notify_stderr() { cat ; }
+}
+
+mute() {
+  notify_suite_starting() { echo -n ; }
+  notify_test_starting () { echo -n ; }
+  notify_test_succeeded() { echo -n ; }
+  notify_test_failed   () { echo -n ; }
+  notify_stack         () { echo -n ; }
+  notify_stdout        () { echo -n ; }
+  notify_stderr        () { echo -n ; }
 }
 
 BASH_UNIT=../bash_unit
