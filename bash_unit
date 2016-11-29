@@ -175,6 +175,30 @@ color() {
   if [ -t 1 ] ; then echo -en "$NOCOLOR" ; fi
 }
 
+pretty_format() {
+  local color="$1"
+  local pretty_symbol="$2"
+  local alt_symbol="$3"
+  [ -t 1 ] && local term=true || local term=false
+  (
+    cat
+    if $term
+    then
+      echo -en " $pretty_symbol "
+    else
+      [[ ! -z "$alt_symbol" ]] && echo -en " $alt_symbol "
+    fi
+  ) | color "$color"
+}
+
+pretty_success() {
+  pretty_format "$GREEN" "\u2713" "$1"
+}
+
+pretty_failure() {
+  pretty_format "$RED" "\u2717" "$1"
+}
+
 text_format() {
   notify_suite_starting() {
     test_file="$1"
@@ -185,11 +209,13 @@ text_format() {
     echo -n "Running $test... " | color "$BLUE"
   }
   notify_test_succeeded() {
-    color "$GREEN" "SUCCESS"
+    echo -n "SUCCESS" | pretty_success
+    echo
   }
   notify_test_failed() {
     local message="$2"
-    color "$RED" "FAILURE"
+    echo -n "FAILURE" | pretty_failure
+    echo
     [[ -z $message  ]] || printf -- "$message\n"
   }
   notify_stdout() {
@@ -213,16 +239,14 @@ tap_format() {
   }
   notify_test_succeeded() {
     local test="$1"
-    echo -n "ok" | color "$GREEN"
-    echo -n ' - '
+    echo -n "ok" | pretty_success -
     echo "$test" | color "$BLUE"
   }
   notify_test_failed() {
     local test="$1"
     local message="$2"
-    echo -n "not ok" | color "$RED"
-    echo -n " - "
-    echo "$test"
+    echo -n "not ok" | pretty_failure -
+    echo "$test" | color "$BLUE"
     [[ -z $message  ]] || printf -- "$message\n" | sed -u -e 's/^/# /'
   }
   notify_stdout() {
