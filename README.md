@@ -1,4 +1,5 @@
-**bash unit testing enterprise edition framework for professionals**
+**bash unit testing enterprise edition framework for professionals ![bash_unit](img/bu_50.png)**
+
 
 It allows you to write unit tests (functions starting with *test*),
 run them and, in case of failure, displays the stack trace
