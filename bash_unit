@@ -132,7 +132,9 @@ stacktrace() {
 
 run_test_suite() {
   local failure=0
-  for test in $(set | grep  -E '^test.* ()' | grep -E "$test_pattern" | sed -e 's: .*::')
+  local tests=$(set | grep  -E '^test.* ()' | grep -E "$test_pattern" | sed -e 's: .*::')
+  notify_number_of_tests $(echo $tests | wc -w)
+  for test in ${tests}
   do
     (
       local status=0
@@ -207,6 +209,9 @@ text_format() {
     test_file="$1"
     echo "Running tests in $test_file"
   }
+  notify_number_of_tests() {
+    echo -n
+  }
   notify_test_starting() {
     local test="$1"
     echo -n "Running $test... " | color "$BLUE"
@@ -236,6 +241,9 @@ tap_format() {
   notify_suite_starting() {
     test_file="$1"
     echo "# Running tests in $test_file"
+  }
+  notify_number_of_tests() {
+    echo "1..${1}"
   }
   notify_test_starting() {
     echo -n

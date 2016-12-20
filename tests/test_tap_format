@@ -12,6 +12,7 @@ test_tap_format_for_one_succesfull_test() {
   assert_equals \
 "\
 # Running tests in code
+1..1
 ok - test_ok\
 " \
 "$(bash_unit_out_for_code <<EOF
@@ -26,6 +27,7 @@ test_tap_format_for_one_failing_test() {
    assert_equals \
 "\
 # Running tests in code
+1..1
 not ok - test_not_ok
 # code:2:test_not_ok()\
 " \
@@ -41,6 +43,7 @@ test_tap_format_for_failing_test_with_stdout_stderr_outputs() {
    assert_equals \
 "\
 # Running tests in code
+1..1
 not ok - test_not_ok
 # out> message on stdout
 # err> message on stderr
@@ -58,6 +61,7 @@ test_assertion_message_is_tap_formatted() {
    assert_equals \
 "\
 # Running tests in code
+1..1
 not ok - test_not_ok
 # obvious failure
 # code:2:test_not_ok()\
@@ -74,6 +78,7 @@ test_multi_lines_assertion_message_is_tap_formatted() {
    assert_equals \
 "\
 # Running tests in code
+1..1
 not ok - test_not_ok
 # obvious failure
 # on multiple lines
@@ -82,6 +87,26 @@ not ok - test_not_ok
 "$(bash_unit_out_for_code <<EOF
   test_not_ok() {
     assert_fail true "obvious failure\non multiple lines"
+  }
+EOF
+)"
+}
+
+test_suite_two_tests() {
+   assert_equals \
+"\
+# Running tests in code
+1..2
+not ok - test_not_ok
+# code:5:test_not_ok()
+ok - test_ok\
+" \
+"$(bash_unit_out_for_code <<EOF
+  test_ok() {
+    assert true
+  }
+  test_not_ok() {
+    assert_fail true
   }
 EOF
 )"

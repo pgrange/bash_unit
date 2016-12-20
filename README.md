@@ -124,6 +124,7 @@ output with the *-f* option.
 
 ```output
 # Running tests in tests/test_bash_unit.sh
+1..31
 ok - test_assert_equals_fails_when_not_equal
 ok - test_assert_equals_succeed_when_equal
 ok - test_assert_fail_fails
