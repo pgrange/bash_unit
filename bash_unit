@@ -157,7 +157,7 @@ usage() {
   echo "$0 [-f <output format>] [-p <pattern1>] [-p <pattern2>]... <test_file1> <test_file2>..." >&2
   echo >&2
   echo "Runs tests in test files that match <pattern>s" >&2
-  echo "<output format> is optionnal only supported value is tap" >&2
+  echo "<output format> is optional only supported value is tap" >&2
   echo "-v to get current version information" >&2
   echo "See https://github.com/pgrange/bash_unit" >&2
   exit 1
