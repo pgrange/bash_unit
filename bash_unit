@@ -31,8 +31,8 @@ fail() {
   local stderr=$3
 
   notify_test_failed $__bash_unit_current_test__ "$message"
-  [[ ! -z $stdout ]] && [ -s $stdout ] && cat $stdout | notify_stdout
-  [[ ! -z $stderr ]] && [ -s $stderr ] && cat $stderr | notify_stderr
+  [[ ! -z $stdout ]] && [ -s $stdout ] && notify_stdout < $stdout
+  [[ ! -z $stderr ]] && [ -s $stderr ] && notify_stderr < $stderr
 
   stacktrace | notify_stack
   exit 1
