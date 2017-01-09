@@ -123,7 +123,7 @@ fake() {
 
 stacktrace() {
   local i=1
-  while ! [ -z ${BASH_SOURCE[$i]} ]
+  while ! [ -z "${BASH_SOURCE[$i]}" ]
   do
     echo ${BASH_SOURCE[$i]}:${BASH_LINENO[$((i-1))]}:${FUNCNAME[$i]}\(\)
     i=$(($i + 1))
