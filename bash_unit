@@ -126,8 +126,8 @@ stacktrace() {
   while ! [ -z "${BASH_SOURCE[$i]}" ]
   do
     echo ${BASH_SOURCE[$i]}:${BASH_LINENO[$((i-1))]}:${FUNCNAME[$i]}\(\)
-    i=$(($i + 1))
-  done | grep -v ^$BASH_SOURCE
+    i=$((i + 1))
+  done | grep -v "^$BASH_SOURCE"
 }
 
 run_test_suite() {
@@ -141,7 +141,7 @@ run_test_suite() {
       declare -F | grep ' teardown$' >/dev/null && teardown
       exit $status
     )
-    failure=$(( $? || $failure))
+    failure=$(( $? || failure))
   done
   return $failure
 }
@@ -315,6 +315,6 @@ do
     cd $(dirname "$test_file")
     run_test_suite
   )
-  failure=$(( $? || $failure))
+  failure=$(( $? || failure))
 done
 exit $failure
