@@ -149,7 +149,7 @@ run_test_suite() {
 run_test() {
   set -e
   notify_test_starting "$__bash_unit_current_test__"
-  $__bash_unit_current_test__ && notify_test_succeeded "$__bash_unit_current_test__"
+  "$__bash_unit_current_test__" && notify_test_succeeded "$__bash_unit_current_test__"
 }
 
 usage() {
@@ -222,10 +222,10 @@ text_format() {
     [[ -z $message  ]] || printf -- "$message\n"
   }
   notify_stdout() {
-    sed 's:^:out> :' | color $GREEN
+    sed 's:^:out> :' | color "$GREEN"
   }
   notify_stderr() {
-    sed 's:^:err> :' | color $RED
+    sed 's:^:err> :' | color "$RED"
   }
   notify_stack() {
     color "$YELLOW"
@@ -253,10 +253,10 @@ tap_format() {
     [[ -z $message  ]] || printf -- "$message\n" | sed -u -e 's/^/# /'
   }
   notify_stdout() {
-    sed 's:^:# out> :' | color $GREEN
+    sed 's:^:# out> :' | color "$GREEN"
   }
   notify_stderr() {
-    sed 's:^:# err> :' | color $RED
+    sed 's:^:# err> :' | color "$RED"
   }
   notify_stack() {
     sed 's:^:# :' | color "$YELLOW"
@@ -289,8 +289,8 @@ shift $((OPTIND-1))
 
 for test_file in "$@"
 do
-  test -e $test_file || usage "file does not exist: $test_file"
-  test -r $test_file || usage "can not read file: $test_file"
+  test -e "$test_file" || usage "file does not exist: $test_file"
+  test -r "$test_file" || usage "can not read file: $test_file"
 done
 
 case "$output_format" in
@@ -312,7 +312,7 @@ do
   notify_suite_starting "$test_file"
   (
     source "$test_file"
-    cd $(dirname "$test_file")
+    cd "$(dirname "$test_file")"
     run_test_suite
   )
   failure=$(( $? || failure))
