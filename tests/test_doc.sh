@@ -62,5 +62,5 @@ function _next_quote_section() {
   '
 }
 
-cd $(dirname $0)
+cd "$(dirname "$0")"
 prepare_tests
