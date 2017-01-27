@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 #   bash unit testing enterprise edition framework for professionals
 #   Copyright (C) 2011-2016 Pascal Grange
