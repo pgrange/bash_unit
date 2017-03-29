@@ -313,7 +313,7 @@ Running test_code_does_not_write_this_in_the_file... SUCCESS
 
 Checks for a precise status code of the evaluation of *assertion*.
 
-It may be usefull if you want to distinguish between several error conditions in your code.
+It may be useful if you want to distinguish between several error conditions in your code.
 
 In case of failure, the standard output and error of the evaluated *assertion* is displayed. The optional message is also displayed.
 
@@ -385,7 +385,7 @@ Running test_obvious_inequality_with_assert_not_equals... SUCCESS
 
     fake <command> [replacement code]
 
-Fakes *command* and replaces it with *replacement code* (if code is specified) for the rest of the execution of your test. If no replacement code is specified, then it replaces command by one that echoes stdin of fake. This may be usefull if you need to simulate an environment for you code under test.
+Fakes *command* and replaces it with *replacement code* (if code is specified) for the rest of the execution of your test. If no replacement code is specified, then it replaces command by one that echoes stdin of fake. This may be useful if you need to simulate an environment for you code under test.
 
 For instance:
 
@@ -520,7 +520,7 @@ overriden by a function. For instance if your code under test relies on *exec* t
 
 *fake* stores parameters given to the fake in the global variable *FAKE_PARAMS* so that you can use them inside your fake.
 
-It may be usefull if you need to adapt the behavior on the given parameters.
+It may be useful if you need to adapt the behavior on the given parameters.
 
 It can also help in asserting the values of these parameters... but this may be quite tricky.
 
