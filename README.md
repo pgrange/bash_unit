@@ -381,7 +381,7 @@ doc:2:test_obvious_equality_with_assert_not_equals()
 Running test_obvious_inequality_with_assert_not_equals... SUCCESS
 ```
 
-#*fake* function
+# *fake* function
 
     fake <command> [replacement code]
 
