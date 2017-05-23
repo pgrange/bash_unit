@@ -182,10 +182,14 @@ pretty_format() {
   local color="$1"
   local pretty_symbol="$2"
   local alt_symbol="$3"
-  [ -t 1 ] && local term=true || local term=false
+  local term_utf8=false
+  if test -t 1 && [[ "$LANG" =~ .i*UTF-8.* ]]
+  then
+    term_utf8=true
+  fi
   (
     cat
-    if $term
+    if $term_utf8
     then
       echo -en " $pretty_symbol "
     else
