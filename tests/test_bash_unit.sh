@@ -313,4 +313,4 @@ mute() {
   notify_stderr        () { echo -n ; }
 }
 
-BASH_UNIT=../bash_unit
+BASH_UNIT="eval FORCE_COLOR=false ../bash_unit"

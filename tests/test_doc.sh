@@ -2,9 +2,9 @@
 
 TEST_PATTERN='```bash|```test'
 OUTPUT_PATTERN='```output'
-LANG=C
+LANG=C.UTF-8
 
-BASH_UNIT=./bash_unit
+BASH_UNIT="eval FORCE_COLOR=false ./bash_unit"
 
 prepare_tests() {
   mkdir /tmp/$$
