@@ -10,6 +10,8 @@ before continuing reading this documentation.
 
 *(by the way, the documentation you are reading is itself tested with bash-unit)*
 
+bash_unit is free software you may contribute to. See [CONTRIBUTING](CONTRIBUTING.md).
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Contents**
