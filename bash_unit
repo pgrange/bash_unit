@@ -87,6 +87,15 @@ _assert_expression() {
   ) || exit $?
 }
 
+debug_assert_status_code() {
+  local expected_status=$1
+  local assertion="$2"
+  local message="$3"
+  local status
+  eval "($assertion)" && status=$? || status=$?
+  assert_equals $expected_status $status "$message"
+}
+
 assert_equals() {
   local expected=$1
   local actual=$2
