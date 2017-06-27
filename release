@@ -2,6 +2,72 @@
 
 token_file=token
 
+cd $(dirname $0)
+
+check_can_release() {
+  local version="$1"
+
+  which asciidoctor >/dev/null 2>&1 || usage "You need asciidoctor to make releases"
+
+  if [ ! -z "$(git status --porcelain)" ]
+  then
+    git status >&2
+    echo >&2
+    usage "Please commit your pending changes first"
+  fi
+
+  [[ -z $version ]] && usage "No version specified on command line"
+  echo $version | grep -E '^v[0-9]*\.[0-9]*\.[0-9]*$' >/dev/null || usage "Invalid format for version: $version"
+  [ -r $token_file ] || usage "$token_file file does not exist" 
+  
+  source $token_file
+  
+  [[ -z $user ]]  && usage "user not found in file $token_file"
+  [[ -z $token ]] && usage "token not found in file $token_file"
+  true #avoid error on last instruction of function (see bash -e)
+}
+
+prepare_release() {
+  set -x
+  local version="$1"
+  shift
+
+  update_version "$version"
+  update_man
+
+  git add bash_unit
+  git add docs/man/man1/bash_unit.1
+
+  if [ $# -eq 0 ]
+  then
+    git commit -m "prepare release $version"
+  else
+    git commit -m "$*"
+  fi
+
+  git tag "$version"
+}
+
+update_version() {
+  local version="$1"
+  sed -i "s:^VERSION=.*:VERSION=$version:" bash_unit
+}
+
+update_man() {
+  asciidoctor -D docs/man/man1 -d manpage -b manpage README.adoc
+}
+
+publish_release() {
+  local version="$1"
+
+  git push
+  git push --tags
+  curl  -u $user:$token -XPOST https://api.github.com/repos/pgrange/bash_unit/releases -d "
+{
+  \"tag_name\": \"$version\"
+}"
+}
+
 usage() {
   local message=$1
 
@@ -22,18 +88,11 @@ EOF
   exit 1
 }
 
+[[ $# -ge 1 ]] || usage "You must specify version on command line"
 version=$1
+shift
 
-[[ -z $version ]] && usage "No version specified on command line"
-echo $version | grep -E '^v[0-9]*\.[0-9]*\.[0-9]*$' >/dev/null || usage "Invalid format for version: $version"
-[ -r $token_file ] || usage "$token_file file does not exist" 
+check_can_release "$version"
 
-source $token_file
-
-[[ -z $user ]]  && usage "user not found in file $token_file"
-[[ -z $token ]] && usage "token not found in file $token_file"
-
-curl  -u $user:$token -XPOST https://api.github.com/repos/pgrange/bash_unit/releases -d "
-{
-  \"tag_name\": \"$version\"
-}"
+prepare_release "$version" "$@"
+publish_release "$version"
