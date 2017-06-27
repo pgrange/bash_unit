@@ -1,3 +1,0 @@
-[filter "insert_tag"]
-  clean = sed 's:^VERSION=.*:VERSION=snapshot:'
-  smudge = sed "s:^VERSION=.*:VERSION=$(git describe --tags --abbrev=0):"
