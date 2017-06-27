@@ -1,63 +1,1010 @@
-.\" Manpage for bash_unit.
-.\" Contact n0vember at half-9 dot net to correct errors or typos
-.TH man 1 "17 September 2016" "1.0" "bash_unit man page"
-.SH NAME
-bash_unit \- run unit tests
-.SH SYNOPSIS
-.B bash_unit
-[ -p TEST_PATTERN ... ]
-.RI TESTS_FILE
-.SH DESCRIPTION
-bash_unit runs the tests writen in the tests_file given as argument. Tests file format is described below in the TESTS FILE section.
+'\" t
+.\"     Title: bash_unit
+.\"    Author: [see the "AUTHORS" section]
+.\" Generator: Asciidoctor 1.5.5
+.\"      Date: 2017-06-27
+.\"    Manual: \ \&
+.\"    Source: \ \&
+.\"  Language: English
+.\"
+.TH "BASH_UNIT" "1" "2017-06-27" "\ \&" "\ \&"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\\$2 \(laURL: \\$1 \(ra\\$3
+..
+.if \n[.g] .mso www.tmac
+.LINKSTYLE blue R < >
+.SH "NAME"
+bash_unit \- bash unit testing enterprise edition framework for professionals !
+.SH "SYNOPSIS"
+.sp
+\fBbash_unit\fP [\-f tap] [\-p <pattern>] [test_file]
+.SH "DESCRIPTION"
+.sp
+\fBbash_unit\fP allows you to write unit tests (functions starting with \fBtest\fP),
+run them and, in case of failure, displays the stack trace
+with source file and line number indications to locate the problem.
+.sp
+You might want to take a look at \c
+.URL "getting_started" "how to get started" ""
+before continuing reading this documentation.
+.sp
+\fI(by the way, the documentation you are reading is itself tested with bash\-unit)\fP
+.sp
+\fBbash_unit\fP is free software you may contribute to. See \c
+.URL "CONTRIBUTING.md" "" "."
+.SH "OPTIONS"
+.sp
+\fB\-p\fP \fIpattern\fP
+.RS 4
+filters tests to run based on the given pattern.
+You can specify several patterns by repeating this option
+fo each pattern.
+.RE
+.sp
+\fB\-f\fP \fIoutput_format\fP
+.RS 4
+specify an alternative output format.
+The only supported value is \fBtap\fP.
+.RE
+.SH "HOW TO RUN TESTS"
+.sp
+To run tests, simply call \fBbash_unit\fP with all your tests files as parameter. For instance to run \fBbash_unit\fP tests, from \fBbash_unit\fP directory:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+\&./bash_unit tests/test_bash_unit.sh
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Running tests in tests/test_bash_unit.sh
+Running test_assert_equals_fails_when_not_equal... SUCCESS
+Running test_assert_equals_succeed_when_equal... SUCCESS
+Running test_assert_fail_fails... SUCCESS
+Running test_assert_fail_succeeds... SUCCESS
+Running test_assert_fails... SUCCESS
+Running test_assert_not_equals_fails_when_equal... SUCCESS
+Running test_assert_not_equals_succeeds_when_not_equal... SUCCESS
+Running test_assert_shows_stderr_on_failure... SUCCESS
+Running test_assert_shows_stdout_on_failure... SUCCESS
+Running test_assert_status_code_fails... SUCCESS
+Running test_assert_status_code_succeeds... SUCCESS
+Running test_assert_succeeds... SUCCESS
+Running test_bash_unit_changes_cwd_to_current_test_file_directory... SUCCESS
+Running test_bash_unit_runs_teardown_even_in_case_of_failure... SUCCESS
+Running test_bash_unit_succeed_when_no_failure_even_if_no_teardown... SUCCESS
+Running test_display_usage_when_test_file_does_not_exist... SUCCESS
+Running test_exit_code_not_0_in_case_of_failure... SUCCESS
+Running test_fail_fails... SUCCESS
+Running test_fail_prints_failure_message... SUCCESS
+Running test_fail_prints_where_is_error... SUCCESS
+Running test_fails_when_test_file_does_not_exist... SUCCESS
+Running test_fake_actually_fakes_the_command... SUCCESS
+Running test_fake_can_fake_inline... SUCCESS
+Running test_fake_echo_stdin_when_no_params... SUCCESS
+Running test_fake_exports_faked_in_subshells... SUCCESS
+Running test_fake_transmits_params_to_fake_code... SUCCESS
+Running test_one_test_should_stop_after_first_assertion_failure... SUCCESS
+Running test_one_test_should_stop_when_assert_fails... SUCCESS
+Running test_run_all_file_parameters... SUCCESS
+Running test_run_all_tests_even_in_case_of_failure... SUCCESS
+Running test_run_only_tests_that_match_pattern... SUCCESS
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+You might also want to run only specific tests, you may do so with the
+\fI\-p\fP option. This option accepts a pattern as parameter and filters test
+functions against this pattern.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+\&./bash_unit \-p fail_fails \-p assert tests/test_bash_unit.sh
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Running tests in tests/test_bash_unit.sh
+Running test_assert_equals_fails_when_not_equal... SUCCESS
+Running test_assert_equals_succeed_when_equal... SUCCESS
+Running test_assert_fail_fails... SUCCESS
+Running test_assert_fail_succeeds... SUCCESS
+Running test_assert_fails... SUCCESS
+Running test_assert_not_equals_fails_when_equal... SUCCESS
+Running test_assert_not_equals_succeeds_when_not_equal... SUCCESS
+Running test_assert_shows_stderr_on_failure... SUCCESS
+Running test_assert_shows_stdout_on_failure... SUCCESS
+Running test_assert_status_code_fails... SUCCESS
+Running test_assert_status_code_succeeds... SUCCESS
+Running test_assert_succeeds... SUCCESS
+Running test_fail_fails... SUCCESS
+Running test_one_test_should_stop_after_first_assertion_failure... SUCCESS
+Running test_one_test_should_stop_when_assert_fails... SUCCESS
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+\fBbash_unit\fP supports the \c
+.URL "http://testanything.org/" "Test Anything Protocol" " "
+so you can ask for a tap formatted
+output with the \fI\-f\fP option.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+\&./bash_unit \-f tap tests/test_bash_unit.sh
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# Running tests in tests/test_bash_unit.sh
+ok \- test_assert_equals_fails_when_not_equal
+ok \- test_assert_equals_succeed_when_equal
+ok \- test_assert_fail_fails
+ok \- test_assert_fail_succeeds
+ok \- test_assert_fails
+ok \- test_assert_not_equals_fails_when_equal
+ok \- test_assert_not_equals_succeeds_when_not_equal
+ok \- test_assert_shows_stderr_on_failure
+ok \- test_assert_shows_stdout_on_failure
+ok \- test_assert_status_code_fails
+ok \- test_assert_status_code_succeeds
+ok \- test_assert_succeeds
+ok \- test_bash_unit_changes_cwd_to_current_test_file_directory
+ok \- test_bash_unit_runs_teardown_even_in_case_of_failure
+ok \- test_bash_unit_succeed_when_no_failure_even_if_no_teardown
+ok \- test_display_usage_when_test_file_does_not_exist
+ok \- test_exit_code_not_0_in_case_of_failure
+ok \- test_fail_fails
+ok \- test_fail_prints_failure_message
+ok \- test_fail_prints_where_is_error
+ok \- test_fails_when_test_file_does_not_exist
+ok \- test_fake_actually_fakes_the_command
+ok \- test_fake_can_fake_inline
+ok \- test_fake_echo_stdin_when_no_params
+ok \- test_fake_exports_faked_in_subshells
+ok \- test_fake_transmits_params_to_fake_code
+ok \- test_one_test_should_stop_after_first_assertion_failure
+ok \- test_one_test_should_stop_when_assert_fails
+ok \- test_run_all_file_parameters
+ok \- test_run_all_tests_even_in_case_of_failure
+ok \- test_run_only_tests_that_match_pattern
+.fi
+.if n \{\
+.RE
+.\}
+.SH "HOW TO WRITE TESTS"
+.sp
+Write your test functions in a file. The name of a test function has to start with \fBtest\fP. Only functions starting with \fBtest\fP will be tested.
+.sp
+Use the \fBbash_unit\fP assertion functions in your test functions, see below.
+.sp
+You may write a \fBsetup\fP function that will be exectuted before each test is run.
+.sp
+You may write a \fBteardown\fP function that will be exectuted after each test is run.
+.sp
+If you need to set someting up only once for all tests, simply write your code outside any test function, this is a bash script.
+.sp
+\fBbash_unit\fP changes the current working directory to the one of the running test file. If you need to access files from your test code, for instance the script under test, use path relative to the test file.
+.sp
+You may need to change the behavior of some commands to create conditions for your code under test to behave as expected. The \fBfake\fP function may help you to do that, see bellow.
+.SH "TEST FUNCTIONS"
+.sp
+\fBbash_unit\fP supports several shell oriented assertion functions.
+.SS "\fBfail\fP"
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+fail [message]
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Fails the test and displays an optional message.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+test_can_fail() {
+  fail "this test failed on purpose"
+}
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Running test_can_fail... FAILURE
+this test failed on purpose
+doc:2:test_can_fail()
+.fi
+.if n \{\
+.RE
+.\}
+.SS "\fBassert\fP"
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+assert <assertion> [message]
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Evaluates \fIassertion\fP and fails if \fIassertion\fP fails.
+.sp
+\fIassertion\fP fails if its evaluation returns a status code different from 0.
+.sp
+In case of failure, the standard output and error of the evaluated \fIassertion\fP is displayed. The optional message is also displayed.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+test_assert_fails() {
+  assert false "this test failed, obvioulsy"
+}
+test_assert_succeed() {
+  assert true
+}
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Running test_assert_fails... FAILURE
+this test failed, obvioulsy
+doc:2:test_assert_fails()
+Running test_assert_succeed... SUCCESS
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+But you probably want to assert less obvious facts.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+code() {
+  touch /tmp/the_file
+}
 
-You can limit the tests to be run with the -p option. This option can be specified mutiple times in order to launch a subset of tests.
-.SH OPTIONS
-.TP
-.BI \-p " " TEST_PATTERN
-Default bash_unit behaviour is to run every test found in tests_file. This option will limit bash_unit to the tests which name matches the specified pattern.
-.SH TESTS FILE
-TESTS FILE is a bash script only containing functions. There are some
-.I RESERVED FUNCTION NAMES
-and the
-.I TESTS FUNCTIONS.
-All
-.I TESTS FUNCTIONS
-are called one by one during the testing process whereas functions with
-.I RESERVED FUNCTION NAMES
-are called to prepare the testing environment.
-.SH TESTS FUNCTIONS
-tests functions are basic shell functions returning 0 exit code when test is succesfull and any other value if unsuccesfull. They can use
-.I TESTING FUNCTIONS.
-You can also add regular bash functions to call in your tests.
-.SH RESERVED FUNCTION NAMES
-.TP
-.B setup
-.SH TESTING FUNCTIONS
-.I TESTS FUNCTIONS
-you write can (and should) use bash_unit
-.I TESTING FUNCTIONS.
-This functions are :
-.TP
-.B assert
-.TP
-.B fail
-.TP
-.B assert_fail
-.TP
-.B assert_status_code
-.TP
-.B assert_equals
-.TP
-.TP
-.B fake
-.B assert_not_equals
-.SH SEE ALSO
-The best documentation is to be found on the github project page :
+test_code_creates_the_file() {
+  code
 
-https://github.com/pgrange/bash_unit
-.SH BUGS
-No known bugs. Bugs may be reported using the github issues process here :
+  assert "test \-e /tmp/the_file"
+}
 
-https://github.com/pgrange/bash_unit/issues
-.SH AUTHOR
-Pascal Grange (pascal at grange dot nom dot fr)
+test_code_makes_the_file_executable() {
+  code
+
+  assert "test \-x /tmp/the_file" "/tmp/the_file should be executable"
+}
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Running test_code_creates_the_file... SUCCESS
+Running test_code_makes_the_file_executable... FAILURE
+/tmp/the_file should be executable
+doc:14:test_code_makes_the_file_executable()
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+It may also be fun to use assert to check for the expected content of a file.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+code() {
+  echo \(aqnot so cool\(aq > /tmp/the_file
+}
+
+test_code_write_appropriate_content_in_the_file() {
+  code
+
+  assert "diff <(echo \(aqthis is cool\(aq) /tmp/the_file"
+}
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Running test_code_write_appropriate_content_in_the_file... FAILURE
+out> 1c1
+out> < this is cool
+out> \-\-\-
+out> > not so cool
+doc:8:test_code_write_appropriate_content_in_the_file()
+.fi
+.if n \{\
+.RE
+.\}
+.SS "\fBassert_fail\fP"
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+assert_fail <assertion> [message]
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Asserts that \fIassertion\fP fails. This is the opposite of \fBassert\fP.
+.sp
+\fIassertion\fP fails if its evaluation returns a status code different from 0.
+.sp
+If the evaluated expression does not fail, then \fBassert_fail\fP will fail and display the standard output and error of the evaluated \fIassertion\fP. The optional message is also displayed.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+code() {
+  echo \(aqnot so cool\(aq > /tmp/the_file
+}
+
+test_code_does_not_write_cool_in_the_file() {
+  code
+
+  assert_fail "grep cool /tmp/the_file" "should not write \(aqcool\(aq in /tmp/the_file"
+}
+
+test_code_does_not_write_this_in_the_file() {
+  code
+
+  assert_fail "grep this /tmp/the_file" "should not write \(aqthis\(aq in /tmp/the_file"
+}
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Running test_code_does_not_write_cool_in_the_file... FAILURE
+should not write \(aqcool\(aq in /tmp/the_file
+out> not so cool
+doc:8:test_code_does_not_write_cool_in_the_file()
+Running test_code_does_not_write_this_in_the_file... SUCCESS
+.fi
+.if n \{\
+.RE
+.\}
+.SS "\fBassert_status_code\fP"
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+assert_status_code <expected_status_code> <assertion> [message]
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Checks for a precise status code of the evaluation of \fIassertion\fP.
+.sp
+It may be useful if you want to distinguish between several error conditions in your code.
+.sp
+In case of failure, the standard output and error of the evaluated \fIassertion\fP is displayed. The optional message is also displayed.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+code() {
+  exit 23
+}
+
+test_code_should_fail_with_code_25() {
+  assert_status_code 25 code
+}
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Running test_code_should_fail_with_code_25... FAILURE
+ expected status code 25 but was 23
+doc:6:test_code_should_fail_with_code_25()
+.fi
+.if n \{\
+.RE
+.\}
+.SS "\fBassert_equals\fP"
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+assert_equals <expected> <actual> [message]
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Asserts for equality of the two strings \fIexpected\fP and \fIactual\fP.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+test_obvious_inequality_with_assert_equals(){
+  assert_equals "a string" "another string" "a string should be another string"
+}
+test_obvious_equality_with_assert_equals(){
+  assert_equals a a
+}
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Running test_obvious_equality_with_assert_equals... SUCCESS
+Running test_obvious_inequality_with_assert_equals... FAILURE
+a string should be another string
+ expected [a string] but was [another string]
+doc:2:test_obvious_inequality_with_assert_equals()
+.fi
+.if n \{\
+.RE
+.\}
+.SS "\fBassert_not_equals\fP"
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+assert_not_equals <unexpected> <actual> [message]
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Asserts for inequality of the two strings \fIunexpected\fP and \fIactual\fP.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+test_obvious_equality_with_assert_not_equals(){
+  assert_not_equals "a string" "a string" "a string should be different from another string"
+}
+test_obvious_inequality_with_assert_not_equals(){
+  assert_not_equals a b
+}
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Running test_obvious_equality_with_assert_not_equals... FAILURE
+a string should be different from another string
+ expected different value than [a string] but was the same
+doc:2:test_obvious_equality_with_assert_not_equals()
+Running test_obvious_inequality_with_assert_not_equals... SUCCESS
+.fi
+.if n \{\
+.RE
+.\}
+.SH "\FBFAKE\FP FUNCTION"
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+fake <command> [replacement code]
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Fakes \fIcommand\fP and replaces it with \fIreplacement code\fP (if code is specified) for the rest of the execution of your test. If no replacement code is specified, then it replaces command by one that echoes stdin of fake. This may be useful if you need to simulate an environment for you code under test.
+.sp
+For instance:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+fake ps echo hello world
+ps
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+will output:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+hello world
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+We can do the same using \fIstdin\fP of fake:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+fake ps << EOF
+hello world
+EOF
+ps
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+hello world
+.fi
+.if n \{\
+.RE
+.\}
+.SS "Using stdin"
+.sp
+Here is an exemple, parameterizing fake with its \fIstdin\fP to test that code fails when some process does not run and succeeds otherwise:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+code() {
+  ps a | grep apache
+}
+
+test_code_succeeds_if_apache_runs() {
+  fake ps <<EOF
+  PID TTY          TIME CMD
+13525 pts/7    00:00:01 bash
+24162 pts/7    00:00:00 ps
+ 8387 ?            0:00 /usr/sbin/apache2 \-k start
+EOF
+
+  assert code "code should succeed when apache is running"
+}
+
+test_code_fails_if_apache_does_not_run() {
+  fake ps <<EOF
+  PID TTY          TIME CMD
+13525 pts/7    00:00:01 bash
+24162 pts/7    00:00:00 ps
+EOF
+
+  assert_fail code "code should fail when apache is not running"
+}
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Running test_code_fails_if_apache_does_not_run... SUCCESS
+Running test_code_succeeds_if_apache_runs... SUCCESS
+.fi
+.if n \{\
+.RE
+.\}
+.SS "Using a function"
+.sp
+In a previous exemple, we faked \fIps\fP by specifiyng code inline:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+fake ps echo hello world
+ps
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+hello world
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+If you need to write more complex code to fake your command, you may abstract this code in a function:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+_ps() {
+  echo hello world
+}
+fake ps _ps
+ps
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+hello world
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Be carefull however that your \fIps_ function is not exported to sub\-processes. It means that, depending on how your code under test works, \fPps_ may not be defined in the context where \fIps\fP will be called. For instance:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+_ps() {
+  echo hello world
+}
+fake ps _ps
+
+bash \-c ps
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+bash: line 1: _ps: command not found
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+It depends on your code under test but it is safer to just export functions needed by your fake so that they are available in sub\-processes:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+_ps() {
+  echo hello world
+}
+export \-f _ps
+fake ps _ps
+
+bash \-c ps
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+hello world
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+\fBfake\fP is also limited by the fact that it defines a \fIbash\fP function to
+override the actual command. In some context the command can not be
+overriden by a function. For instance if your code under test relies on \fIexec\fP to launch \fIps\fP, \fBfake\fP will have no effect.
+.SS "\fBfake\fP parameters"
+.sp
+\fBfake\fP stores parameters given to the fake in the global variable \fIFAKE_PARAMS\fP so that you can use them inside your fake.
+.sp
+It may be useful if you need to adapt the behavior on the given parameters.
+.sp
+It can also help in asserting the values of these parameters... but this may be quite tricky.
+.sp
+For instance, in our previous code that checks apache is running, we have an issue since our code does not use \fIps\fP with the appropriate parameters. So we will try to check that parameters given to ps are \fIax\fP.
+.sp
+To do that, the first naive approch would be:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+code() {
+  ps a | grep apache
+}
+
+test_code_gives_ps_appropriate_parameters() {
+  _ps() {
+    cat <<EOF
+  PID TTY          TIME CMD
+13525 pts/7    00:00:01 bash
+24162 pts/7    00:00:00 ps
+ 8387 ?            0:00 /usr/sbin/apache2 \-k start
+EOF
+    assert_equals ax "$FAKE_PARAMS"
+  }
+  export \-f _ps
+  fake ps _ps
+
+  code >/dev/null
+}
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+This test calls \fIcode\fP, which calls \fIps\fP, which is actually implemented by \fI_ps\fP. Since \fIcode\fP does not use \fIax\fP but only \fIa\fP as parameters, this test should fail. But...
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Running test_code_gives_ps_appropriate_parameters... SUCCESS
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+The problem here is that \fIps\fP fail (because of the failed \fBassert_equals\fP assertion). But \fIps\fP is piped with \fIgrep\fP:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+code() {
+  ps a | grep apache
+}
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+With bash, the result code of a pipeline equals the result code of the last command of the pipeline. The last command is \fIgrep\fP and since grep succeeds, the failure of \fI_ps\fP is lost and our test succeeds. We have only succeeded in messing with the test output, nothing more.
+.sp
+An alternative may be to activate bash \fIpipefail\fP option but this may introduce unwanted side effects. We can also simply not output anything in \fI_ps\fP so that \fIgrep\fP fails:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+code() {
+  ps a | grep apache
+}
+
+test_code_gives_ps_appropriate_parameters() {
+  _ps() {
+    assert_equals ax "$FAKE_PARAMS"
+  }
+  export \-f _ps
+  fake ps _ps
+
+  code >/dev/null
+}
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+The problem here is that we use a trick to make the code under test fail but the
+failure has nothing to do with the actual \fBassert_equals\fP failure. This is really
+bad, don\(cqt do that.
+.sp
+Moreover, \fBassert_equals\fP output is captured by \fIps\fP and this just messes with the display of our test results:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Running test_code_gives_ps_appropriate_parameters...
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+The only correct alternative is for the fake \fIps\fP to write \fIFAKE_PARAMS\fP in a file descriptor
+so that your test can grab them after code execution and assert their value. For instance
+by writing to a file:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+code() {
+  ps a | grep apache
+}
+
+test_code_gives_ps_appropriate_parameters() {
+  _ps() {
+    echo $FAKE_PARAMS > /tmp/fake_params
+  }
+  export \-f _ps
+  fake ps _ps
+
+  code || true
+
+  assert_equals ax "$(head \-n1 /tmp/fake_params)"
+}
+
+setup() {
+  rm \-f /tmp/fake_params
+}
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Here our fake writes to \fI/tmp/fake\fP. We delete this file in \fBsetup\fP to be
+sure that we do not get inapropriate data from a previous test. We assert
+that the first line of \fI/tmp/fake\fP equals \fIax\fP. Also, note that we know
+that \fIcode\fP will fail and write this to ignore the error: \f[CR]code || true\fP.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Running test_code_gives_ps_appropriate_parameters... FAILURE
+ expected [ax] but was [a]
+doc:14:test_code_gives_ps_appropriate_parameters()
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+We can also compact the fake definition:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+code() {
+  ps a | grep apache
+}
+
+test_code_gives_ps_appropriate_parameters() {
+  fake ps \(aqecho $FAKE_PARAMS >/tmp/fake_params\(aq
+
+  code || true
+
+  assert_equals ax "$(head \-n1 /tmp/fake_params)"
+}
+
+setup() {
+  rm \-f /tmp/fake_params
+}
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Running test_code_gives_ps_appropriate_parameters... FAILURE
+ expected [ax] but was [a]
+doc:10:test_code_gives_ps_appropriate_parameters()
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Finally, we can avoid the \fI/tmp/fake_params\fP temporary file by using \fIcoproc\fP:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+code() {
+  ps a | grep apache
+}
+
+test_get_data_from_fake() {
+  #Fasten you seat belt...
+  coproc cat
+  exec {test_channel}>&amp;${COPROC[1]}
+  fake ps \(aqecho $FAKE_PARAMS >&amp;$test_channel\(aq
+
+  code || true
+
+  assert_equals ax "$(head \-n1 <&amp;${COPROC[0]})"
+}
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Running test_get_data_from_fake... FAILURE
+ expected [ax] but was [a]
+doc:13:test_get_data_from_fake()
+.fi
+.if n \{\
+.RE
+.\}
