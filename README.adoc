@@ -44,17 +44,23 @@ ifndef::backend-manpage[]
 
 == How to install *bash_unit*
 
-This will install *bash_unit* in your current working directory:
+=== installing on Debian/Ubuntu
 
-    bash <(curl -s https://raw.githubusercontent.com/pgrange/bash_unit/master/install.sh)
-
-You can also download it from the https://github.com/pgrange/bash_unit/releases[release page].
+*bash_unit* deb package is available in the https://github.com/pgrange/bash-unit_deb/releases[bash-unit_deb repo].
 
 === installing on Archlinux
 
 *bash_unit* package is available on Archlinux through AUR. In order to install, issue the following command :
 
     yaourt -Sys bash_unit
+
+=== other installation
+
+This will install *bash_unit* in your current working directory:
+
+    bash <(curl -s https://raw.githubusercontent.com/pgrange/bash_unit/master/install.sh)
+
+You can also download it from the https://github.com/pgrange/bash_unit/releases[release page].
 
 endif::[]
 
