@@ -37,6 +37,20 @@ EOF
 )"
 }
 
+test_tap_format_for_one_pending_test() {
+   assert_equals \
+"\
+# Running tests in code
+ok - pending_not_yet_implemented # skip test to be written\
+" \
+"$(bash_unit_out_for_code <<EOF
+  pending_not_yet_implemented() {
+    assert false
+  }
+EOF
+)"
+}
+
 test_tap_format_for_failing_test_with_stdout_stderr_outputs() {
    assert_equals \
 "\

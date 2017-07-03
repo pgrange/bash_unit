@@ -49,6 +49,27 @@ Running test_one... SUCCESS
 Running tests in test_file" "$bash_unit_output" 
 }
 
+test_do_not_run_pending_tests() {
+  assert "$BASH_UNIT \
+    <(echo 'pending_should_not_run() { fail ; }
+            todo_should_not_run() { fail ; }') \
+  "
+}
+
+test_pending_tests_appear_in_output() {
+  bash_unit_output=$($BASH_UNIT \
+    <(echo 'pending_should_not_run() { fail ; }
+            todo_should_not_run() { fail ; }') \
+    | sed -e 's:/dev/fd/[0-9]*:test_file:' \
+  )
+
+  assert_equals "\
+Running tests in test_file
+Running pending_should_not_run... PENDING
+Running todo_should_not_run... PENDING" \
+  "$bash_unit_output"
+}
+
 test_fails_when_test_file_does_not_exist() {
   assert_fail "$BASH_UNIT /not_exist/not_exist"
 }

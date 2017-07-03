@@ -132,6 +132,14 @@ stacktrace() {
 
 run_test_suite() {
   local failure=0
+
+  for pending_test in $(set | grep  -E '^(pending|todo).* \(\)' | grep -E "$test_pattern" | sed -e 's: .*::')
+  do
+    notify_test_starting "$pending_test"
+    notify_test_pending "$pending_test"
+  done
+
+
   for test in $(set | grep  -E '^test.* \(\)' | grep -E "$test_pattern" | sed -e 's: .*::')
   do
     (
@@ -167,6 +175,10 @@ usage() {
 
 pretty_success() {
   pretty_format "$GREEN" "\u2713" "$1"
+}
+
+pretty_warning() {
+  pretty_format "$YELLOW" "\u2717" "$1"
 }
 
 pretty_failure() {
@@ -225,6 +237,11 @@ text_format() {
     local test="$1"
     echo -n "Running $test... " | color "$BLUE"
   }
+  notify_test_pending() {
+    echo -n "PENDING" | pretty_warning
+    echo
+  }
+
   notify_test_succeeded() {
     echo -n "SUCCESS" | pretty_success
     echo
@@ -253,6 +270,12 @@ tap_format() {
   }
   notify_test_starting() {
     echo -n
+  }
+  notify_test_pending() {
+    local test="$1"
+    echo -n "ok" | pretty_warning -
+    echo -n "$test" | color "$BLUE"
+    echo " # skip test to be written" | color "$YELLOW"
   }
   notify_test_succeeded() {
     local test="$1"
