@@ -2,12 +2,12 @@
 .\"     Title: bash_unit
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: Asciidoctor 1.5.5
-.\"      Date: 2017-06-27
+.\"      Date: 2017-07-03
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "BASH_UNIT" "1" "2017-06-27" "\ \&" "\ \&"
+.TH "BASH_UNIT" "1" "2017-07-03" "\ \&" "\ \&"
 .ie \n(.g .ds Aq \(aq
 .el       .ds Aq '
 .ss \n[.ss] 0
@@ -211,6 +211,9 @@ You may write a \fBsetup\fP function that will be exectuted before each test is 
 You may write a \fBteardown\fP function that will be exectuted after each test is run.
 .sp
 If you need to set someting up only once for all tests, simply write your code outside any test function, this is a bash script.
+.sp
+If you want to keep an eye on a test not yet implemented, prefix the name of the function by \fBtodo\fP instead of test.
+Test to do are not executed and do not impact the global status of your test suite but are displayed in \fBbash_unit\fP output.
 .sp
 \fBbash_unit\fP changes the current working directory to the one of the running test file. If you need to access files from your test code, for instance the script under test, use path relative to the test file.
 .sp
