@@ -348,8 +348,13 @@ for test_file in "$@"
 do
   notify_suite_starting "$test_file"
   (
-    source "$test_file"
-    cd "$(dirname "$test_file")"
+    if [[ "${STICK_TO_CWD}" != true ]]
+    then
+      cd "$(dirname "$test_file")"
+      source "$(basename "$test_file")"
+    else
+      source "$test_file"
+    fi
     run_test_suite
   )
   failure=$(( $? || failure))

@@ -1,17 +1,18 @@
 #!/bin/bash
 
 test_run_all_tests_even_in_case_of_failure() {
-  bash_unit_output=$($BASH_UNIT <(cat << EOF
-function test_succeed() { assert true ; }
-function test_fails()   { assert false ; }
-EOF
-) | sed -e 's:/dev/fd/[0-9]*:test_file:')
-
-  assert_equals "\
-Running tests in test_file
+  assert_equals \
+"\
+Running tests in code
 Running test_fails... FAILURE
-test_file:2:test_fails()
-Running test_succeed... SUCCESS" "$bash_unit_output" 
+code:2:test_fails()
+Running test_succeed... SUCCESS\
+" \
+"$(bash_unit_out_for_code << EOF
+  function test_succeed() { assert true ; }
+  function test_fails()   { assert false ; }
+EOF
+)"
 }
 
 test_exit_code_not_0_in_case_of_failure() {
@@ -29,11 +30,14 @@ test_run_all_file_parameters() {
     | sed -e 's:/dev/fd/[0-9]*:test_file:' \
   )
 
-  assert_equals "\
+  assert_equals \
+"\
 Running tests in test_file
 Running test_one... SUCCESS
 Running tests in test_file
-Running test_two... SUCCESS" "$bash_unit_output" 
+Running test_two... SUCCESS\
+" \
+"$bash_unit_output"
 }
 
 test_run_only_tests_that_match_pattern() {
@@ -107,6 +111,10 @@ test_one_test_should_stop_when_assert_fails() {
 line() {
   line_nb=$1
   tail -n +$line_nb | head -1
+}
+
+bash_unit_out_for_code() {
+  $BASH_UNIT <(cat) | sed -e 's:/dev/fd/[0-9]*:code:' -e 's/[0-9]*:/code:/'
 }
 
 BASH_UNIT="eval FORCE_COLOR=false ../bash_unit"

@@ -102,7 +102,7 @@ EOF
 }
 
 bash_unit_out_for_code() {
-  $BASH_UNIT -f tap <(cat) | sed -e 's:/dev/fd/[0-9]*:code:g'
+  $BASH_UNIT -f tap <(cat) | sed -e 's:/dev/fd/[0-9]*:code:' -e 's/[0-9]*:/code:/'
 }
 
 BASH_UNIT="eval FORCE_COLOR=false ../bash_unit"

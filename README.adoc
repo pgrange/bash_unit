@@ -86,7 +86,6 @@ Running test_assert_shows_stdout_on_failure... SUCCESS
 Running test_assert_status_code_fails... SUCCESS
 Running test_assert_status_code_succeeds... SUCCESS
 Running test_assert_succeeds... SUCCESS
-Running test_bash_unit_changes_cwd_to_current_test_file_directory... SUCCESS
 Running test_fail_fails... SUCCESS
 Running test_fail_prints_failure_message... SUCCESS
 Running test_fail_prints_where_is_error... SUCCESS
@@ -143,7 +142,6 @@ ok - test_assert_shows_stdout_on_failure
 ok - test_assert_status_code_fails
 ok - test_assert_status_code_succeeds
 ok - test_assert_succeeds
-ok - test_bash_unit_changes_cwd_to_current_test_file_directory
 ok - test_fail_fails
 ok - test_fail_prints_failure_message
 ok - test_fail_prints_where_is_error

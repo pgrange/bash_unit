@@ -4,7 +4,10 @@ TEST_PATTERN='```bash|```test'
 OUTPUT_PATTERN='```output'
 LANG=C.UTF-8
 
-BASH_UNIT="eval FORCE_COLOR=false ./bash_unit"
+export FORCE_COLOR=false
+export STICK_TO_CWD=true
+BASH_UNIT="eval ./bash_unit"
+#BASH_UNIT="eval FORCE_COLOR=false ./bash_unit"
 
 prepare_tests() {
   mkdir /tmp/$$
@@ -62,5 +65,7 @@ function _next_quote_section() {
   '
 }
 
-cd "$(dirname "$0")"
+# change to bash_unit source directory since we should be in
+# test subdirectory
+cd ..
 prepare_tests

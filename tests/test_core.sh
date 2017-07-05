@@ -138,10 +138,19 @@ EOF
   assert_equals 2 $(ps | grep pts | wc -l)
 }
 
-test_bash_unit_changes_cwd_to_current_test_file_directory() {
+if [[ "${STICK_TO_CWD}" != true ]]
+then
+  # do not test for cwd if STICK_TO_CWD is true
+  test_bash_unit_changes_cwd_to_current_test_file_directory() {
+    assert "ls ../tests/$(basename "$BASH_SOURCE")" \
+      "bash_unit should change current working directory to match the directory of the currenlty running test"
+  }
+
+  #the following assertion is out of any test on purpose
   assert "ls ../tests/$(basename "$BASH_SOURCE")" \
-    "bash_unit should change current working directory to match the directory of the currenlty running test"
-}
+  "bash_unit should change current working directory to match the directory of the currenlty running test before sourcing test file"
+fi
+
 
 line() {
   line_nb=$1
