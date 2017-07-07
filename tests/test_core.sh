@@ -11,28 +11,28 @@ test_fail_fails() {
 
 #fail can now be used in the following tests
 
-test_assert_fail_succeeds() {
-  (assert_fail false) || fail 'assert_fail should succeed' 
+test_assert_fails_succeeds() {
+  (assert_fails false) || fail 'assert_fails should succeed' 
 }
 
-test_assert_fail_fails() {
-  with_bash_unit_muted assert_fail true && fail 'assert_fail should fail' || true
+test_assert_fails_fails() {
+  with_bash_unit_muted assert_fails true && fail 'assert_fails should fail' || true
 }
 
-#assert_fail can now be used in the following tests
+#assert_fails can now be used in the following tests
 
 test_assert_succeeds() {
   assert true || fail 'assert should succeed'
 }
 
 test_assert_fails() {
-  assert_fail "with_bash_unit_muted assert false" "assert should fail"
+  assert_fails "with_bash_unit_muted assert false" "assert should fail"
 }
 
 #assert can now be used in the following tests
 
 test_assert_equals_fails_when_not_equal() {
-  assert_fail \
+  assert_fails \
     "with_bash_unit_muted assert_equals toto tutu" \
     "assert_equals should fail"
 }
@@ -46,7 +46,7 @@ test_assert_equals_succeed_when_equal() {
 #assert_equals can now be used in the following tests
 
 test_assert_not_equals_fails_when_equal() {
-  assert_fail \
+  assert_fails \
     "with_bash_unit_muted assert_not_equals toto toto" \
     "assert_not_equals should fail"
 }
@@ -75,7 +75,7 @@ test_assert_status_code_succeeds() {
 }
 
 test_assert_status_code_fails() {
-  assert_fail "with_bash_unit_muted assert_status_code 3 true" \
+  assert_fails "with_bash_unit_muted assert_status_code 3 true" \
     "assert_status_code should fail"
 }
 

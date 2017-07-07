@@ -16,7 +16,7 @@ EOF
 }
 
 test_exit_code_not_0_in_case_of_failure() {
-  assert_fail "$BASH_UNIT <(cat << EOF
+  assert_fails "$BASH_UNIT <(cat << EOF
 function test_succeed() { assert true ; }
 function test_fails()   { assert false ; }
 EOF
@@ -75,7 +75,7 @@ Running todo_should_not_run... PENDING" \
 }
 
 test_fails_when_test_file_does_not_exist() {
-  assert_fail "$BASH_UNIT /not_exist/not_exist"
+  assert_fails "$BASH_UNIT /not_exist/not_exist"
 }
 
 test_display_usage_when_test_file_does_not_exist() {

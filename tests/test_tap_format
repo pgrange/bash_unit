@@ -5,7 +5,7 @@ test_bash_unit_accepts_tap_format_option() {
 }
 
 test_bash_unit_rejects_invalid_format() {
-  assert_fail "$BASH_UNIT -f invalid_format"
+  assert_fails "$BASH_UNIT -f invalid_format"
 }
 
 test_tap_format_for_one_succesfull_test() {
@@ -62,7 +62,7 @@ not ok - test_not_ok
 " \
 "$(bash_unit_out_for_code <<EOF
   test_not_ok() {
-    assert_fail "echo message on stdout ; echo message on stderr >&2"
+    assert_fails "echo message on stdout ; echo message on stderr >&2"
   }
 EOF
 )"
@@ -78,7 +78,7 @@ not ok - test_not_ok
 " \
 "$(bash_unit_out_for_code <<EOF
   test_not_ok() {
-    assert_fail true "obvious failure"
+    assert_fails true "obvious failure"
   }
 EOF
 )"
@@ -95,7 +95,7 @@ not ok - test_not_ok
 " \
 "$(bash_unit_out_for_code <<EOF
   test_not_ok() {
-    assert_fail true "obvious failure\non multiple lines"
+    assert_fails true "obvious failure\non multiple lines"
   }
 EOF
 )"

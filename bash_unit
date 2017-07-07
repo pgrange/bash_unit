@@ -48,7 +48,7 @@ assert() {
     "\"$message\""
 }
 
-assert_fail() {
+assert_fails() {
   local assertion=$1
   local message=$2
 
@@ -56,6 +56,11 @@ assert_fail() {
     "$assertion" \
     "[ \$status != 0 ]" \
     "\"$message\""
+}
+
+assert_fail() {
+  #deprecated, use assert_fails instead
+  assert_fails "$@"
 }
 
 assert_status_code() {
