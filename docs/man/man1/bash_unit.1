@@ -2,12 +2,12 @@
 .\"     Title: bash_unit
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: Asciidoctor 1.5.5
-.\"      Date: 2017-07-03
+.\"      Date: 2017-07-07
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "BASH_UNIT" "1" "2017-07-03" "\ \&" "\ \&"
+.TH "BASH_UNIT" "1" "2017-07-07" "\ \&" "\ \&"
 .ie \n(.g .ds Aq \(aq
 .el       .ds Aq '
 .ss \n[.ss] 0
@@ -53,13 +53,13 @@ The only supported value is \fBtap\fP.
 .RE
 .SH "HOW TO RUN TESTS"
 .sp
-To run tests, simply call \fBbash_unit\fP with all your tests files as parameter. For instance to run \fBbash_unit\fP tests, from \fBbash_unit\fP directory:
+To run tests, simply call \fBbash_unit\fP with all your tests files as parameter. For instance to run some \fBbash_unit\fP tests, from \fBbash_unit\fP directory:
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-\&./bash_unit tests/test_bash_unit.sh
+\&./bash_unit tests/test_core.sh
 .fi
 .if n \{\
 .RE
@@ -69,7 +69,7 @@ To run tests, simply call \fBbash_unit\fP with all your tests files as parameter
 .RS 4
 .\}
 .nf
-Running tests in tests/test_bash_unit.sh
+Running tests in tests/test_core.sh
 Running test_assert_equals_fails_when_not_equal... SUCCESS
 Running test_assert_equals_succeed_when_equal... SUCCESS
 Running test_assert_fail_fails... SUCCESS
@@ -82,25 +82,14 @@ Running test_assert_shows_stdout_on_failure... SUCCESS
 Running test_assert_status_code_fails... SUCCESS
 Running test_assert_status_code_succeeds... SUCCESS
 Running test_assert_succeeds... SUCCESS
-Running test_bash_unit_changes_cwd_to_current_test_file_directory... SUCCESS
-Running test_bash_unit_runs_teardown_even_in_case_of_failure... SUCCESS
-Running test_bash_unit_succeed_when_no_failure_even_if_no_teardown... SUCCESS
-Running test_display_usage_when_test_file_does_not_exist... SUCCESS
-Running test_exit_code_not_0_in_case_of_failure... SUCCESS
 Running test_fail_fails... SUCCESS
 Running test_fail_prints_failure_message... SUCCESS
 Running test_fail_prints_where_is_error... SUCCESS
-Running test_fails_when_test_file_does_not_exist... SUCCESS
 Running test_fake_actually_fakes_the_command... SUCCESS
 Running test_fake_can_fake_inline... SUCCESS
 Running test_fake_echo_stdin_when_no_params... SUCCESS
 Running test_fake_exports_faked_in_subshells... SUCCESS
 Running test_fake_transmits_params_to_fake_code... SUCCESS
-Running test_one_test_should_stop_after_first_assertion_failure... SUCCESS
-Running test_one_test_should_stop_when_assert_fails... SUCCESS
-Running test_run_all_file_parameters... SUCCESS
-Running test_run_all_tests_even_in_case_of_failure... SUCCESS
-Running test_run_only_tests_that_match_pattern... SUCCESS
 .fi
 .if n \{\
 .RE
@@ -114,7 +103,7 @@ functions against this pattern.
 .RS 4
 .\}
 .nf
-\&./bash_unit \-p fail_fails \-p assert tests/test_bash_unit.sh
+\&./bash_unit \-p fail_fails \-p assert tests/test_core.sh
 .fi
 .if n \{\
 .RE
@@ -124,7 +113,7 @@ functions against this pattern.
 .RS 4
 .\}
 .nf
-Running tests in tests/test_bash_unit.sh
+Running tests in tests/test_core.sh
 Running test_assert_equals_fails_when_not_equal... SUCCESS
 Running test_assert_equals_succeed_when_equal... SUCCESS
 Running test_assert_fail_fails... SUCCESS
@@ -138,8 +127,6 @@ Running test_assert_status_code_fails... SUCCESS
 Running test_assert_status_code_succeeds... SUCCESS
 Running test_assert_succeeds... SUCCESS
 Running test_fail_fails... SUCCESS
-Running test_one_test_should_stop_after_first_assertion_failure... SUCCESS
-Running test_one_test_should_stop_when_assert_fails... SUCCESS
 .fi
 .if n \{\
 .RE
@@ -154,7 +141,7 @@ output with the \fI\-f\fP option.
 .RS 4
 .\}
 .nf
-\&./bash_unit \-f tap tests/test_bash_unit.sh
+\&./bash_unit \-f tap tests/test_core.sh
 .fi
 .if n \{\
 .RE
@@ -164,7 +151,7 @@ output with the \fI\-f\fP option.
 .RS 4
 .\}
 .nf
-# Running tests in tests/test_bash_unit.sh
+# Running tests in tests/test_core.sh
 ok \- test_assert_equals_fails_when_not_equal
 ok \- test_assert_equals_succeed_when_equal
 ok \- test_assert_fail_fails
@@ -177,25 +164,14 @@ ok \- test_assert_shows_stdout_on_failure
 ok \- test_assert_status_code_fails
 ok \- test_assert_status_code_succeeds
 ok \- test_assert_succeeds
-ok \- test_bash_unit_changes_cwd_to_current_test_file_directory
-ok \- test_bash_unit_runs_teardown_even_in_case_of_failure
-ok \- test_bash_unit_succeed_when_no_failure_even_if_no_teardown
-ok \- test_display_usage_when_test_file_does_not_exist
-ok \- test_exit_code_not_0_in_case_of_failure
 ok \- test_fail_fails
 ok \- test_fail_prints_failure_message
 ok \- test_fail_prints_where_is_error
-ok \- test_fails_when_test_file_does_not_exist
 ok \- test_fake_actually_fakes_the_command
 ok \- test_fake_can_fake_inline
 ok \- test_fake_echo_stdin_when_no_params
 ok \- test_fake_exports_faked_in_subshells
 ok \- test_fake_transmits_params_to_fake_code
-ok \- test_one_test_should_stop_after_first_assertion_failure
-ok \- test_one_test_should_stop_when_assert_fails
-ok \- test_run_all_file_parameters
-ok \- test_run_all_tests_even_in_case_of_failure
-ok \- test_run_only_tests_that_match_pattern
 .fi
 .if n \{\
 .RE
