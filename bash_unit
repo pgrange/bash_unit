@@ -138,6 +138,8 @@ stacktrace() {
 run_test_suite() {
   local failure=0
 
+  declare -F | grep ' setup_suite$' >/dev/null && setup_suite
+
   for pending_test in $(set | grep  -E '^(pending|todo).* \(\)' | grep -E "$test_pattern" | sed -e 's: .*::')
   do
     notify_test_starting "$pending_test"
@@ -156,6 +158,9 @@ run_test_suite() {
     )
     failure=$(( $? || failure))
   done
+
+  declare -F | grep ' teardown_suite$' >/dev/null && teardown_suite
+
   return $failure
 }
 
