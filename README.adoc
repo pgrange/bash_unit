@@ -162,7 +162,13 @@ You may write a *setup* function that will be exectuted before each test is run.
 
 You may write a *teardown* function that will be exectuted after each test is run.
 
-If you need to set someting up only once for all tests, simply write your code outside any test function, this is a bash script.
+You may write a *setup_suite* function that will be executed only once before all the tests of your test file.
+
+You may write a *teardown_suite* function that will be executed only once after all the tests of your test file.
+
+If you write code outside of any bash function, this code will be executed once at test file loading time since
+your file is a bash script and *bash_unit* sources it before running your tests. It is suggested to write a
+*setup_suite* function and avoid any code outside a bash function.
 
 If you want to keep an eye on a test not yet implemented, prefix the name of the function by *todo* instead of test.
 Test to do are not executed and do not impact the global status of your test suite but are displayed in *bash_unit* output.
