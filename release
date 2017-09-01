@@ -74,7 +74,7 @@ usage() {
   cat >&2 <<EOF
 $message
 
-  $0 <version>
+  $0 <version>  [release note]
 Publishes a new release of bash_unit on github.
 Version must respect [Semantic Versioning](http://semver.org/)
 A token file must exist in the current working directory. This file must be of the form:
