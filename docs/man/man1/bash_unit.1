@@ -2,12 +2,12 @@
 .\"     Title: bash_unit
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: Asciidoctor 1.5.5
-.\"      Date: 2017-07-07
+.\"      Date: 2017-09-01
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "BASH_UNIT" "1" "2017-07-07" "\ \&" "\ \&"
+.TH "BASH_UNIT" "1" "2017-09-01" "\ \&" "\ \&"
 .ie \n(.g .ds Aq \(aq
 .el       .ds Aq '
 .ss \n[.ss] 0
@@ -72,9 +72,9 @@ To run tests, simply call \fBbash_unit\fP with all your tests files as parameter
 Running tests in tests/test_core.sh
 Running test_assert_equals_fails_when_not_equal... SUCCESS
 Running test_assert_equals_succeed_when_equal... SUCCESS
-Running test_assert_fail_fails... SUCCESS
-Running test_assert_fail_succeeds... SUCCESS
 Running test_assert_fails... SUCCESS
+Running test_assert_fails_fails... SUCCESS
+Running test_assert_fails_succeeds... SUCCESS
 Running test_assert_not_equals_fails_when_equal... SUCCESS
 Running test_assert_not_equals_succeeds_when_not_equal... SUCCESS
 Running test_assert_shows_stderr_on_failure... SUCCESS
@@ -116,9 +116,9 @@ functions against this pattern.
 Running tests in tests/test_core.sh
 Running test_assert_equals_fails_when_not_equal... SUCCESS
 Running test_assert_equals_succeed_when_equal... SUCCESS
-Running test_assert_fail_fails... SUCCESS
-Running test_assert_fail_succeeds... SUCCESS
 Running test_assert_fails... SUCCESS
+Running test_assert_fails_fails... SUCCESS
+Running test_assert_fails_succeeds... SUCCESS
 Running test_assert_not_equals_fails_when_equal... SUCCESS
 Running test_assert_not_equals_succeeds_when_not_equal... SUCCESS
 Running test_assert_shows_stderr_on_failure... SUCCESS
@@ -154,9 +154,9 @@ output with the \fI\-f\fP option.
 # Running tests in tests/test_core.sh
 ok \- test_assert_equals_fails_when_not_equal
 ok \- test_assert_equals_succeed_when_equal
-ok \- test_assert_fail_fails
-ok \- test_assert_fail_succeeds
 ok \- test_assert_fails
+ok \- test_assert_fails_fails
+ok \- test_assert_fails_succeeds
 ok \- test_assert_not_equals_fails_when_equal
 ok \- test_assert_not_equals_succeeds_when_not_equal
 ok \- test_assert_shows_stderr_on_failure
@@ -186,7 +186,13 @@ You may write a \fBsetup\fP function that will be exectuted before each test is 
 .sp
 You may write a \fBteardown\fP function that will be exectuted after each test is run.
 .sp
-If you need to set someting up only once for all tests, simply write your code outside any test function, this is a bash script.
+You may write a \fBsetup_suite\fP function that will be executed only once before all the tests of your test file.
+.sp
+You may write a \fBteardown_suite\fP function that will be executed only once after all the tests of your test file.
+.sp
+If you write code outside of any bash function, this code will be executed once at test file loading time since
+your file is a bash script and \fBbash_unit\fP sources it before running your tests. It is suggested to write a
+\fBsetup_suite\fP function and avoid any code outside a bash function.
 .sp
 If you want to keep an eye on a test not yet implemented, prefix the name of the function by \fBtodo\fP instead of test.
 Test to do are not executed and do not impact the global status of your test suite but are displayed in \fBbash_unit\fP output.
@@ -382,13 +388,13 @@ code() {
 test_code_does_not_write_cool_in_the_file() {
   code
 
-  assert_fail "grep cool /tmp/the_file" "should not write \(aqcool\(aq in /tmp/the_file"
+  assert_fails "grep cool /tmp/the_file" "should not write \(aqcool\(aq in /tmp/the_file"
 }
 
 test_code_does_not_write_this_in_the_file() {
   code
 
-  assert_fail "grep this /tmp/the_file" "should not write \(aqthis\(aq in /tmp/the_file"
+  assert_fails "grep this /tmp/the_file" "should not write \(aqthis\(aq in /tmp/the_file"
 }
 .fi
 .if n \{\
@@ -630,7 +636,7 @@ test_code_fails_if_apache_does_not_run() {
 24162 pts/7    00:00:00 ps
 EOF
 
-  assert_fail code "code should fail when apache is not running"
+  assert_fails code "code should fail when apache is not running"
 }
 .fi
 .if n \{\
