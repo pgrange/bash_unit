@@ -34,7 +34,7 @@ _(by the way, the documentation you are reading is itself tested with bash-unit)
 *-p* _pattern_::
   filters tests to run based on the given pattern.
   You can specify several patterns by repeating this option
-  fo each pattern.
+  for each pattern.
 
 *-f* _output_format_::
   specify an alternative output format.
