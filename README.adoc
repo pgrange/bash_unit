@@ -487,7 +487,7 @@ ps
 hello world
 ```
 
-Be carefull however that your __ps_ function is not exported to sub-processes. It means that, depending on how your code under test works, __ps_ may not be defined in the context where _ps_ will be called. For instance:
+Be carefull however that your _\_ps_ function is not exported to sub-processes. It means that, depending on how your code under test works, _\_ps_ may not be defined in the context where _ps_ will be called. For instance:
 
 ```bash
 _ps() {
