@@ -158,9 +158,9 @@ Write your test functions in a file. The name of a test function has to start wi
 
 Use the *bash_unit* assertion functions in your test functions, see below.
 
-You may write a *setup* function that will be exectuted before each test is run.
+You may write a *setup* function that will be executed before each test is run.
 
-You may write a *teardown* function that will be exectuted after each test is run.
+You may write a *teardown* function that will be executed after each test is run.
 
 You may write a *setup_suite* function that will be executed only once before all the tests of your test file.
 
