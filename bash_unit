@@ -248,17 +248,17 @@ text_format() {
     echo -n "Running $test... " | color "$BLUE"
   }
   notify_test_pending() {
-    echo -n "PENDING" | pretty_warning
+    echo -n "PENDING" | pretty_warning -
     echo
   }
 
   notify_test_succeeded() {
-    echo -n "SUCCESS" | pretty_success
+    echo -n "SUCCESS" | pretty_success -
     echo
   }
   notify_test_failed() {
     local message="$2"
-    echo -n "FAILURE" | pretty_failure
+    echo -n "FAILURE" | pretty_failure -
     echo
     [[ -z $message  ]] || printf -- "$message\n"
   }
