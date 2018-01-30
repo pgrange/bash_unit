@@ -151,6 +151,13 @@ then
   "bash_unit should change current working directory to match the directory of the currenlty running test before sourcing test file"
 fi
 
+setup() {
+  # enforce bash variable controls during core tests
+  # this way we know that people using this enforcement
+  # in their own code can still rely on bash_unit
+  set -u
+}
+
 
 line() {
   line_nb=$1

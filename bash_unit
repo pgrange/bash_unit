@@ -26,9 +26,9 @@ YELLOW="${ESCAPE}[93m"
 BLUE="${ESCAPE}[94m"
 
 fail() {
-  local message=$1
-  local stdout=$2
-  local stderr=$3
+  local message=${1:-}
+  local stdout=${2:-}
+  local stderr=${3:-}
 
   notify_test_failed "$__bash_unit_current_test__" "$message"
   [[ ! -z $stdout ]] && [ -s "$stdout" ] && notify_stdout < "$stdout"
@@ -40,7 +40,7 @@ fail() {
 
 assert() {
   local assertion=$1
-  local message=$2
+  local message=${2:-}
 
   _assert_expression \
     "$assertion" \
@@ -50,7 +50,7 @@ assert() {
 
 assert_fails() {
   local assertion=$1
-  local message=$2
+  local message=${2:-}
 
   _assert_expression \
     "$assertion" \
@@ -66,7 +66,7 @@ assert_fail() {
 assert_status_code() {
   local expected_status=$1
   local assertion="$2"
-  local message="$3"
+  local message="${3:-}"
 
   _assert_expression \
     "$assertion" \
@@ -95,7 +95,7 @@ _assert_expression() {
 assert_equals() {
   local expected=$1
   local actual=$2
-  local message=$3
+  local message=${3:-}
   [[ -z $message ]] || message="$message\n"
   
   if [ "$expected" != "$actual" ]
@@ -107,7 +107,7 @@ assert_equals() {
 assert_not_equals() {
   local unexpected=$1
   local actual=$2
-  local message=$3
+  local message=${3:-}
   [[ -z $message ]] || message="$message\n"
 
   [ "$unexpected" != "$actual" ] || \
@@ -128,7 +128,7 @@ fake() {
 
 stacktrace() {
   local i=1
-  while ! [ -z "${BASH_SOURCE[$i]}" ]
+  while ! [ -z "${BASH_SOURCE[$i]:-}" ]
   do
     echo ${BASH_SOURCE[$i]}:${BASH_LINENO[$((i-1))]}:${FUNCNAME[$i]}\(\)
     i=$((i + 1))
@@ -184,7 +184,7 @@ usage() {
 # Formating
 
 pretty_success() {
-  pretty_format "$GREEN" "\u2713" "$1"
+  pretty_format "$GREEN" "\u2713" "${1:-}"
 }
 
 pretty_warning() {
@@ -192,7 +192,7 @@ pretty_warning() {
 }
 
 pretty_failure() {
-  pretty_format "$RED" "\u2717" "$1"
+  pretty_format "$RED" "\u2717" "${1:-}"
 }
 
 pretty_format() {
