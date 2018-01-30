@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TEST_PATTERN='```bash|```test'
+TEST_PATTERN='```test'
 OUTPUT_PATTERN='```output'
 LANG=C.UTF-8
 

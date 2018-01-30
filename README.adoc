@@ -194,7 +194,7 @@ You may need to change the behavior of some commands to create conditions for yo
 
 Fails the test and displays an optional message.
 
-```bash
+```test
 test_can_fail() {
   fail "this test failed on purpose"
 }
@@ -216,7 +216,7 @@ _assertion_ fails if its evaluation returns a status code different from 0.
 
 In case of failure, the standard output and error of the evaluated _assertion_ is displayed. The optional message is also displayed.
 
-```bash
+```test
 test_assert_fails() {
   assert false "this test failed, obvioulsy"
 }
@@ -234,7 +234,7 @@ Running test_assert_succeed... SUCCESS
 
 But you probably want to assert less obvious facts.
 
-```bash
+```test
 code() {
   touch /tmp/the_file
 }
@@ -261,7 +261,7 @@ doc:14:test_code_makes_the_file_executable()
 
 It may also be fun to use assert to check for the expected content of a file.
 
-```bash
+```test
 code() {
   echo 'not so cool' > /tmp/the_file
 }
@@ -292,7 +292,7 @@ _assertion_ fails if its evaluation returns a status code different from 0.
 
 If the evaluated expression does not fail, then *assert_fail* will fail and display the standard output and error of the evaluated _assertion_. The optional message is also displayed.
 
-```bash
+```test
 code() {
   echo 'not so cool' > /tmp/the_file
 }
@@ -328,7 +328,7 @@ It may be useful if you want to distinguish between several error conditions in 
 
 In case of failure, the standard output and error of the evaluated _assertion_ is displayed. The optional message is also displayed.
 
-```bash
+```test
 code() {
   exit 23
 }
@@ -350,7 +350,7 @@ doc:6:test_code_should_fail_with_code_25()
 
 Asserts for equality of the two strings _expected_ and _actual_.
 
-```bash
+```test
 test_obvious_inequality_with_assert_equals(){
   assert_equals "a string" "another string" "a string should be another string"
 }
@@ -374,7 +374,7 @@ doc:2:test_obvious_inequality_with_assert_equals()
 
 Asserts for inequality of the two strings _unexpected_ and _actual_.
 
-```bash
+```test
 test_obvious_equality_with_assert_not_equals(){
   assert_not_equals "a string" "a string" "a string should be different from another string"
 }
@@ -400,7 +400,7 @@ Fakes _command_ and replaces it with _replacement code_ (if code is specified) f
 
 For instance:
 
-```bash
+```test
 fake ps echo hello world
 ps
 ```
@@ -413,7 +413,7 @@ hello world
 
 We can do the same using _stdin_ of fake:
 
-```bash
+```test
 fake ps << EOF
 hello world
 EOF
@@ -434,7 +434,7 @@ endif::[]
 
 Here is an exemple, parameterizing fake with its _stdin_ to test that code fails when some process does not run and succeeds otherwise:
 
-```bash
+```test
 code() {
   ps a | grep apache
 }
@@ -471,7 +471,7 @@ Running test_code_succeeds_if_apache_runs... SUCCESS
 
 In a previous exemple, we faked _ps_ by specifiyng code inline:
 
-```bash
+```test
 fake ps echo hello world
 ps
 ```
@@ -482,7 +482,7 @@ hello world
 
 If you need to write more complex code to fake your command, you may abstract this code in a function:
 
-```bash
+```test
 _ps() {
   echo hello world
 }
@@ -496,7 +496,7 @@ hello world
 
 Be carefull however that your _ps function is not exported to sub-processes. It means that, depending on how your code under test works, _ps may not be defined in the context where ps will be called. For instance:
 
-```bash
+```test
 _ps() {
   echo hello world
 }
@@ -511,7 +511,7 @@ bash: line 1: _ps: command not found
 
 It depends on your code under test but it is safer to just export functions needed by your fake so that they are available in sub-processes:
 
-```bash
+```test
 _ps() {
   echo hello world
 }
@@ -541,7 +541,7 @@ For instance, in our previous code that checks apache is running, we have an iss
 
 To do that, the first naive approch would be:
 
-```bash
+```test
 code() {
   ps a | grep apache
 }
@@ -581,7 +581,7 @@ With bash, the result code of a pipeline equals the result code of the last comm
 
 An alternative may be to activate bash _pipefail_ option but this may introduce unwanted side effects. We can also simply not output anything in __ps_ so that _grep_ fails:
 
-```bash
+```test
 code() {
   ps a | grep apache
 }
@@ -611,7 +611,7 @@ The only correct alternative is for the fake _ps_ to write _FAKE_PARAMS_ in a fi
 so that your test can grab them after code execution and assert their value. For instance
 by writing to a file:
 
-```bash
+```test
 code() {
   ps a | grep apache
 }
@@ -647,7 +647,7 @@ doc:14:test_code_gives_ps_appropriate_parameters()
 
 We can also compact the fake definition:
 
-```bash
+```test
 code() {
   ps a | grep apache
 }
@@ -673,7 +673,7 @@ doc:10:test_code_gives_ps_appropriate_parameters()
 
 Finally, we can avoid the _/tmp/fake_params_ temporary file by using _coproc_:
 
-```bash
+```test
 code() {
   ps a | grep apache
 }
