@@ -2,12 +2,12 @@
 .\"     Title: bash_unit
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: Asciidoctor 1.5.5
-.\"      Date: 2017-09-01
+.\"      Date: 2018-01-30
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "BASH_UNIT" "1" "2017-09-01" "\ \&" "\ \&"
+.TH "BASH_UNIT" "1" "2018-01-30" "\ \&" "\ \&"
 .ie \n(.g .ds Aq \(aq
 .el       .ds Aq '
 .ss \n[.ss] 0
@@ -43,7 +43,7 @@ before continuing reading this documentation.
 .RS 4
 filters tests to run based on the given pattern.
 You can specify several patterns by repeating this option
-fo each pattern.
+for each pattern.
 .RE
 .sp
 \fB\-f\fP \fIoutput_format\fP
@@ -704,7 +704,7 @@ hello world
 .RE
 .\}
 .sp
-Be carefull however that your \fIps_ function is not exported to sub\-processes. It means that, depending on how your code under test works, \fPps_ may not be defined in the context where \fIps\fP will be called. For instance:
+Be carefull however that your _ps function is not exported to sub\-processes. It means that, depending on how your code under test works, _ps may not be defined in the context where ps will be called. For instance:
 .sp
 .if n \{\
 .RS 4
