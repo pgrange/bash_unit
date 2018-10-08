@@ -79,6 +79,7 @@ test_fails_when_test_file_does_not_exist() {
 }
 
 test_display_usage_when_test_file_does_not_exist() {
+  # shellcheck disable=SC2069
   bash_unit_output=$($BASH_UNIT /not_exist/not_exist 2>&1 >/dev/null | line 1)
 
   assert_equals "file does not exist: /not_exist/not_exist"\
@@ -92,18 +93,21 @@ test_bash_unit_succeed_when_no_failure_even_if_no_teardown() {
 
 test_bash_unit_runs_teardown_even_in_case_of_failure() {
   #FIX https://github.com/pgrange/bash_unit/issues/10
+  # shellcheck disable=SC2069
   assert_equals "ran teardown" \
     "$($BASH_UNIT <(echo 'test_fail() { fail ; } ; teardown() { echo "ran teardown" >&2 ; }') 2>&1 >/dev/null)"
 }
 
 test_one_test_should_stop_after_first_assertion_failure() {
   #FIX https://github.com/pgrange/bash_unit/issues/10
+  # shellcheck disable=SC2069
   assert_equals "before failure" \
     "$($BASH_UNIT <(echo 'test_fail() { echo "before failure" >&2 ; fail ; echo "after failure" >&2 ; }') 2>&1 >/dev/null)"
 }
 
 test_one_test_should_stop_when_assert_fails() {
   #FIX https://github.com/pgrange/bash_unit/issues/26
+  # shellcheck disable=SC2069
   assert_equals "before failure" \
     "$($BASH_UNIT <(echo 'test_fail() { echo "before failure" >&2 ; assert false ; echo "after failure" >&2 ; }') 2>&1 >/dev/null)"
 }
