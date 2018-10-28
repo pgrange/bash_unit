@@ -506,7 +506,7 @@ bash -c ps
 ```
 
 ```output
-bash: line 1: _ps: command not found
+environment: line 1: _ps: command not found
 ```
 
 It depends on your code under test but it is safer to just export functions needed by your fake so that they are available in sub-processes:
