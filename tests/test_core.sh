@@ -102,20 +102,20 @@ another ok message" \
 
 test_fake_actually_fakes_the_command() {
   fake ps echo expected
-  assert_equals "expected" $(ps)
+  assert_equals "expected" "$(ps)"
 }
 
 test_fake_can_fake_inline() {
   assert_equals \
     "expected" \
-    $(fake ps echo expected ; ps)
+    "$(fake ps echo expected ; ps)"
 }
 
 test_fake_exports_faked_in_subshells() {
   fake ps echo expected
   assert_equals \
     expected \
-    $( bash -c ps )
+    "$( bash -c ps )"
 }
 
 test_fake_transmits_params_to_fake_code() {
@@ -135,7 +135,8 @@ test_fake_echo_stdin_when_no_params() {
  7818 pts/9    00:00:00 ps
 EOF
 
-  assert_equals 2 $(ps | grep pts | wc -l)
+  # shellcheck disable=SC2009
+  assert_equals 2 "$(ps | grep -c pts)"
 }
 
 if [[ "${STICK_TO_CWD}" != true ]]
