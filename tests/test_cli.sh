@@ -16,7 +16,7 @@ EOF
 }
 
 test_exit_code_not_0_in_case_of_failure() {
-  assert_fails "$BASH_UNIT <(cat << EOF
+  assert_fails "$BASH_UNIT <($CAT << EOF
 function test_succeed() { assert true ; }
 function test_fails()   { assert false ; }
 EOF
@@ -27,7 +27,7 @@ test_run_all_file_parameters() {
   bash_unit_output=$($BASH_UNIT \
     <(echo "test_one() { echo -n ; }") \
     <(echo "test_two() { echo -n ; }") \
-    | sed -e 's:/dev/fd/[0-9]*:test_file:' \
+    | "$SED" -e 's:/dev/fd/[0-9]*:test_file:' \
   )
 
   assert_equals \
@@ -44,7 +44,7 @@ test_run_only_tests_that_match_pattern() {
   bash_unit_output=$($BASH_UNIT -p one \
     <(echo "test_one() { echo -n ; }") \
     <(echo "test_two() { echo -n ; }") \
-    | sed -e 's:/dev/fd/[0-9]*:test_file:' \
+    | "$SED" -e 's:/dev/fd/[0-9]*:test_file:' \
   )
 
   assert_equals "\
@@ -64,7 +64,7 @@ test_pending_tests_appear_in_output() {
   bash_unit_output=$($BASH_UNIT \
     <(echo 'pending_should_not_run() { fail ; }
             todo_should_not_run() { fail ; }') \
-    | sed -e 's:/dev/fd/[0-9]*:test_file:' \
+    | "$SED" -e 's:/dev/fd/[0-9]*:test_file:' \
   )
 
   assert_equals "\
@@ -108,13 +108,25 @@ test_one_test_should_stop_when_assert_fails() {
     "$($BASH_UNIT <(echo 'test_fail() { echo "before failure" >&2 ; assert false ; echo "after failure" >&2 ; }') 2>&1 >/dev/null)"
 }
 
+setup() {
+  # fake basic unix commands bash_unit relies on so that
+  # we ensure bash_unit keeps working when people fake
+  # this commands in their tests (and make what is necessary
+  # so that code in these tests is immune to that fake by
+  # using $SED or $CAT in the tests)
+  fake cat :
+  fake sed :
+  CAT="$(which cat)"
+  SED="$(which sed)"
+}
+
 line() {
   line_nb=$1
   tail -n +$line_nb | head -1
 }
 
 bash_unit_out_for_code() {
-  $BASH_UNIT <(cat) | sed -e 's:/dev/fd/[0-9]*:code:' -e 's/[0-9]*:/code:/'
+  $BASH_UNIT <("$CAT") | "$SED" -e 's:/dev/fd/[0-9]*:code:' -e 's/[0-9]*:/code:/'
 }
 
 BASH_UNIT="eval FORCE_COLOR=false ../bash_unit"

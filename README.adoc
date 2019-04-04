@@ -529,6 +529,13 @@ hello world
 override the actual command. In some context the command can not be
 overriden by a function. For instance if your code under test relies on _exec_ to launch _ps_, *fake* will have no effect.
 
+*fake* may also imply strange behaviors from bash_unit when you try to
+fake really basic stuff. bash_unit tries to be as much immune to this as
+possible but there are some limits. Especially and as surprising as it
+might seem, bash allows creating functions named after builtin commands
+and bash_unit won't resist that kind of situation. So, for instance, do
+not try to fake: `exit`; `local`; `trap`; `eval`; `export`; `if`; `then`; `else`; `fi`; `while`; `do`; `done`; `$`; `echo`; `[` (I know, this is not a builtin but don't).
+
 === *fake* parameters
 
 *fake* stores parameters given to the fake in the global variable _FAKE_PARAMS_ so that you can use them inside your fake.

@@ -135,7 +135,7 @@ test_fake_echo_stdin_when_no_params() {
  7818 pts/9    00:00:00 ps
 EOF
 
-  assert_equals 2 $(ps | grep pts | wc -l)
+  assert_equals 2 $(ps | "$GREP" pts | wc -l)
 }
 
 if [[ "${STICK_TO_CWD}" != true ]]
@@ -156,8 +156,14 @@ setup() {
   # this way we know that people using this enforcement
   # in their own code can still rely on bash_unit
   set -u
+  # fake basic unix commands bash_unit relies on so that
+  # we ensure bash_unit keeps working when people fake
+  # this commands in their tests
+  fake cat :
+  fake sed :
+  fake grep :
+  fake printf :
 }
-
 
 line() {
   line_nb=$1
@@ -222,16 +228,19 @@ unmute_logs() {
   notify_test_failed   () { echo "FAILURE" ; echo $2 ; }
 }
 
+CAT="$(which cat)"
+GREP="$(which grep)"
+
 unmute_stack() {
-  notify_stack() { cat ; }
+  notify_stack() { "$CAT" ; }
 }
 
 unmute_out() {
-  notify_stdout() { cat ; }
+  notify_stdout() { "$CAT" ; }
 }
 
 unmute_err() {
-  notify_stderr() { cat ; }
+  notify_stderr() { "$CAT" ; }
 }
 
 mute() {
