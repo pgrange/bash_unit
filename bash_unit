@@ -364,6 +364,8 @@ for test_file in "$@"
 do
   notify_suite_starting "$test_file"
   (
+    set -e # Ensure bash_unit with exit with failure
+           # in case of syntax error.
     if [[ "${STICK_TO_CWD}" != true ]]
     then
       cd "$(dirname "$test_file")"
@@ -371,6 +373,7 @@ do
     else
       source "$test_file"
     fi
+    set +e
     run_test_suite
   )
   failure=$(( $? || failure))

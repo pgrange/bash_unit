@@ -23,6 +23,13 @@ EOF
 )"
 }
 
+test_exit_code_not_0_in_case_of_syntax_error() {
+  assert_fails "$BASH_UNIT <($CAT << EOF
+function test_fails()   { while true ; done ; }
+EOF
+)"
+}
+
 test_run_all_file_parameters() {
   bash_unit_output=$($BASH_UNIT \
     <(echo "test_one() { echo -n ; }") \
