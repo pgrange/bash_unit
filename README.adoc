@@ -44,17 +44,6 @@ ifndef::backend-manpage[]
 
 == How to install *bash_unit*
 
-=== installing on Debian/Ubuntu
-
-*bash_unit* deb package is available in the https://github.com/pgrange/bash-unit_deb/releases[bash-unit_deb repo]. You may install it with the following commands:
-
-```bash
-curl https://pgrange.github.io/bash-unit_deb/keys.asc | sudo apt-key add -
-echo deb https://pgrange.github.io/bash-unit_deb/debian/ unstable/ | sudo tee -a /etc/apt/sources.list.d/bash-unit.list
-sudo apt update
-sudo apt install bash-unit
-```
-
 === installing on Archlinux
 
 *bash_unit* package is available on Archlinux through AUR. In order to install, issue the following command :
