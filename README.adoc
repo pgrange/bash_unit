@@ -50,6 +50,12 @@ ifndef::backend-manpage[]
 
     yaourt -Sys bash_unit
 
+=== installing via [Nix/NixOS](https://nixos.org/)
+
+*bash_unit* package has been added to [nixpkgs](https://github.com/nixos/nixpkgs). You can use it with the following command:
+
+    nix-shell -p bash_unit
+
 === other installation
 
 This will install *bash_unit* in your current working directory:
