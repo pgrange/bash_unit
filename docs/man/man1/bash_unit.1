@@ -2,12 +2,12 @@
 .\"     Title: bash_unit
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: Asciidoctor 1.5.5
-.\"      Date: 2018-01-30
+.\"      Date: 2020-01-18
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "BASH_UNIT" "1" "2018-01-30" "\ \&" "\ \&"
+.TH "BASH_UNIT" "1" "2020-01-18" "\ \&" "\ \&"
 .ie \n(.g .ds Aq \(aq
 .el       .ds Aq '
 .ss \n[.ss] 0
@@ -725,7 +725,7 @@ bash \-c ps
 .RS 4
 .\}
 .nf
-bash: line 1: _ps: command not found
+environment: line 1: _ps: command not found
 .fi
 .if n \{\
 .RE
@@ -762,6 +762,13 @@ hello world
 \fBfake\fP is also limited by the fact that it defines a \fIbash\fP function to
 override the actual command. In some context the command can not be
 overriden by a function. For instance if your code under test relies on \fIexec\fP to launch \fIps\fP, \fBfake\fP will have no effect.
+.sp
+\fBfake\fP may also imply strange behaviors from bash_unit when you try to
+fake really basic stuff. bash_unit tries to be as much immune to this as
+possible but there are some limits. Especially and as surprising as it
+might seem, bash allows creating functions named after builtin commands
+and bash_unit won\(cqt resist that kind of situation. So, for instance, do
+not try to fake: \f[CR]exit\fP; \f[CR]local\fP; \f[CR]trap\fP; \f[CR]eval\fP; \f[CR]export\fP; \f[CR]if\fP; \f[CR]then\fP; \f[CR]else\fP; \f[CR]fi\fP; \f[CR]while\fP; \f[CR]do\fP; \f[CR]done\fP; \f[CR]$\fP; \f[CR]echo\fP; \f[CR][\fP (I know, this is not a builtin but don\(cqt).
 .SS "\fBfake\fP parameters"
 .sp
 \fBfake\fP stores parameters given to the fake in the global variable \fIFAKE_PARAMS\fP so that you can use them inside your fake.
