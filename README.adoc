@@ -50,9 +50,9 @@ ifndef::backend-manpage[]
 
     yaourt -Sys bash_unit
 
-=== installing via [Nix/NixOS](https://nixos.org/)
+=== installing via link:https://nixos.org/[Nix/NixOS]
 
-*bash_unit* package has been added to [nixpkgs](https://github.com/nixos/nixpkgs). You can use it with the following command:
+*bash_unit* package has been added to link:https://github.com/nixos/nixpkgs[nixpkgs]. You can use it with the following command:
 
     nix-shell -p bash_unit
 
