@@ -464,7 +464,7 @@ Running test_code_succeeds_if_apache_runs... SUCCESS
 
 === Using a function
 
-In a previous exemple, we faked _ps_ by specifiyng code inline:
+In a previous exemple, we faked _ps_ by specifying code inline:
 
 ```test
 fake ps echo hello world
