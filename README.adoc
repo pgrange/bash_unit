@@ -8,7 +8,7 @@ ifndef::backend-manpage[]
 image::img/bu_50.png[bash_unit]
 endif::[]
 
-bash_unit - bash unit testing enterprise edition framework for professionals !
+bash_unit - bash unit testing enterprise edition framework for professionals!
 
 == Synopsis
 
