@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 TEST_PATTERN='```test'
 OUTPUT_PATTERN='```output'

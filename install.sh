@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo "downloading bash_unit"
 current_working_dir=$PWD

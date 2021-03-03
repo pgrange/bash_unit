@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 test_fail_fails() {
   with_bash_unit_muted fail && \
