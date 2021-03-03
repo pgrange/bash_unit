@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 test_run_all_tests_even_in_case_of_failure() {
   assert_equals \

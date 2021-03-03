@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/usr/bin/env bash
 
 test_bash_unit_accepts_tap_format_option() {
   assert "$BASH_UNIT -f tap"
