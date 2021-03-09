@@ -354,7 +354,7 @@ case "$output_format" in
     tap_format
     ;;
   *)
-    usage "unsupproted output format: $output_format"
+    usage "unsupported output format: $output_format"
     ;;
 esac
 
