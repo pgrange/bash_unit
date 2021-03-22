@@ -76,26 +76,26 @@ To run tests, simply call *bash_unit* with all your tests files as parameter. Fo
 
 ```output
 Running tests in tests/test_core.sh
-Running test_assert_equals_fails_when_not_equal... SUCCESS
-Running test_assert_equals_succeed_when_equal... SUCCESS
-Running test_assert_fails... SUCCESS
-Running test_assert_fails_fails... SUCCESS
-Running test_assert_fails_succeeds... SUCCESS
-Running test_assert_not_equals_fails_when_equal... SUCCESS
-Running test_assert_not_equals_succeeds_when_not_equal... SUCCESS
-Running test_assert_shows_stderr_on_failure... SUCCESS
-Running test_assert_shows_stdout_on_failure... SUCCESS
-Running test_assert_status_code_fails... SUCCESS
-Running test_assert_status_code_succeeds... SUCCESS
-Running test_assert_succeeds... SUCCESS
-Running test_fail_fails... SUCCESS
-Running test_fail_prints_failure_message... SUCCESS
-Running test_fail_prints_where_is_error... SUCCESS
-Running test_fake_actually_fakes_the_command... SUCCESS
-Running test_fake_can_fake_inline... SUCCESS
-Running test_fake_echo_stdin_when_no_params... SUCCESS
-Running test_fake_exports_faked_in_subshells... SUCCESS
-Running test_fake_transmits_params_to_fake_code... SUCCESS
+	Running test_assert_equals_fails_when_not_equal... SUCCESS
+	Running test_assert_equals_succeed_when_equal... SUCCESS
+	Running test_assert_fails... SUCCESS
+	Running test_assert_fails_fails... SUCCESS
+	Running test_assert_fails_succeeds... SUCCESS
+	Running test_assert_not_equals_fails_when_equal... SUCCESS
+	Running test_assert_not_equals_succeeds_when_not_equal... SUCCESS
+	Running test_assert_shows_stderr_on_failure... SUCCESS
+	Running test_assert_shows_stdout_on_failure... SUCCESS
+	Running test_assert_status_code_fails... SUCCESS
+	Running test_assert_status_code_succeeds... SUCCESS
+	Running test_assert_succeeds... SUCCESS
+	Running test_fail_fails... SUCCESS
+	Running test_fail_prints_failure_message... SUCCESS
+	Running test_fail_prints_where_is_error... SUCCESS
+	Running test_fake_actually_fakes_the_command... SUCCESS
+	Running test_fake_can_fake_inline... SUCCESS
+	Running test_fake_echo_stdin_when_no_params... SUCCESS
+	Running test_fake_exports_faked_in_subshells... SUCCESS
+	Running test_fake_transmits_params_to_fake_code... SUCCESS
 ```
 
 You might also want to run only specific tests, you may do so with the
@@ -108,19 +108,19 @@ functions against this pattern.
 
 ```output
 Running tests in tests/test_core.sh
-Running test_assert_equals_fails_when_not_equal... SUCCESS
-Running test_assert_equals_succeed_when_equal... SUCCESS
-Running test_assert_fails... SUCCESS
-Running test_assert_fails_fails... SUCCESS
-Running test_assert_fails_succeeds... SUCCESS
-Running test_assert_not_equals_fails_when_equal... SUCCESS
-Running test_assert_not_equals_succeeds_when_not_equal... SUCCESS
-Running test_assert_shows_stderr_on_failure... SUCCESS
-Running test_assert_shows_stdout_on_failure... SUCCESS
-Running test_assert_status_code_fails... SUCCESS
-Running test_assert_status_code_succeeds... SUCCESS
-Running test_assert_succeeds... SUCCESS
-Running test_fail_fails... SUCCESS
+	Running test_assert_equals_fails_when_not_equal... SUCCESS
+	Running test_assert_equals_succeed_when_equal... SUCCESS
+	Running test_assert_fails... SUCCESS
+	Running test_assert_fails_fails... SUCCESS
+	Running test_assert_fails_succeeds... SUCCESS
+	Running test_assert_not_equals_fails_when_equal... SUCCESS
+	Running test_assert_not_equals_succeeds_when_not_equal... SUCCESS
+	Running test_assert_shows_stderr_on_failure... SUCCESS
+	Running test_assert_shows_stdout_on_failure... SUCCESS
+	Running test_assert_status_code_fails... SUCCESS
+	Running test_assert_status_code_succeeds... SUCCESS
+	Running test_assert_succeeds... SUCCESS
+	Running test_fail_fails... SUCCESS
 ```
 
 *bash_unit* supports the http://testanything.org/[Test Anything Protocol] so you can ask for a tap formatted
@@ -196,7 +196,7 @@ test_can_fail() {
 ```
 
 ```output
-Running test_can_fail... FAILURE
+	Running test_can_fail... FAILURE
 this test failed on purpose
 doc:2:test_can_fail()
 ```
@@ -221,10 +221,10 @@ test_assert_succeed() {
 ```
 
 ```output
-Running test_assert_fails... FAILURE
+	Running test_assert_fails... FAILURE
 this test failed, obvioulsy
 doc:2:test_assert_fails()
-Running test_assert_succeed... SUCCESS
+	Running test_assert_succeed... SUCCESS
 ```
 
 But you probably want to assert less obvious facts.
@@ -248,8 +248,8 @@ test_code_makes_the_file_executable() {
 ```
 
 ```output
-Running test_code_creates_the_file... SUCCESS
-Running test_code_makes_the_file_executable... FAILURE
+	Running test_code_creates_the_file... SUCCESS
+	Running test_code_makes_the_file_executable... FAILURE
 /tmp/the_file should be executable
 doc:14:test_code_makes_the_file_executable()
 ```
@@ -269,7 +269,7 @@ test_code_write_appropriate_content_in_the_file() {
 ```
 
 ```output
-Running test_code_write_appropriate_content_in_the_file... FAILURE
+	Running test_code_write_appropriate_content_in_the_file... FAILURE
 out> 1c1
 out> < this is cool
 out> ---
@@ -306,11 +306,11 @@ test_code_does_not_write_this_in_the_file() {
 ```
 
 ```output
-Running test_code_does_not_write_cool_in_the_file... FAILURE
+	Running test_code_does_not_write_cool_in_the_file... FAILURE
 should not write 'cool' in /tmp/the_file
 out> not so cool
 doc:8:test_code_does_not_write_cool_in_the_file()
-Running test_code_does_not_write_this_in_the_file... SUCCESS
+	Running test_code_does_not_write_this_in_the_file... SUCCESS
 ```
 
 === *assert_status_code*
@@ -334,7 +334,7 @@ test_code_should_fail_with_code_25() {
 ```
 
 ```output
-Running test_code_should_fail_with_code_25... FAILURE
+	Running test_code_should_fail_with_code_25... FAILURE
  expected status code 25 but was 23
 doc:6:test_code_should_fail_with_code_25()
 ```
@@ -356,8 +356,8 @@ test_obvious_equality_with_assert_equals(){
 ```
 
 ```output
-Running test_obvious_equality_with_assert_equals... SUCCESS
-Running test_obvious_inequality_with_assert_equals... FAILURE
+	Running test_obvious_equality_with_assert_equals... SUCCESS
+	Running test_obvious_inequality_with_assert_equals... FAILURE
 a string should be another string
  expected [a string] but was [another string]
 doc:2:test_obvious_inequality_with_assert_equals()
@@ -380,11 +380,11 @@ test_obvious_inequality_with_assert_not_equals(){
 ```
 
 ```output
-Running test_obvious_equality_with_assert_not_equals... FAILURE
+	Running test_obvious_equality_with_assert_not_equals... FAILURE
 a string should be different from another string
  expected different value than [a string] but was the same
 doc:2:test_obvious_equality_with_assert_not_equals()
-Running test_obvious_inequality_with_assert_not_equals... SUCCESS
+	Running test_obvious_inequality_with_assert_not_equals... SUCCESS
 ```
 
 == *fake* function
@@ -458,8 +458,8 @@ EOF
 ```
 
 ```output
-Running test_code_fails_if_apache_does_not_run... SUCCESS
-Running test_code_succeeds_if_apache_runs... SUCCESS
+	Running test_code_fails_if_apache_does_not_run... SUCCESS
+	Running test_code_succeeds_if_apache_runs... SUCCESS
 ```
 
 === Using a function
@@ -568,7 +568,7 @@ EOF
 This test calls _code_, which calls _ps_, which is actually implemented by __ps_. Since _code_ does not use _ax_ but only _a_ as parameters, this test should fail. But...
 
 ```output
-Running test_code_gives_ps_appropriate_parameters... SUCCESS
+	Running test_code_gives_ps_appropriate_parameters... SUCCESS
 ```
 
 The problem here is that _ps_ fail (because of the failed *assert_equals* assertion). But _ps_ is piped with _grep_:
@@ -606,7 +606,7 @@ bad, don't do that.
 Moreover, *assert_equals* output is captured by _ps_ and this just messes with the display of our test results:
 
 ```output
-Running test_code_gives_ps_appropriate_parameters... 
+	Running test_code_gives_ps_appropriate_parameters... 
 ```
 
 The only correct alternative is for the fake _ps_ to write _FAKE_PARAMS_ in a file descriptor
@@ -642,7 +642,7 @@ that _code_ will fail and write this to ignore the error: `code || true`.
 
 
 ```output
-Running test_code_gives_ps_appropriate_parameters... FAILURE
+	Running test_code_gives_ps_appropriate_parameters... FAILURE
  expected [ax] but was [a]
 doc:14:test_code_gives_ps_appropriate_parameters()
 ```
@@ -668,7 +668,7 @@ setup() {
 ```
 
 ```output
-Running test_code_gives_ps_appropriate_parameters... FAILURE
+	Running test_code_gives_ps_appropriate_parameters... FAILURE
  expected [ax] but was [a]
 doc:10:test_code_gives_ps_appropriate_parameters()
 ```
@@ -694,7 +694,7 @@ test_get_data_from_fake() {
 ```
 
 ```output
-Running test_get_data_from_fake... FAILURE
+	Running test_get_data_from_fake... FAILURE
  expected [ax] but was [a]
 doc:13:test_get_data_from_fake()
 ```

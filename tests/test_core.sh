@@ -223,7 +223,7 @@ with_bash_unit_notifications_muted() {
 
 unmute_logs() {
   notify_suite_starting() { echo "Running tests in $1" ; }
-  notify_test_starting () { echo -n "Running $1... " ; }
+  notify_test_starting () { echo -e -n "\tRunning $1... " ; }
   notify_test_succeeded() { echo "SUCCESS" ; }
   notify_test_failed   () { echo "FAILURE" ; echo $2 ; }
 }
