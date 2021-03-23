@@ -251,7 +251,7 @@ text_format() {
   }
   notify_test_starting() {
     local test="$1"
-    echo -n "Running $test... " | color "$BLUE"
+    echo -e -n "\tRunning $test... " | color "$BLUE"
   }
   notify_test_pending() {
     echo -n "PENDING" | pretty_warning
