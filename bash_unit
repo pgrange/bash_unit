@@ -178,7 +178,7 @@ run_test() {
 
 usage() {
   echo "$1" >&2
-  echo "$0 [-f <output format>] [-p <pattern1>] [-p <pattern2>]... <test_file1> <test_file2>..." >&2
+  echo "$0 [-f <output format>] [-p <pattern1>] [-p <pattern2>] ... <test_file1> <test_file2> ..." >&2
   echo >&2
   echo "Runs tests in test files that match <pattern>s" >&2
   echo "<output format> is optional only supported value is tap" >&2
@@ -251,7 +251,7 @@ text_format() {
   }
   notify_test_starting() {
     local test="$1"
-    echo -e -n "\tRunning $test... " | color "$BLUE"
+    echo -e -n "\tRunning $test ... " | color "$BLUE"
   }
   notify_test_pending() {
     echo -n "PENDING" | pretty_warning
