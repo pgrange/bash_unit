@@ -4,9 +4,9 @@ test_run_all_tests_even_in_case_of_failure() {
   assert_equals \
 "\
 Running tests in code
-	Running test_fails... FAILURE
+	Running test_fails ... FAILURE
 code:2:test_fails()
-	Running test_succeed... SUCCESS\
+	Running test_succeed ... SUCCESS\
 " \
 "$(bash_unit_out_for_code << EOF
   function test_succeed() { assert true ; }
@@ -40,9 +40,9 @@ test_run_all_file_parameters() {
   assert_equals \
 "\
 Running tests in test_file
-	Running test_one... SUCCESS
+	Running test_one ... SUCCESS
 Running tests in test_file
-	Running test_two... SUCCESS\
+	Running test_two ... SUCCESS\
 " \
 "$bash_unit_output"
 }
@@ -56,7 +56,7 @@ test_run_only_tests_that_match_pattern() {
 
   assert_equals "\
 Running tests in test_file
-	Running test_one... SUCCESS
+	Running test_one ... SUCCESS
 Running tests in test_file" "$bash_unit_output" 
 }
 
@@ -76,8 +76,8 @@ test_pending_tests_appear_in_output() {
 
   assert_equals "\
 Running tests in test_file
-	Running pending_should_not_run... PENDING
-	Running todo_should_not_run... PENDING" \
+	Running pending_should_not_run ... PENDING
+	Running todo_should_not_run ... PENDING" \
   "$bash_unit_output"
 }
 
