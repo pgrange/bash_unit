@@ -103,6 +103,17 @@ test_bash_unit_runs_teardown_even_in_case_of_failure() {
     "$($BASH_UNIT <(echo 'test_fail() { fail ; } ; teardown() { echo "ran teardown" >&2 ; }') 2>&1 >/dev/null)"
 }
 
+test_bash_unit_runs_teardown_suite_even_in_case_of_failure() {
+  assert_equals "ran teardown_suite" \
+    "$($BASH_UNIT <(echo 'test_fail() { fail ; } ; teardown_suite() { echo "ran teardown_suite" >&2 ; }') 2>&1 >/dev/null)"
+}
+
+test_bash_unit_runs_teardown_suite_even_in_case_of_failure_setup_suite() {
+  #FIX https://github.com/pgrange/bash_unit/issues/43
+  assert_equals "ran teardown_suite" \
+    "$($BASH_UNIT <(echo 'setup_suite() { return 1 ; } ; teardown_suite() { echo "ran teardown_suite" >&2 ; }') 2>&1 >/dev/null)"
+}
+
 test_one_test_should_stop_after_first_assertion_failure() {
   #FIX https://github.com/pgrange/bash_unit/issues/10
   assert_equals "before failure" \
