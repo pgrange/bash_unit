@@ -16,7 +16,7 @@
 #
 #  https://github.com/pgrange/bash_unit
 
-VERSION=v1.7.1
+VERSION=v1.7.2
 
 ESCAPE=$(printf "\033")
 NOCOLOR="${ESCAPE}[0m"
