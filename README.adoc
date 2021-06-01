@@ -170,7 +170,9 @@ You may write a *teardown_suite* function that will be executed only once after 
 
 If you write code outside of any bash function, this code will be executed once at test file loading time since
 your file is a bash script and *bash_unit* sources it before running your tests. It is suggested to write a
-*setup_suite* function and avoid any code outside a bash function.
+*setup_suite* function and avoid any code outside a bash function. you must not use any bash_unit assertion
+in setup_suite or use exit in setup_suite for teardown_suite to be run.
+See https://github.com/pgrange/bash_unit/issues/43[issue 43] for more details.
 
 If you want to keep an eye on a test not yet implemented, prefix the name of the function by *todo* instead of test.
 Test to do are not executed and do not impact the global status of your test suite but are displayed in *bash_unit* output.
