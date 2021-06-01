@@ -50,7 +50,7 @@ prepare_release() {
 
 update_version() {
   local version="$1"
-  sed -i "s:^VERSION=.*:VERSION=$version:" bash_unit
+  sed -i -e "s:^VERSION=.*:VERSION=$version:" bash_unit
 }
 
 update_man() {
