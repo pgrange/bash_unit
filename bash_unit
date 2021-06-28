@@ -342,7 +342,8 @@ tap_format() {
 output_format=text
 test_pattern=""
 separator=""
-while getopts "vp:f:" option
+overall=1
+while getopts "vp:f:o" option
 do
   case "$option" in
     p)
@@ -351,6 +352,9 @@ do
       ;;
     f)
       output_format="${OPTARG}"
+      ;;
+    o)
+      overall=0
       ;;
     v)
       echo "bash_unit $VERSION"
@@ -375,6 +379,7 @@ case "$output_format" in
     ;;
   tap)
     tap_format
+    overall=0
     ;;
   *)
     usage "unsupported output format: $output_format"
@@ -401,4 +406,18 @@ do
   )
   failure=$(( $? || failure))
 done
+
+# Show the overall result
+if ((overall))
+then
+  echo -n "Overall result: "
+  if ((failure))
+  then
+    echo -n "FAIL" | pretty_failure
+  else
+    echo -n "PASS" | pretty_success
+  fi
+  echo
+fi
+
 exit $failure

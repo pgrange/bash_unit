@@ -6,7 +6,7 @@ LANG=C.UTF-8
 
 export FORCE_COLOR=false
 export STICK_TO_CWD=true
-BASH_UNIT="eval ./bash_unit"
+BASH_UNIT="eval ./bash_unit -o"
 #BASH_UNIT="eval FORCE_COLOR=false ./bash_unit"
 
 prepare_tests() {
@@ -20,10 +20,10 @@ prepare_tests() {
 
   while grep -E '^'"$TEST_PATTERN"'$' $remaining >/dev/null
   do
-    block=$(($block+1))
+    ((++block))
     run_doc_test  $remaining $swap |& sed '$a\' > $test_output$block
     doc_to_output $remaining $swap > $expected_output$block
-    eval 'function test_block_'"$block"'() {
+    eval 'function test_block_'"$(printf %02d $block)"'() {
         assert "diff -u '"$expected_output$block"' '"$test_output$block"'"
       }'
   done
