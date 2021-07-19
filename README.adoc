@@ -12,7 +12,7 @@ bash_unit - bash unit testing enterprise edition framework for professionals!
 
 == Synopsis
 
-*bash_unit* [-f tap] [-p <pattern>] [test_file]
+*bash_unit* [-f tap] [-p <pattern>] [-r] [test_file]
 
 == Description
 
@@ -35,6 +35,12 @@ _(by the way, the documentation you are reading is itself tested with bash-unit)
   filters tests to run based on the given pattern.
   You can specify several patterns by repeating this option
   for each pattern.
+
+*-r*::
+  executes test cases in random order.
+  Only affects the order within a test file (files are always
+  executed in the order in which they are specified on the
+  command line).
 
 *-f* _output_format_::
   specify an alternative output format.
