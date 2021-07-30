@@ -7,7 +7,7 @@ Running tests in code
 	Running test_fails ... FAILURE
 code:2:test_fails()
 	Running test_succeed ... SUCCESS
-Overall resultcode: FAIL\
+Overall resultcode: FAILURE\
 " \
 "$(bash_unit_out_for_code << EOF
   function test_succeed() { assert true ; }
@@ -44,7 +44,7 @@ Running tests in test_file
 	Running test_one ... SUCCESS
 Running tests in test_file
 	Running test_two ... SUCCESS
-Overall result: PASS\
+Overall result: SUCCESS\
 " \
 "$bash_unit_output"
 }
@@ -60,7 +60,7 @@ test_run_only_tests_that_match_pattern() {
 Running tests in test_file
 	Running test_one ... SUCCESS
 Running tests in test_file
-Overall result: PASS" "$bash_unit_output"
+Overall result: SUCCESS" "$bash_unit_output"
 }
 
 test_do_not_run_pending_tests() {
@@ -81,7 +81,7 @@ test_pending_tests_appear_in_output() {
 Running tests in test_file
 	Running pending_should_not_run ... PENDING
 	Running todo_should_not_run ... PENDING
-Overall result: PASS" \
+Overall result: SUCCESS" \
   "$bash_unit_output"
 }
 

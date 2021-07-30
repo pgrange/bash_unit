@@ -251,4 +251,6 @@ mute() {
   notify_stack         () { echo -n ; }
   notify_stdout        () { echo -n ; }
   notify_stderr        () { echo -n ; }
+  notify_suites_succeded () { echo -n ; }
+  notify_suites_failed   () { echo -n ; }
 }
