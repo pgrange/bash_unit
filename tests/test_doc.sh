@@ -6,7 +6,7 @@ LANG=C.UTF-8
 
 export FORCE_COLOR=false
 export STICK_TO_CWD=true
-BASH_UNIT="eval ./bash_unit -o"
+BASH_UNIT="eval ./bash_unit"
 #BASH_UNIT="eval FORCE_COLOR=false ./bash_unit"
 
 prepare_tests() {
@@ -32,10 +32,23 @@ prepare_tests() {
 function run_doc_test() {
   local remaining="$1"
   local swap="$2"
-  $BASH_UNIT <(
-    cat "$remaining" | _next_code "$swap"
-  ) | tail -n +2 | sed -e 's:/dev/fd/[0-9]*:doc:g' 
+  $BASH_UNIT <(cat "$remaining" | _next_code "$swap") \
+  | clean_bash_unit_running_header \
+  | clean_bash_pseudo_files_name \
+  | clean_bash_unit_overall_result
   cat "$swap" > "$remaining"
+}
+
+function clean_bash_unit_running_header() {
+  tail -n +2
+}
+
+function clean_bash_pseudo_files_name() {
+  sed -e 's:/dev/fd/[0-9]*:doc:g'
+}
+
+function clean_bash_unit_overall_result() {
+  sed '$d'
 }
 
 function doc_to_output() {

@@ -102,7 +102,7 @@ Running tests in tests/test_core.sh
 	Running test_fake_echo_stdin_when_no_params ... SUCCESS
 	Running test_fake_exports_faked_in_subshells ... SUCCESS
 	Running test_fake_transmits_params_to_fake_code ... SUCCESS
-Overall result: PASS
+Overall result: SUCCESS
 ```
 
 You might also want to run only specific tests, you may do so with the
@@ -128,18 +128,7 @@ Running tests in tests/test_core.sh
 	Running test_assert_status_code_succeeds ... SUCCESS
 	Running test_assert_succeeds ... SUCCESS
 	Running test_fail_fails ... SUCCESS
-Overall result: PASS
-```
-
-The "Overall result:" line at the end can be suppressed with the _-o_ option:
-
-```test
-./bash_unit -o -p test_assert_succeeds tests/test_core.sh
-```
-
-```output
-Running tests in tests/test_core.sh
-	Running test_assert_succeeds ... SUCCESS
+Overall result: SUCCESS
 ```
 
 *bash_unit* supports the http://testanything.org/[Test Anything Protocol] so you can ask for a tap formatted
