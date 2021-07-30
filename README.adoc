@@ -604,7 +604,7 @@ With bash, the result code of a pipeline equals the result code of the last comm
 
 An alternative may be to activate bash _pipefail_ option but this may introduce unwanted side effects. We can also simply not output anything in __ps_ so that _grep_ fails:
 
-```test
+```shell
 code() {
   ps a | grep apache
 }
@@ -626,7 +626,7 @@ bad, don't do that.
 
 Moreover, *assert_equals* output is captured by _ps_ and this just messes with the display of our test results:
 
-```output
+```shell
 	Running test_code_gives_ps_appropriate_parameters ... 
 ```
 
