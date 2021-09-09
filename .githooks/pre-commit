@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#/**
+# * TangoMan pre-commit git hook
+# *
+# * @license MIT
+# * @author  "Matthias Morin" <mat@tangoman.io>
+# * @version 0.1.0
+# */
+
+set -efu -o pipefail
+
+BASEDIR="$(git rev-parse --show-toplevel)"
+
+cd "${BASEDIR}" || exit 1
+
+sh "${BASEDIR}"/entrypoint.sh lint tests
