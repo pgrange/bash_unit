@@ -20,7 +20,8 @@ prepare_tests() {
 
   while grep -E '^'"$TEST_PATTERN"'$' $remaining >/dev/null
   do
-    block=$(($block+1))
+    block=$((block+1))
+    # shellcheck disable=SC1003
     run_doc_test  $remaining $swap |& sed '$a\' > $test_output$block
     doc_to_output $remaining $swap > $expected_output$block
     eval 'function test_block_'"$block"'() {
@@ -33,6 +34,7 @@ function run_doc_test() {
   local remaining="$1"
   local swap="$2"
   $BASH_UNIT <(
+    # shellcheck disable=2002
     cat "$remaining" | _next_code "$swap"
   ) | tail -n +2 | sed -e 's:/dev/fd/[0-9]*:doc:g' 
   cat "$swap" > "$remaining"
@@ -41,6 +43,7 @@ function run_doc_test() {
 function doc_to_output() {
   local remaining="$1"
   local swap="$2"
+  # shellcheck disable=2002
   cat "$remaining" | _next_output "$swap"
   cat "$swap" > "$remaining"
  }

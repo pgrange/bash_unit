@@ -134,13 +134,15 @@ setup() {
   # using $SED or $CAT in the tests)
   fake cat :
   fake sed :
+  # shellcheck disable=SC2230
   CAT="$(which cat)"
+  # shellcheck disable=SC2230
   SED="$(which sed)"
 }
 
 line() {
   line_nb=$1
-  tail -n +$line_nb | head -1
+  tail -n "+${line_nb}" | head -1
 }
 
 bash_unit_out_for_code() {

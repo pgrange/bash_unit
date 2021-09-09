@@ -16,6 +16,7 @@ test_assert_fails_succeeds() {
 }
 
 test_assert_fails_fails() {
+  # shellcheck disable=SC2015
   with_bash_unit_muted assert_fails true && fail 'assert_fails should fail' || true
 }
 
@@ -65,7 +66,7 @@ test_fail_prints_failure_message() {
 }
 
 test_fail_prints_where_is_error() {
-  assert_equals "${BASH_SOURCE}:${LINENO}:${FUNCNAME}()" \
+  assert_equals "${BASH_SOURCE[0]}:${LINENO}:${FUNCNAME[0]}()" \
     "$(with_bash_unit_stack fail | last_line)"
 }
 
@@ -102,20 +103,20 @@ another ok message" \
 
 test_fake_actually_fakes_the_command() {
   fake ps echo expected
-  assert_equals "expected" $(ps)
+  assert_equals "expected" "$(ps)"
 }
 
 test_fake_can_fake_inline() {
   assert_equals \
     "expected" \
-    $(fake ps echo expected ; ps)
+    "$(fake ps echo expected ; ps)"
 }
 
 test_fake_exports_faked_in_subshells() {
   fake ps echo expected
   assert_equals \
     expected \
-    $( bash -c ps )
+    "$( bash -c ps)"
 }
 
 test_fake_transmits_params_to_fake_code() {
@@ -135,19 +136,19 @@ test_fake_echo_stdin_when_no_params() {
  7818 pts/9    00:00:00 ps
 EOF
 
-  assert_equals 2 $(ps | "$GREP" pts | wc -l)
+  assert_equals 2 "$(ps | "$GREP" pts | wc -l)"
 }
 
 if [[ "${STICK_TO_CWD}" != true ]]
 then
   # do not test for cwd if STICK_TO_CWD is true
   test_bash_unit_changes_cwd_to_current_test_file_directory() {
-    assert "ls ../tests/$(basename "$BASH_SOURCE")" \
+    assert "ls ../tests/$(basename "${BASH_SOURCE[0]}")" \
       "bash_unit should change current working directory to match the directory of the currenlty running test"
   }
 
   #the following assertion is out of any test on purpose
-  assert "ls ../tests/$(basename "$BASH_SOURCE")" \
+  assert "ls ../tests/$(basename "${BASH_SOURCE[0]}")" \
   "bash_unit should change current working directory to match the directory of the currenlty running test before sourcing test file"
 fi
 
@@ -167,7 +168,7 @@ setup() {
 
 line() {
   line_nb=$1
-  tail -n +$line_nb | head -1
+  tail -n "+${line_nb}" | head -1
 }
 
 last_line() {
@@ -213,6 +214,10 @@ with_bash_unit_notifications_muted() {
         e)
           unmute_err
           ;;
+        \?)
+          echo "error: invalid option \"${OPTARG}\""
+          return 1
+          ;;
       esac
     done
     shift $((OPTIND-1))
@@ -225,10 +230,12 @@ unmute_logs() {
   notify_suite_starting() { echo "Running tests in $1" ; }
   notify_test_starting () { echo -e -n "\tRunning $1... " ; }
   notify_test_succeeded() { echo "SUCCESS" ; }
-  notify_test_failed   () { echo "FAILURE" ; echo $2 ; }
+  notify_test_failed   () { echo "FAILURE" ; echo "$2" ; }
 }
 
+# shellcheck disable=SC2230
 CAT="$(which cat)"
+# shellcheck disable=SC2230
 GREP="$(which grep)"
 
 unmute_stack() {
