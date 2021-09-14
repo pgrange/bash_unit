@@ -306,6 +306,14 @@ text_format() {
   notify_stack() {
     color "$YELLOW"
   }
+  notify_suites_succeded() {
+    echo -n "Overall result: SUCCESS" | pretty_success
+    echo
+  }
+  notify_suites_failed() {
+    echo -n "Overall result: FAILURE" | pretty_failure
+    echo
+  }
 }
 
 tap_format() {
@@ -314,7 +322,7 @@ tap_format() {
     echo "# Running tests in $test_file"
   }
   notify_test_starting() {
-    echo -n
+    :
   }
   notify_test_pending() {
     local test="$1"
@@ -343,13 +351,19 @@ tap_format() {
   notify_stack() {
     "$SED" 's:^:# :' | color "$YELLOW"
   }
+  notify_suites_succeded() {
+    :
+  }
+  notify_suites_failed() {
+    :
+  }
 }
 
 output_format=text
 test_pattern=""
 separator=""
 randomise=0
-while getopts "vp:f:r" option
+while getopts "vp:f:or" option
 do
   case "$option" in
     p)
@@ -411,4 +425,12 @@ do
   )
   failure=$(( $? || failure))
 done
+
+if ((failure))
+then
+  notify_suites_failed
+else
+  notify_suites_succeded
+fi
+
 exit $failure

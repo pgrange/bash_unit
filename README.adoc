@@ -108,6 +108,7 @@ Running tests in tests/test_core.sh
 	Running test_fake_echo_stdin_when_no_params ... SUCCESS
 	Running test_fake_exports_faked_in_subshells ... SUCCESS
 	Running test_fake_transmits_params_to_fake_code ... SUCCESS
+Overall result: SUCCESS
 ```
 
 You might also want to run only specific tests, you may do so with the
@@ -133,6 +134,7 @@ Running tests in tests/test_core.sh
 	Running test_assert_status_code_succeeds ... SUCCESS
 	Running test_assert_succeeds ... SUCCESS
 	Running test_fail_fails ... SUCCESS
+Overall result: SUCCESS
 ```
 
 *bash_unit* supports the http://testanything.org/[Test Anything Protocol] so you can ask for a tap formatted
@@ -597,7 +599,7 @@ With bash, the result code of a pipeline equals the result code of the last comm
 
 An alternative may be to activate bash _pipefail_ option but this may introduce unwanted side effects. We can also simply not output anything in __ps_ so that _grep_ fails:
 
-```test
+```shell
 code() {
   ps a | grep apache
 }
@@ -619,7 +621,7 @@ bad, don't do that.
 
 Moreover, *assert_equals* output is captured by _ps_ and this just messes with the display of our test results:
 
-```output
+```shell
 	Running test_code_gives_ps_appropriate_parameters ... 
 ```
 
