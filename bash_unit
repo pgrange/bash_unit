@@ -363,7 +363,7 @@ output_format=text
 test_pattern=""
 separator=""
 randomise=0
-while getopts "vp:f:or" option
+while getopts "vp:f:r" option
 do
   case "$option" in
     p)
