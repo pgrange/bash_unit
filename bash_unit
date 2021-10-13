@@ -121,6 +121,16 @@ assert_not_equals() {
     fail "$message expected different value than [$unexpected] but was the same"
 }
 
+assert_no_diff() {
+  local expected=$1
+  local actual=$2
+  local message=${3:-}
+  [[ -z $message ]] || message="$message\n"
+
+  diff "${expected}" "${actual}" >/dev/null || \
+    fail "$message expected '${actual}' to be identical to '${expected}' but was different"
+}
+
 fake() {
   local command=$1
   shift

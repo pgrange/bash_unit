@@ -57,6 +57,18 @@ test_assert_not_equals_succeeds_when_not_equal() {
     'assert_not_equals should succeed'
 }
 
+test_assert_no_diff_succeeds_when_no_diff() {
+  assert \
+    "assert_no_diff <(echo foo) <(echo foo)" \
+    "assert_no_diff should succeed"
+}
+
+test_assert_no_diff_fails_when_diff() {
+  assert_fails \
+    "assert_no_diff <(echo foo) <(echo bar)" \
+    "assert_no_diff should fail"
+}
+
 test_fail_prints_failure_message() {
   message=$(with_bash_unit_log fail 'failure message' | line 2)
 
