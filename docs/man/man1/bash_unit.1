@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: bash_unit
 .\"    Author: [see the "AUTHOR(S)" section]
-.\" Generator: Asciidoctor 2.0.13
-.\"      Date: 2021-06-01
+.\" Generator: Asciidoctor 2.0.16
+.\"      Date: 2021-10-14
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "BASH_UNIT" "1" "2021-06-01" "\ \&" "\ \&"
+.TH "BASH_UNIT" "1" "2021-10-14" "\ \&" "\ \&"
 .ie \n(.g .ds Aq \(aq
 .el       .ds Aq '
 .ss \n[.ss] 0
@@ -31,7 +31,7 @@
 bash_unit \- bash unit testing enterprise edition framework for professionals!
 .SH "SYNOPSIS"
 .sp
-\fBbash_unit\fP [\-f tap] [\-p <pattern>] [test_file]
+\fBbash_unit\fP [\-f tap] [\-p <pattern>] [\-r] [test_file]
 .SH "DESCRIPTION"
 .sp
 \fBbash_unit\fP allows you to write unit tests (functions starting with \fBtest\fP),
@@ -55,6 +55,14 @@ You can specify several patterns by repeating this option
 for each pattern.
 .RE
 .sp
+\fB\-r\fP
+.RS 4
+executes test cases in random order.
+Only affects the order within a test file (files are always
+executed in the order in which they are specified on the
+command line).
+.RE
+.sp
 \fB\-f\fP \fIoutput_format\fP
 .RS 4
 specify an alternative output format.
@@ -76,26 +84,30 @@ To run tests, simply call \fBbash_unit\fP with all your tests files as parameter
 .nf
 .fam C
 Running tests in tests/test_core.sh
-        Running test_assert_equals_fails_when_not_equal ... SUCCESS
-        Running test_assert_equals_succeed_when_equal ... SUCCESS
-        Running test_assert_fails ... SUCCESS
-        Running test_assert_fails_fails ... SUCCESS
-        Running test_assert_fails_succeeds ... SUCCESS
-        Running test_assert_not_equals_fails_when_equal ... SUCCESS
-        Running test_assert_not_equals_succeeds_when_not_equal ... SUCCESS
-        Running test_assert_shows_stderr_on_failure ... SUCCESS
-        Running test_assert_shows_stdout_on_failure ... SUCCESS
-        Running test_assert_status_code_fails ... SUCCESS
-        Running test_assert_status_code_succeeds ... SUCCESS
-        Running test_assert_succeeds ... SUCCESS
-        Running test_fail_fails ... SUCCESS
-        Running test_fail_prints_failure_message ... SUCCESS
-        Running test_fail_prints_where_is_error ... SUCCESS
-        Running test_fake_actually_fakes_the_command ... SUCCESS
-        Running test_fake_can_fake_inline ... SUCCESS
-        Running test_fake_echo_stdin_when_no_params ... SUCCESS
-        Running test_fake_exports_faked_in_subshells ... SUCCESS
-        Running test_fake_transmits_params_to_fake_code ... SUCCESS
+        Running test_assert_equals_fails_when_not_equal ... SUCCESS ✓
+        Running test_assert_equals_succeed_when_equal ... SUCCESS ✓
+        Running test_assert_fails ... SUCCESS ✓
+        Running test_assert_fails_fails ... SUCCESS ✓
+        Running test_assert_fails_succeeds ... SUCCESS ✓
+        Running test_assert_no_diff_fails_when_diff ... SUCCESS ✓
+        Running test_assert_no_diff_succeeds_when_no_diff ... SUCCESS ✓
+        Running test_assert_not_equals_fails_when_equal ... SUCCESS ✓
+        Running test_assert_not_equals_succeeds_when_not_equal ... SUCCESS ✓
+        Running test_assert_shows_stderr_on_failure ... SUCCESS ✓
+        Running test_assert_shows_stdout_on_failure ... SUCCESS ✓
+        Running test_assert_status_code_fails ... SUCCESS ✓
+        Running test_assert_status_code_succeeds ... SUCCESS ✓
+        Running test_assert_succeeds ... SUCCESS ✓
+        Running test_bash_unit_changes_cwd_to_current_test_file_directory ... SUCCESS ✓
+        Running test_fail_fails ... SUCCESS ✓
+        Running test_fail_prints_failure_message ... SUCCESS ✓
+        Running test_fail_prints_where_is_error ... SUCCESS ✓
+        Running test_fake_actually_fakes_the_command ... SUCCESS ✓
+        Running test_fake_can_fake_inline ... SUCCESS ✓
+        Running test_fake_echo_stdin_when_no_params ... SUCCESS ✓
+        Running test_fake_exports_faked_in_subshells ... SUCCESS ✓
+        Running test_fake_transmits_params_to_fake_code ... SUCCESS ✓
+Overall result: SUCCESS ✓
 .fam
 .fi
 .if n .RE
@@ -116,19 +128,22 @@ functions against this pattern.
 .nf
 .fam C
 Running tests in tests/test_core.sh
-        Running test_assert_equals_fails_when_not_equal ... SUCCESS
-        Running test_assert_equals_succeed_when_equal ... SUCCESS
-        Running test_assert_fails ... SUCCESS
-        Running test_assert_fails_fails ... SUCCESS
-        Running test_assert_fails_succeeds ... SUCCESS
-        Running test_assert_not_equals_fails_when_equal ... SUCCESS
-        Running test_assert_not_equals_succeeds_when_not_equal ... SUCCESS
-        Running test_assert_shows_stderr_on_failure ... SUCCESS
-        Running test_assert_shows_stdout_on_failure ... SUCCESS
-        Running test_assert_status_code_fails ... SUCCESS
-        Running test_assert_status_code_succeeds ... SUCCESS
-        Running test_assert_succeeds ... SUCCESS
-        Running test_fail_fails ... SUCCESS
+        Running test_assert_equals_fails_when_not_equal ... SUCCESS ✓
+        Running test_assert_equals_succeed_when_equal ... SUCCESS ✓
+        Running test_assert_fails ... SUCCESS ✓
+        Running test_assert_fails_fails ... SUCCESS ✓
+        Running test_assert_fails_succeeds ... SUCCESS ✓
+        Running test_assert_no_diff_fails_when_diff ... SUCCESS ✓
+        Running test_assert_no_diff_succeeds_when_no_diff ... SUCCESS ✓
+        Running test_assert_not_equals_fails_when_equal ... SUCCESS ✓
+        Running test_assert_not_equals_succeeds_when_not_equal ... SUCCESS ✓
+        Running test_assert_shows_stderr_on_failure ... SUCCESS ✓
+        Running test_assert_shows_stdout_on_failure ... SUCCESS ✓
+        Running test_assert_status_code_fails ... SUCCESS ✓
+        Running test_assert_status_code_succeeds ... SUCCESS ✓
+        Running test_assert_succeeds ... SUCCESS ✓
+        Running test_fail_fails ... SUCCESS ✓
+Overall result: SUCCESS ✓
 .fam
 .fi
 .if n .RE
@@ -150,26 +165,29 @@ output with the \fI\-f\fP option.
 .nf
 .fam C
 # Running tests in tests/test_core.sh
-ok \- test_assert_equals_fails_when_not_equal
-ok \- test_assert_equals_succeed_when_equal
-ok \- test_assert_fails
-ok \- test_assert_fails_fails
-ok \- test_assert_fails_succeeds
-ok \- test_assert_not_equals_fails_when_equal
-ok \- test_assert_not_equals_succeeds_when_not_equal
-ok \- test_assert_shows_stderr_on_failure
-ok \- test_assert_shows_stdout_on_failure
-ok \- test_assert_status_code_fails
-ok \- test_assert_status_code_succeeds
-ok \- test_assert_succeeds
-ok \- test_fail_fails
-ok \- test_fail_prints_failure_message
-ok \- test_fail_prints_where_is_error
-ok \- test_fake_actually_fakes_the_command
-ok \- test_fake_can_fake_inline
-ok \- test_fake_echo_stdin_when_no_params
-ok \- test_fake_exports_faked_in_subshells
-ok \- test_fake_transmits_params_to_fake_code
+ok ✓ test_assert_equals_fails_when_not_equal
+ok ✓ test_assert_equals_succeed_when_equal
+ok ✓ test_assert_fails
+ok ✓ test_assert_fails_fails
+ok ✓ test_assert_fails_succeeds
+ok ✓ test_assert_no_diff_fails_when_diff
+ok ✓ test_assert_no_diff_succeeds_when_no_diff
+ok ✓ test_assert_not_equals_fails_when_equal
+ok ✓ test_assert_not_equals_succeeds_when_not_equal
+ok ✓ test_assert_shows_stderr_on_failure
+ok ✓ test_assert_shows_stdout_on_failure
+ok ✓ test_assert_status_code_fails
+ok ✓ test_assert_status_code_succeeds
+ok ✓ test_assert_succeeds
+ok ✓ test_bash_unit_changes_cwd_to_current_test_file_directory
+ok ✓ test_fail_fails
+ok ✓ test_fail_prints_failure_message
+ok ✓ test_fail_prints_where_is_error
+ok ✓ test_fake_actually_fakes_the_command
+ok ✓ test_fake_can_fake_inline
+ok ✓ test_fake_echo_stdin_when_no_params
+ok ✓ test_fake_exports_faked_in_subshells
+ok ✓ test_fake_transmits_params_to_fake_code
 .fam
 .fi
 .if n .RE
@@ -316,13 +334,13 @@ It may also be fun to use assert to check for the expected content of a file.
 .nf
 .fam C
 code() {
-  echo \(aqnot so cool\(aq > /tmp/the_file
+  echo \*(Aqnot so cool\*(Aq > /tmp/the_file
 }
 
 test_code_write_appropriate_content_in_the_file() {
   code
 
-  assert "diff <(echo \(aqthis is cool\(aq) /tmp/the_file"
+  assert "diff <(echo \*(Aqthis is cool\*(Aq) /tmp/the_file"
 }
 .fam
 .fi
@@ -360,19 +378,19 @@ If the evaluated expression does not fail, then \fBassert_fail\fP will fail and 
 .nf
 .fam C
 code() {
-  echo \(aqnot so cool\(aq > /tmp/the_file
+  echo \*(Aqnot so cool\*(Aq > /tmp/the_file
 }
 
 test_code_does_not_write_cool_in_the_file() {
   code
 
-  assert_fails "grep cool /tmp/the_file" "should not write \(aqcool\(aq in /tmp/the_file"
+  assert_fails "grep cool /tmp/the_file" "should not write \*(Aqcool\*(Aq in /tmp/the_file"
 }
 
 test_code_does_not_write_this_in_the_file() {
   code
 
-  assert_fails "grep this /tmp/the_file" "should not write \(aqthis\(aq in /tmp/the_file"
+  assert_fails "grep this /tmp/the_file" "should not write \*(Aqthis\*(Aq in /tmp/the_file"
 }
 .fam
 .fi
@@ -382,7 +400,7 @@ test_code_does_not_write_this_in_the_file() {
 .nf
 .fam C
         Running test_code_does_not_write_cool_in_the_file ... FAILURE
-should not write \(aqcool\(aq in /tmp/the_file
+should not write \*(Aqcool\*(Aq in /tmp/the_file
 out> not so cool
 doc:8:test_code_does_not_write_cool_in_the_file()
         Running test_code_does_not_write_this_in_the_file ... SUCCESS
@@ -497,6 +515,42 @@ a string should be different from another string
  expected different value than [a string] but was the same
 doc:2:test_obvious_equality_with_assert_not_equals()
         Running test_obvious_inequality_with_assert_not_equals ... SUCCESS
+.fam
+.fi
+.if n .RE
+.SS "\fBassert_no_diff\fP"
+.sp
+.if n .RS 4
+.nf
+.fam C
+assert_no_diff <expected> <actual> [message]
+.fam
+.fi
+.if n .RE
+.sp
+Assert for equality of content between the two files \fIexpected\fP and \fIactual\fP.
+.sp
+.if n .RS 4
+.nf
+.fam C
+test_obvious_diff_with_assert_no_diff(){
+  assert_no_diff <(echo foo) <(echo bar) "dynamic files should have no difference"
+}
+test_obvious_equality_with_assert_no_diff(){
+  assert_no_diff "$0" "$0"
+}
+.fam
+.fi
+.if n .RE
+.sp
+.if n .RS 4
+.nf
+.fam C
+        Running test_obvious_diff_with_assert_no_diff ...  FAILURE ✗
+dynamic files should have no difference
+ expected \*(Aq/dev/fd/62\*(Aq to be identical to \*(Aq/dev/fd/63\*(Aq but was different
+doc:2:test_obvious_diff_with_assert_no_diff()
+        Running test_obvious_equality_with_assert_no_diff ... SUCCESS ✓
 .fam
 .fi
 .if n .RE
@@ -849,7 +903,7 @@ code() {
 }
 
 test_code_gives_ps_appropriate_parameters() {
-  fake ps \(aqecho $FAKE_PARAMS >/tmp/fake_params\(aq
+  fake ps \*(Aqecho $FAKE_PARAMS >/tmp/fake_params\*(Aq
 
   code || true
 
@@ -886,7 +940,7 @@ test_get_data_from_fake() {
   #Fasten you seat belt ...
   coproc cat
   exec {test_channel}>&${COPROC[1]}
-  fake ps \(aqecho $FAKE_PARAMS >&$test_channel\(aq
+  fake ps \*(Aqecho $FAKE_PARAMS >&$test_channel\*(Aq
 
   code || true
 
