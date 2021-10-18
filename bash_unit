@@ -233,9 +233,10 @@ pretty_failure() {
 pretty_format() {
   local color="$1"
   local pretty_symbol="$2"
-  local alt_symbol="$3"
+  local alt_symbol="${3:-}"
   local term_utf8=false
-  if is_terminal && [[ "$LANG" =~ .*UTF-8.* ]]
+#env
+  if is_terminal && [[ "${LANG:-}" =~ .*UTF-8.* ]]
   then
     term_utf8=true
   fi
@@ -270,7 +271,7 @@ color() {
 }
 
 is_terminal() {
-  [ -t 1 ] || [[ "${FORCE_COLOR}" == true ]]
+  [ -t 1 ] || [[ "${FORCE_COLOR:-}" == true ]]
 }
 
 text_format() {
@@ -306,6 +307,14 @@ text_format() {
   notify_stack() {
     color "$YELLOW"
   }
+  notify_suites_succeded() {
+    echo -n "Overall result: SUCCESS" | pretty_success
+    echo
+  }
+  notify_suites_failed() {
+    echo -n "Overall result: FAILURE" | pretty_failure
+    echo
+  }
 }
 
 tap_format() {
@@ -314,7 +323,7 @@ tap_format() {
     echo "# Running tests in $test_file"
   }
   notify_test_starting() {
-    echo -n
+    :
   }
   notify_test_pending() {
     local test="$1"
@@ -342,6 +351,12 @@ tap_format() {
   }
   notify_stack() {
     "$SED" 's:^:# :' | color "$YELLOW"
+  }
+  notify_suites_succeded() {
+    :
+  }
+  notify_suites_failed() {
+    :
   }
 }
 
@@ -411,4 +426,12 @@ do
   )
   failure=$(( $? || failure))
 done
+
+if ((failure))
+then
+  notify_suites_failed
+else
+  notify_suites_succeded
+fi
+
 exit $failure
