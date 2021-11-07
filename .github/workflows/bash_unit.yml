@@ -1,6 +1,6 @@
 name: bash_unit CI
 on:
-  - push:
+  push:
 
 jobs:
   ubuntu:
