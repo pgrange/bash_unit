@@ -7,8 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: install Ubuntu dependencies with sudo apt install -y
-      run: sudo apt install -y gawk
     - name: Unit testing with bash_unit
       run: ./bash_unit tests/test*
 
@@ -19,4 +17,4 @@ jobs:
     - name: install MacOS dependencies with brew install
       run: brew install gawk
     - name: Unit testing with bash_unit
-      run: ./entrypoint.sh tests
+      run: ./bash_unit tests/test*
