@@ -88,31 +88,30 @@ To run tests, simply call *bash_unit* with all your tests files as parameter. Fo
 
 ```output
 Running tests in tests/test_core.sh
-        Running test_assert_equals_fails_when_not_equal ... SUCCESS ✓ 
-        Running test_assert_equals_succeed_when_equal ... SUCCESS ✓ 
-        Running test_assert_fails ... SUCCESS ✓ 
-        Running test_assert_fails_fails ... SUCCESS ✓ 
-        Running test_assert_fails_succeeds ... SUCCESS ✓ 
-        Running test_assert_no_diff_fails_when_diff ... SUCCESS ✓ 
-        Running test_assert_no_diff_succeeds_when_no_diff ... SUCCESS ✓ 
-        Running test_assert_not_equals_fails_when_equal ... SUCCESS ✓ 
-        Running test_assert_not_equals_succeeds_when_not_equal ... SUCCESS ✓ 
-        Running test_assert_shows_stderr_on_failure ... SUCCESS ✓ 
-        Running test_assert_shows_stdout_on_failure ... SUCCESS ✓ 
-        Running test_assert_status_code_fails ... SUCCESS ✓ 
-        Running test_assert_status_code_succeeds ... SUCCESS ✓ 
-        Running test_assert_succeeds ... SUCCESS ✓ 
-        Running test_bash_unit_changes_cwd_to_current_test_file_directory ... SUCCESS ✓ 
-        Running test_fail_fails ... SUCCESS ✓ 
-        Running test_fail_prints_failure_message ... SUCCESS ✓ 
-        Running test_fail_prints_where_is_error ... SUCCESS ✓ 
-        Running test_fake_actually_fakes_the_command ... SUCCESS ✓ 
-        Running test_fake_can_fake_inline ... SUCCESS ✓ 
-        Running test_fake_echo_stdin_when_no_params ... SUCCESS ✓ 
-        Running test_fake_exports_faked_in_subshells ... SUCCESS ✓ 
-        Running test_fake_transmits_params_to_fake_code ... SUCCESS ✓ 
-        Running test_should_pretty_format_even_when_LANG_is_unset ... SUCCESS ✓ 
-Overall result: SUCCESS ✓ 
+	Running test_assert_equals_fails_when_not_equal ... SUCCESS
+	Running test_assert_equals_succeed_when_equal ... SUCCESS
+	Running test_assert_fails ... SUCCESS
+	Running test_assert_fails_fails ... SUCCESS
+	Running test_assert_fails_succeeds ... SUCCESS
+	Running test_assert_no_diff_fails_when_diff ... SUCCESS
+	Running test_assert_no_diff_succeeds_when_no_diff ... SUCCESS
+	Running test_assert_not_equals_fails_when_equal ... SUCCESS
+	Running test_assert_not_equals_succeeds_when_not_equal ... SUCCESS
+	Running test_assert_shows_stderr_on_failure ... SUCCESS
+	Running test_assert_shows_stdout_on_failure ... SUCCESS
+	Running test_assert_status_code_fails ... SUCCESS
+	Running test_assert_status_code_succeeds ... SUCCESS
+	Running test_assert_succeeds ... SUCCESS
+	Running test_fail_fails ... SUCCESS
+	Running test_fail_prints_failure_message ... SUCCESS
+	Running test_fail_prints_where_is_error ... SUCCESS
+	Running test_fake_actually_fakes_the_command ... SUCCESS
+	Running test_fake_can_fake_inline ... SUCCESS
+	Running test_fake_echo_stdin_when_no_params ... SUCCESS
+	Running test_fake_exports_faked_in_subshells ... SUCCESS
+	Running test_fake_transmits_params_to_fake_code ... SUCCESS
+	Running test_should_pretty_format_even_when_LANG_is_unset ... SUCCESS
+Overall result: SUCCESS
 ```
 
 You might also want to run only specific tests, you may do so with the
@@ -125,22 +124,22 @@ functions against this pattern.
 
 ```output
 Running tests in tests/test_core.sh
-        Running test_assert_equals_fails_when_not_equal ... SUCCESS ✓ 
-        Running test_assert_equals_succeed_when_equal ... SUCCESS ✓ 
-        Running test_assert_fails ... SUCCESS ✓ 
-        Running test_assert_fails_fails ... SUCCESS ✓ 
-        Running test_assert_fails_succeeds ... SUCCESS ✓ 
-        Running test_assert_no_diff_fails_when_diff ... SUCCESS ✓ 
-        Running test_assert_no_diff_succeeds_when_no_diff ... SUCCESS ✓ 
-        Running test_assert_not_equals_fails_when_equal ... SUCCESS ✓ 
-        Running test_assert_not_equals_succeeds_when_not_equal ... SUCCESS ✓ 
-        Running test_assert_shows_stderr_on_failure ... SUCCESS ✓ 
-        Running test_assert_shows_stdout_on_failure ... SUCCESS ✓ 
-        Running test_assert_status_code_fails ... SUCCESS ✓ 
-        Running test_assert_status_code_succeeds ... SUCCESS ✓ 
-        Running test_assert_succeeds ... SUCCESS ✓ 
-        Running test_fail_fails ... SUCCESS ✓ 
-Overall result: SUCCESS ✓ 
+	Running test_assert_equals_fails_when_not_equal ... SUCCESS
+	Running test_assert_equals_succeed_when_equal ... SUCCESS
+	Running test_assert_fails ... SUCCESS
+	Running test_assert_fails_fails ... SUCCESS
+	Running test_assert_fails_succeeds ... SUCCESS
+	Running test_assert_no_diff_fails_when_diff ... SUCCESS
+	Running test_assert_no_diff_succeeds_when_no_diff ... SUCCESS
+	Running test_assert_not_equals_fails_when_equal ... SUCCESS
+	Running test_assert_not_equals_succeeds_when_not_equal ... SUCCESS
+	Running test_assert_shows_stderr_on_failure ... SUCCESS
+	Running test_assert_shows_stdout_on_failure ... SUCCESS
+	Running test_assert_status_code_fails ... SUCCESS
+	Running test_assert_status_code_succeeds ... SUCCESS
+	Running test_assert_succeeds ... SUCCESS
+	Running test_fail_fails ... SUCCESS
+Overall result: SUCCESS
 ```
 
 *bash_unit* supports the http://testanything.org/[Test Anything Protocol] so you can ask for a tap formatted
@@ -152,29 +151,28 @@ output with the _-f_ option.
 
 ```output
 # Running tests in tests/test_core.sh
-ok ✓ test_assert_equals_fails_when_not_equal
-ok ✓ test_assert_equals_succeed_when_equal
-ok ✓ test_assert_fails
-ok ✓ test_assert_fails_fails
-ok ✓ test_assert_fails_succeeds
-ok ✓ test_assert_no_diff_fails_when_diff
-ok ✓ test_assert_no_diff_succeeds_when_no_diff
-ok ✓ test_assert_not_equals_fails_when_equal
-ok ✓ test_assert_not_equals_succeeds_when_not_equal
-ok ✓ test_assert_shows_stderr_on_failure
-ok ✓ test_assert_shows_stdout_on_failure
-ok ✓ test_assert_status_code_fails
-ok ✓ test_assert_status_code_succeeds
-ok ✓ test_assert_succeeds
-ok ✓ test_bash_unit_changes_cwd_to_current_test_file_directory
-ok ✓ test_fail_fails
-ok ✓ test_fail_prints_failure_message
-ok ✓ test_fail_prints_where_is_error
-ok ✓ test_fake_actually_fakes_the_command
-ok ✓ test_fake_can_fake_inline
-ok ✓ test_fake_echo_stdin_when_no_params
-ok ✓ test_fake_exports_faked_in_subshells
-ok ✓ test_fake_transmits_params_to_fake_code
+ok - test_assert_equals_fails_when_not_equal
+ok - test_assert_equals_succeed_when_equal
+ok - test_assert_fails
+ok - test_assert_fails_fails
+ok - test_assert_fails_succeeds
+ok - test_assert_no_diff_fails_when_diff
+ok - test_assert_no_diff_succeeds_when_no_diff
+ok - test_assert_not_equals_fails_when_equal
+ok - test_assert_not_equals_succeeds_when_not_equal
+ok - test_assert_shows_stderr_on_failure
+ok - test_assert_shows_stdout_on_failure
+ok - test_assert_status_code_fails
+ok - test_assert_status_code_succeeds
+ok - test_assert_succeeds
+ok - test_fail_fails
+ok - test_fail_prints_failure_message
+ok - test_fail_prints_where_is_error
+ok - test_fake_actually_fakes_the_command
+ok - test_fake_can_fake_inline
+ok - test_fake_echo_stdin_when_no_params
+ok - test_fake_exports_faked_in_subshells
+ok - test_fake_transmits_params_to_fake_code
 ok - test_should_pretty_format_even_when_LANG_is_unset
 ```
 
@@ -411,29 +409,6 @@ a string should be different from another string
  expected different value than [a string] but was the same
 doc:2:test_obvious_equality_with_assert_not_equals()
 	Running test_obvious_inequality_with_assert_not_equals ... SUCCESS
-```
-
-=== *assert_no_diff*
-
-    assert_no_diff <expected> <actual> [message]
-
-Assert for equality of content between the two files _expected_ and _actual_.
-
-```test
-test_obvious_diff_with_assert_no_diff(){
-  assert_no_diff <(echo foo) <(echo bar) "dynamic files should have no difference"
-}
-test_obvious_equality_with_assert_no_diff(){
-  assert_no_diff "$0" "$0"
-}
-```
-
-```output
-        Running test_obvious_diff_with_assert_no_diff ...  FAILURE ✗ 
-dynamic files should have no difference
- expected '/dev/fd/62' to be identical to '/dev/fd/63' but was different
-doc:2:test_obvious_diff_with_assert_no_diff()
-        Running test_obvious_equality_with_assert_no_diff ... SUCCESS ✓ 
 ```
 
 == *fake* function
