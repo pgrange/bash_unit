@@ -16,7 +16,7 @@
 #
 #  https://github.com/pgrange/bash_unit
 
-VERSION=v1.7.2
+VERSION=v1.8.0
 
 ESCAPE=$(printf "\033")
 NOCOLOR="${ESCAPE}[0m"
@@ -119,6 +119,16 @@ assert_not_equals() {
 
   [ "$unexpected" != "$actual" ] || \
     fail "$message expected different value than [$unexpected] but was the same"
+}
+
+assert_no_diff() {
+  local expected=$1
+  local actual=$2
+  local message=${3:-}
+  [[ -z $message ]] || message="$message\n"
+
+  diff "${expected}" "${actual}" >/dev/null || \
+    fail "$message expected '${actual}' to be identical to '${expected}' but was different"
 }
 
 fake() {
