@@ -150,6 +150,12 @@ EOF
   assert_equals 2 $(ps | "$GREP" pts | wc -l)
 }
 
+test_should_pretty_format_even_when_LANG_is_unset() {
+  # See https://github.com/pgrange/bash_unit/pull/81
+  unset LANG
+  assert "echo foo | pretty_format GREEN I"
+}
+
 if [[ "${STICK_TO_CWD}" != true ]]
 then
   # do not test for cwd if STICK_TO_CWD is true
