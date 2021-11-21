@@ -2,12 +2,12 @@
 .\"     Title: bash_unit
 .\"    Author: [see the "AUTHOR(S)" section]
 .\" Generator: Asciidoctor 2.0.16
-.\"      Date: 2021-10-14
+.\"      Date: 2021-11-07
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "BASH_UNIT" "1" "2021-10-14" "\ \&" "\ \&"
+.TH "BASH_UNIT" "1" "2021-11-07" "\ \&" "\ \&"
 .ie \n(.g .ds Aq \(aq
 .el       .ds Aq '
 .ss \n[.ss] 0
@@ -84,30 +84,30 @@ To run tests, simply call \fBbash_unit\fP with all your tests files as parameter
 .nf
 .fam C
 Running tests in tests/test_core.sh
-        Running test_assert_equals_fails_when_not_equal ... SUCCESS ✓
-        Running test_assert_equals_succeed_when_equal ... SUCCESS ✓
-        Running test_assert_fails ... SUCCESS ✓
-        Running test_assert_fails_fails ... SUCCESS ✓
-        Running test_assert_fails_succeeds ... SUCCESS ✓
-        Running test_assert_no_diff_fails_when_diff ... SUCCESS ✓
-        Running test_assert_no_diff_succeeds_when_no_diff ... SUCCESS ✓
-        Running test_assert_not_equals_fails_when_equal ... SUCCESS ✓
-        Running test_assert_not_equals_succeeds_when_not_equal ... SUCCESS ✓
-        Running test_assert_shows_stderr_on_failure ... SUCCESS ✓
-        Running test_assert_shows_stdout_on_failure ... SUCCESS ✓
-        Running test_assert_status_code_fails ... SUCCESS ✓
-        Running test_assert_status_code_succeeds ... SUCCESS ✓
-        Running test_assert_succeeds ... SUCCESS ✓
-        Running test_bash_unit_changes_cwd_to_current_test_file_directory ... SUCCESS ✓
-        Running test_fail_fails ... SUCCESS ✓
-        Running test_fail_prints_failure_message ... SUCCESS ✓
-        Running test_fail_prints_where_is_error ... SUCCESS ✓
-        Running test_fake_actually_fakes_the_command ... SUCCESS ✓
-        Running test_fake_can_fake_inline ... SUCCESS ✓
-        Running test_fake_echo_stdin_when_no_params ... SUCCESS ✓
-        Running test_fake_exports_faked_in_subshells ... SUCCESS ✓
-        Running test_fake_transmits_params_to_fake_code ... SUCCESS ✓
-Overall result: SUCCESS ✓
+        Running test_assert_equals_fails_when_not_equal ... SUCCESS
+        Running test_assert_equals_succeed_when_equal ... SUCCESS
+        Running test_assert_fails ... SUCCESS
+        Running test_assert_fails_fails ... SUCCESS
+        Running test_assert_fails_succeeds ... SUCCESS
+        Running test_assert_no_diff_fails_when_diff ... SUCCESS
+        Running test_assert_no_diff_succeeds_when_no_diff ... SUCCESS
+        Running test_assert_not_equals_fails_when_equal ... SUCCESS
+        Running test_assert_not_equals_succeeds_when_not_equal ... SUCCESS
+        Running test_assert_shows_stderr_on_failure ... SUCCESS
+        Running test_assert_shows_stdout_on_failure ... SUCCESS
+        Running test_assert_status_code_fails ... SUCCESS
+        Running test_assert_status_code_succeeds ... SUCCESS
+        Running test_assert_succeeds ... SUCCESS
+        Running test_fail_fails ... SUCCESS
+        Running test_fail_prints_failure_message ... SUCCESS
+        Running test_fail_prints_where_is_error ... SUCCESS
+        Running test_fake_actually_fakes_the_command ... SUCCESS
+        Running test_fake_can_fake_inline ... SUCCESS
+        Running test_fake_echo_stdin_when_no_params ... SUCCESS
+        Running test_fake_exports_faked_in_subshells ... SUCCESS
+        Running test_fake_transmits_params_to_fake_code ... SUCCESS
+        Running test_should_pretty_format_even_when_LANG_is_unset ... SUCCESS
+Overall result: SUCCESS
 .fam
 .fi
 .if n .RE
@@ -128,22 +128,22 @@ functions against this pattern.
 .nf
 .fam C
 Running tests in tests/test_core.sh
-        Running test_assert_equals_fails_when_not_equal ... SUCCESS ✓
-        Running test_assert_equals_succeed_when_equal ... SUCCESS ✓
-        Running test_assert_fails ... SUCCESS ✓
-        Running test_assert_fails_fails ... SUCCESS ✓
-        Running test_assert_fails_succeeds ... SUCCESS ✓
-        Running test_assert_no_diff_fails_when_diff ... SUCCESS ✓
-        Running test_assert_no_diff_succeeds_when_no_diff ... SUCCESS ✓
-        Running test_assert_not_equals_fails_when_equal ... SUCCESS ✓
-        Running test_assert_not_equals_succeeds_when_not_equal ... SUCCESS ✓
-        Running test_assert_shows_stderr_on_failure ... SUCCESS ✓
-        Running test_assert_shows_stdout_on_failure ... SUCCESS ✓
-        Running test_assert_status_code_fails ... SUCCESS ✓
-        Running test_assert_status_code_succeeds ... SUCCESS ✓
-        Running test_assert_succeeds ... SUCCESS ✓
-        Running test_fail_fails ... SUCCESS ✓
-Overall result: SUCCESS ✓
+        Running test_assert_equals_fails_when_not_equal ... SUCCESS
+        Running test_assert_equals_succeed_when_equal ... SUCCESS
+        Running test_assert_fails ... SUCCESS
+        Running test_assert_fails_fails ... SUCCESS
+        Running test_assert_fails_succeeds ... SUCCESS
+        Running test_assert_no_diff_fails_when_diff ... SUCCESS
+        Running test_assert_no_diff_succeeds_when_no_diff ... SUCCESS
+        Running test_assert_not_equals_fails_when_equal ... SUCCESS
+        Running test_assert_not_equals_succeeds_when_not_equal ... SUCCESS
+        Running test_assert_shows_stderr_on_failure ... SUCCESS
+        Running test_assert_shows_stdout_on_failure ... SUCCESS
+        Running test_assert_status_code_fails ... SUCCESS
+        Running test_assert_status_code_succeeds ... SUCCESS
+        Running test_assert_succeeds ... SUCCESS
+        Running test_fail_fails ... SUCCESS
+Overall result: SUCCESS
 .fam
 .fi
 .if n .RE
@@ -165,29 +165,29 @@ output with the \fI\-f\fP option.
 .nf
 .fam C
 # Running tests in tests/test_core.sh
-ok ✓ test_assert_equals_fails_when_not_equal
-ok ✓ test_assert_equals_succeed_when_equal
-ok ✓ test_assert_fails
-ok ✓ test_assert_fails_fails
-ok ✓ test_assert_fails_succeeds
-ok ✓ test_assert_no_diff_fails_when_diff
-ok ✓ test_assert_no_diff_succeeds_when_no_diff
-ok ✓ test_assert_not_equals_fails_when_equal
-ok ✓ test_assert_not_equals_succeeds_when_not_equal
-ok ✓ test_assert_shows_stderr_on_failure
-ok ✓ test_assert_shows_stdout_on_failure
-ok ✓ test_assert_status_code_fails
-ok ✓ test_assert_status_code_succeeds
-ok ✓ test_assert_succeeds
-ok ✓ test_bash_unit_changes_cwd_to_current_test_file_directory
-ok ✓ test_fail_fails
-ok ✓ test_fail_prints_failure_message
-ok ✓ test_fail_prints_where_is_error
-ok ✓ test_fake_actually_fakes_the_command
-ok ✓ test_fake_can_fake_inline
-ok ✓ test_fake_echo_stdin_when_no_params
-ok ✓ test_fake_exports_faked_in_subshells
-ok ✓ test_fake_transmits_params_to_fake_code
+ok \- test_assert_equals_fails_when_not_equal
+ok \- test_assert_equals_succeed_when_equal
+ok \- test_assert_fails
+ok \- test_assert_fails_fails
+ok \- test_assert_fails_succeeds
+ok \- test_assert_no_diff_fails_when_diff
+ok \- test_assert_no_diff_succeeds_when_no_diff
+ok \- test_assert_not_equals_fails_when_equal
+ok \- test_assert_not_equals_succeeds_when_not_equal
+ok \- test_assert_shows_stderr_on_failure
+ok \- test_assert_shows_stdout_on_failure
+ok \- test_assert_status_code_fails
+ok \- test_assert_status_code_succeeds
+ok \- test_assert_succeeds
+ok \- test_fail_fails
+ok \- test_fail_prints_failure_message
+ok \- test_fail_prints_where_is_error
+ok \- test_fake_actually_fakes_the_command
+ok \- test_fake_can_fake_inline
+ok \- test_fake_echo_stdin_when_no_params
+ok \- test_fake_exports_faked_in_subshells
+ok \- test_fake_transmits_params_to_fake_code
+ok \- test_should_pretty_format_even_when_LANG_is_unset
 .fam
 .fi
 .if n .RE
@@ -515,42 +515,6 @@ a string should be different from another string
  expected different value than [a string] but was the same
 doc:2:test_obvious_equality_with_assert_not_equals()
         Running test_obvious_inequality_with_assert_not_equals ... SUCCESS
-.fam
-.fi
-.if n .RE
-.SS "\fBassert_no_diff\fP"
-.sp
-.if n .RS 4
-.nf
-.fam C
-assert_no_diff <expected> <actual> [message]
-.fam
-.fi
-.if n .RE
-.sp
-Assert for equality of content between the two files \fIexpected\fP and \fIactual\fP.
-.sp
-.if n .RS 4
-.nf
-.fam C
-test_obvious_diff_with_assert_no_diff(){
-  assert_no_diff <(echo foo) <(echo bar) "dynamic files should have no difference"
-}
-test_obvious_equality_with_assert_no_diff(){
-  assert_no_diff "$0" "$0"
-}
-.fam
-.fi
-.if n .RE
-.sp
-.if n .RS 4
-.nf
-.fam C
-        Running test_obvious_diff_with_assert_no_diff ...  FAILURE ✗
-dynamic files should have no difference
- expected \*(Aq/dev/fd/62\*(Aq to be identical to \*(Aq/dev/fd/63\*(Aq but was different
-doc:2:test_obvious_diff_with_assert_no_diff()
-        Running test_obvious_equality_with_assert_no_diff ... SUCCESS ✓
 .fam
 .fi
 .if n .RE
