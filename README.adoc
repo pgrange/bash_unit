@@ -93,10 +93,14 @@ Running tests in tests/test_core.sh
 	Running test_assert_fails ... SUCCESS
 	Running test_assert_fails_fails ... SUCCESS
 	Running test_assert_fails_succeeds ... SUCCESS
+	Running test_assert_matches_fails_when_not_matching ... SUCCESS
+	Running test_assert_matches_succeed_when_matching ... SUCCESS
 	Running test_assert_no_diff_fails_when_diff ... SUCCESS
 	Running test_assert_no_diff_succeeds_when_no_diff ... SUCCESS
 	Running test_assert_not_equals_fails_when_equal ... SUCCESS
 	Running test_assert_not_equals_succeeds_when_not_equal ... SUCCESS
+	Running test_assert_not_matches_fails_when_matching ... SUCCESS
+	Running test_assert_not_matches_succeed_when_not_matching ... SUCCESS
 	Running test_assert_shows_stderr_on_failure ... SUCCESS
 	Running test_assert_shows_stdout_on_failure ... SUCCESS
 	Running test_assert_status_code_fails ... SUCCESS
@@ -129,10 +133,14 @@ Running tests in tests/test_core.sh
 	Running test_assert_fails ... SUCCESS
 	Running test_assert_fails_fails ... SUCCESS
 	Running test_assert_fails_succeeds ... SUCCESS
+	Running test_assert_matches_fails_when_not_matching ... SUCCESS
+	Running test_assert_matches_succeed_when_matching ... SUCCESS
 	Running test_assert_no_diff_fails_when_diff ... SUCCESS
 	Running test_assert_no_diff_succeeds_when_no_diff ... SUCCESS
 	Running test_assert_not_equals_fails_when_equal ... SUCCESS
 	Running test_assert_not_equals_succeeds_when_not_equal ... SUCCESS
+	Running test_assert_not_matches_fails_when_matching ... SUCCESS
+	Running test_assert_not_matches_succeed_when_not_matching ... SUCCESS
 	Running test_assert_shows_stderr_on_failure ... SUCCESS
 	Running test_assert_shows_stdout_on_failure ... SUCCESS
 	Running test_assert_status_code_fails ... SUCCESS
@@ -156,10 +164,14 @@ ok - test_assert_equals_succeed_when_equal
 ok - test_assert_fails
 ok - test_assert_fails_fails
 ok - test_assert_fails_succeeds
+ok - test_assert_matches_fails_when_not_matching
+ok - test_assert_matches_succeed_when_matching
 ok - test_assert_no_diff_fails_when_diff
 ok - test_assert_no_diff_succeeds_when_no_diff
 ok - test_assert_not_equals_fails_when_equal
 ok - test_assert_not_equals_succeeds_when_not_equal
+ok - test_assert_not_matches_fails_when_matching
+ok - test_assert_not_matches_succeed_when_not_matching
 ok - test_assert_shows_stderr_on_failure
 ok - test_assert_shows_stdout_on_failure
 ok - test_assert_status_code_fails
@@ -411,6 +423,56 @@ doc:2:test_obvious_equality_with_assert_not_equals()
 	Running test_obvious_inequality_with_assert_not_equals ... SUCCESS
 ```
 
+##############################
+=== *assert_matches*
+
+    assert_matches <expected-regex> <actual> [message]
+
+Asserts that the string _actual_ matches the regex pattern _expected-regex_.
+
+```test
+test_obvious_notmatching_with_assert_matches(){
+  assert_matches "a str.*" "another string" "'another string' should not match 'a str.*'"
+}
+test_obvious_matching_with_assert_matches(){
+  assert_matches "a[nN].t{0,1}.*r str.*" "another string"
+}
+
+```
+
+```output
+	Running test_obvious_matching_with_assert_matches ... SUCCESS
+	Running test_obvious_notmatching_with_assert_matches ... FAILURE
+'another string' should not match 'a str.*'
+ expected regex [a str.*] to match [another string]
+doc:2:test_obvious_notmatching_with_assert_matches()
+```
+
+=== *assert_not_matches*
+
+    assert_not_matches <unexpected-regex> <actual> [message]
+
+Asserts that the string _actual_ does not match the regex pattern _unexpected-regex_.
+
+```test
+test_obvious_matching_with_assert_not_matches(){
+  assert_not_matches "a str.*" "a string" "'a string' should not match 'a str.*'"
+}
+test_obvious_notmatching_with_assert_not_matches(){
+  assert_not_matches "a str.*" "another string"
+}
+
+```
+
+```output
+	Running test_obvious_matching_with_assert_not_matches ... FAILURE
+'a string' should not match 'a str.*'
+ expected regex [a str.*] should not match but matched [a string]
+doc:2:test_obvious_matching_with_assert_not_matches()
+	Running test_obvious_notmatching_with_assert_not_matches ... SUCCESS
+```
+
+##############################
 == *fake* function
 
     fake <command> [replacement code]
