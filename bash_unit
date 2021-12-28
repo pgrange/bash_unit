@@ -133,13 +133,13 @@ assert_matches() {
 }
 
 assert_not_matches() {
-  local expected=$1
+  local unexpected=$1
   local actual=$2
   local message=${3:-}
   [[ -z $message ]] || message="$message\n"
 
-  if [[ "${actual}" =~ ${expected} ]]; then
-    fail "$message expected regex [$expected] should not match but matched [$actual]"
+  if [[ "${actual}" =~ ${unexpected} ]]; then
+    fail "$message expected regex [$unexpected] should not match but matched [$actual]"
   fi
 }
 
