@@ -121,6 +121,28 @@ assert_not_equals() {
     fail "$message expected different value than [$unexpected] but was the same"
 }
 
+assert_matches() {
+  local expected=$1
+  local actual=$2
+  local message=${3:-}
+  [[ -z $message ]] || message="$message\n"
+
+  if [[ ! "${actual}" =~ ${expected} ]]; then
+    fail "$message expected regex [$expected] to match [$actual]"
+  fi
+}
+
+assert_not_matches() {
+  local unexpected=$1
+  local actual=$2
+  local message=${3:-}
+  [[ -z $message ]] || message="$message\n"
+
+  if [[ "${actual}" =~ ${unexpected} ]]; then
+    fail "$message expected regex [$unexpected] should not match but matched [$actual]"
+  fi
+}
+
 assert_no_diff() {
   local expected=$1
   local actual=$2

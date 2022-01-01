@@ -45,6 +45,30 @@ test_assert_equals_succeed_when_equal() {
 
 #assert_equals can now be used in the following tests
 
+test_assert_matches_fails_when_not_matching() {
+  assert_fails \
+    "with_bash_unit_muted assert_matches to.*to tutu" \
+    "assert_matches should fail"
+}
+
+test_assert_matches_succeed_when_matching() {
+  assert \
+    "assert_matches 't.to{0,1} t[Aa].*ta$' 'toto tata'"\
+    'assert_matches should succeed'
+}
+
+test_assert_not_matches_fails_when_matching() {
+  assert_fails \
+    "with_bash_unit_muted assert_not_matches 't.to{0,1} t[Aa].*ta$' 'toto tata'" \
+    "assert_not_matches should fail"
+}
+
+test_assert_not_matches_succeed_when_not_matching() {
+  assert \
+    "assert_not_matches 'toto' 'tata'"\
+    'assert_not_matches should succeed'
+}
+
 test_assert_not_equals_fails_when_equal() {
   assert_fails \
     "with_bash_unit_muted assert_not_equals toto toto" \
