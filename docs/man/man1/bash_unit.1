@@ -2,12 +2,12 @@
 .\"     Title: bash_unit
 .\"    Author: [see the "AUTHOR(S)" section]
 .\" Generator: Asciidoctor 2.0.16
-.\"      Date: 2021-11-07
+.\"      Date: 2022-01-01
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "BASH_UNIT" "1" "2021-11-07" "\ \&" "\ \&"
+.TH "BASH_UNIT" "1" "2022-01-01" "\ \&" "\ \&"
 .ie \n(.g .ds Aq \(aq
 .el       .ds Aq '
 .ss \n[.ss] 0
@@ -89,10 +89,14 @@ Running tests in tests/test_core.sh
         Running test_assert_fails ... SUCCESS
         Running test_assert_fails_fails ... SUCCESS
         Running test_assert_fails_succeeds ... SUCCESS
+        Running test_assert_matches_fails_when_not_matching ... SUCCESS
+        Running test_assert_matches_succeed_when_matching ... SUCCESS
         Running test_assert_no_diff_fails_when_diff ... SUCCESS
         Running test_assert_no_diff_succeeds_when_no_diff ... SUCCESS
         Running test_assert_not_equals_fails_when_equal ... SUCCESS
         Running test_assert_not_equals_succeeds_when_not_equal ... SUCCESS
+        Running test_assert_not_matches_fails_when_matching ... SUCCESS
+        Running test_assert_not_matches_succeed_when_not_matching ... SUCCESS
         Running test_assert_shows_stderr_on_failure ... SUCCESS
         Running test_assert_shows_stdout_on_failure ... SUCCESS
         Running test_assert_status_code_fails ... SUCCESS
@@ -133,10 +137,14 @@ Running tests in tests/test_core.sh
         Running test_assert_fails ... SUCCESS
         Running test_assert_fails_fails ... SUCCESS
         Running test_assert_fails_succeeds ... SUCCESS
+        Running test_assert_matches_fails_when_not_matching ... SUCCESS
+        Running test_assert_matches_succeed_when_matching ... SUCCESS
         Running test_assert_no_diff_fails_when_diff ... SUCCESS
         Running test_assert_no_diff_succeeds_when_no_diff ... SUCCESS
         Running test_assert_not_equals_fails_when_equal ... SUCCESS
         Running test_assert_not_equals_succeeds_when_not_equal ... SUCCESS
+        Running test_assert_not_matches_fails_when_matching ... SUCCESS
+        Running test_assert_not_matches_succeed_when_not_matching ... SUCCESS
         Running test_assert_shows_stderr_on_failure ... SUCCESS
         Running test_assert_shows_stdout_on_failure ... SUCCESS
         Running test_assert_status_code_fails ... SUCCESS
@@ -170,10 +178,14 @@ ok \- test_assert_equals_succeed_when_equal
 ok \- test_assert_fails
 ok \- test_assert_fails_fails
 ok \- test_assert_fails_succeeds
+ok \- test_assert_matches_fails_when_not_matching
+ok \- test_assert_matches_succeed_when_matching
 ok \- test_assert_no_diff_fails_when_diff
 ok \- test_assert_no_diff_succeeds_when_no_diff
 ok \- test_assert_not_equals_fails_when_equal
 ok \- test_assert_not_equals_succeeds_when_not_equal
+ok \- test_assert_not_matches_fails_when_matching
+ok \- test_assert_not_matches_succeed_when_not_matching
 ok \- test_assert_shows_stderr_on_failure
 ok \- test_assert_shows_stdout_on_failure
 ok \- test_assert_status_code_fails
@@ -518,7 +530,83 @@ doc:2:test_obvious_equality_with_assert_not_equals()
 .fam
 .fi
 .if n .RE
-.SH "\fBFAKE\fP FUNCTION"
+.sp
+####
+=== \fBassert_matches\fP
+.sp
+.if n .RS 4
+.nf
+.fam C
+assert_matches <expected\-regex> <actual> [message]
+.fam
+.fi
+.if n .RE
+.sp
+Asserts that the string \fIactual\fP matches the regex pattern \fIexpected\-regex\fP.
+.sp
+.if n .RS 4
+.nf
+.fam C
+test_obvious_notmatching_with_assert_matches(){
+  assert_matches "a str.*" "another string" "\*(Aqanother string\*(Aq should not match \*(Aqa str.*\*(Aq"
+}
+test_obvious_matching_with_assert_matches(){
+  assert_matches "a[nN].t{0,1}.*r str.*" "another string"
+}
+.fam
+.fi
+.if n .RE
+.sp
+.if n .RS 4
+.nf
+.fam C
+        Running test_obvious_matching_with_assert_matches ... SUCCESS
+        Running test_obvious_notmatching_with_assert_matches ... FAILURE
+\*(Aqanother string\*(Aq should not match \*(Aqa str.*\*(Aq
+ expected regex [a str.*] to match [another string]
+doc:2:test_obvious_notmatching_with_assert_matches()
+.fam
+.fi
+.if n .RE
+.SS "\fBassert_not_matches\fP"
+.sp
+.if n .RS 4
+.nf
+.fam C
+assert_not_matches <unexpected\-regex> <actual> [message]
+.fam
+.fi
+.if n .RE
+.sp
+Asserts that the string \fIactual\fP does not match the regex pattern \fIunexpected\-regex\fP.
+.sp
+.if n .RS 4
+.nf
+.fam C
+test_obvious_matching_with_assert_not_matches(){
+  assert_not_matches "a str.*" "a string" "\*(Aqa string\*(Aq should not match \*(Aqa str.*\*(Aq"
+}
+test_obvious_notmatching_with_assert_not_matches(){
+  assert_not_matches "a str.*" "another string"
+}
+.fam
+.fi
+.if n .RE
+.sp
+.if n .RS 4
+.nf
+.fam C
+        Running test_obvious_matching_with_assert_not_matches ... FAILURE
+\*(Aqa string\*(Aq should not match \*(Aqa str.*\*(Aq
+ expected regex [a str.*] should not match but matched [a string]
+doc:2:test_obvious_matching_with_assert_not_matches()
+        Running test_obvious_notmatching_with_assert_not_matches ... SUCCESS
+.fam
+.fi
+.if n .RE
+.sp
+####
+== \fBfake\fP function
 .sp
 .if n .RS 4
 .nf
