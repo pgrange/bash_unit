@@ -423,7 +423,6 @@ doc:2:test_obvious_equality_with_assert_not_equals()
 	Running test_obvious_inequality_with_assert_not_equals ... SUCCESS
 ```
 
-##############################
 === *assert_matches*
 
     assert_matches <expected-regex> <actual> [message]
@@ -472,7 +471,31 @@ doc:2:test_obvious_matching_with_assert_not_matches()
 	Running test_obvious_notmatching_with_assert_not_matches ... SUCCESS
 ```
 
-##############################
+=== *assert_no_diff*
+
+    assert_no_diff <expected> <actual> [message]
+
+Asserts that the content of the file _actual_ does not have any differences to the one _expected_.
+
+```test
+test_obvious_notmatching_with_assert_no_diff(){
+  assert_no_diff bash_unit README.adoc "content of 'README.adoc' should be the same as 'bash_unit'"
+}
+test_obvious_matching_with_assert_assert_no_diff(){
+  assert_no_diff bash_unit bash_unit
+}
+
+```
+
+```output
+	Running test_obvious_matching_with_assert_assert_no_diff ... SUCCESS
+	Running test_obvious_notmatching_with_assert_no_diff ... FAILURE
+content of 'README.adoc' should be the same as 'bash_unit'
+ expected 'README.adoc' to be identical to 'bash_unit' but was different
+doc:2:test_obvious_notmatching_with_assert_no_diff()
+```
+
+
 == *fake* function
 
     fake <command> [replacement code]
