@@ -423,7 +423,6 @@ doc:2:test_obvious_equality_with_assert_not_equals()
 	Running test_obvious_inequality_with_assert_not_equals ... SUCCESS
 ```
 
-##############################
 === *assert_matches*
 
     assert_matches <expected-regex> <actual> [message]
@@ -472,7 +471,6 @@ doc:2:test_obvious_matching_with_assert_not_matches()
 	Running test_obvious_notmatching_with_assert_not_matches ... SUCCESS
 ```
 
-##############################
 == *fake* function
 
     fake <command> [replacement code]
