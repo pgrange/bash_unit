@@ -471,6 +471,12 @@ doc:2:test_obvious_matching_with_assert_not_matches()
 	Running test_obvious_notmatching_with_assert_not_matches ... SUCCESS
 ```
 
+=== *assert_no_diff*
+
+    assert_no_diff <expected-file> <actual-file> [message]
+
+Asserts that the content of `expected-file` matches the content of `actual-file`.
+
 == *fake* function
 
     fake <command> [replacement code]
