@@ -495,7 +495,6 @@ content of 'README.adoc' should be the same as 'bash_unit'
 doc:2:test_obvious_notmatching_with_assert_no_diff()
 ```
 
-
 == *fake* function
 
     fake <command> [replacement code]

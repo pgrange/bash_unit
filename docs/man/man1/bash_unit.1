@@ -2,12 +2,12 @@
 .\"     Title: bash_unit
 .\"    Author: [see the "AUTHOR(S)" section]
 .\" Generator: Asciidoctor 2.0.16
-.\"      Date: 2022-01-01
+.\"      Date: 2022-01-05
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "BASH_UNIT" "1" "2022-01-01" "\ \&" "\ \&"
+.TH "BASH_UNIT" "1" "2022-01-05" "\ \&" "\ \&"
 .ie \n(.g .ds Aq \(aq
 .el       .ds Aq '
 .ss \n[.ss] 0
@@ -530,9 +530,7 @@ doc:2:test_obvious_equality_with_assert_not_equals()
 .fam
 .fi
 .if n .RE
-.sp
-####
-=== \fBassert_matches\fP
+.SS "\fBassert_matches\fP"
 .sp
 .if n .RS 4
 .nf
@@ -604,9 +602,18 @@ doc:2:test_obvious_matching_with_assert_not_matches()
 .fam
 .fi
 .if n .RE
+.SS "\fBassert_no_diff\fP"
 .sp
-####
-== \fBfake\fP function
+.if n .RS 4
+.nf
+.fam C
+assert_no_diff <expected\-file> <actual\-file> [message]
+.fam
+.fi
+.if n .RE
+.sp
+Asserts that the content of \f(CRexpected\-file\fP matches the content of \f(CRactual\-file\fP.
+.SH "\fBFAKE\fP FUNCTION"
 .sp
 .if n .RS 4
 .nf
