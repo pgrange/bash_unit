@@ -528,14 +528,14 @@ hello world
 ```
 
 ifndef::backend-manpage[]
-It has been asked wether using *fake* results in creating actual fakes or stubs or mocks? or may be spies? or may be they are dummies?
+It has been asked whether using *fake* results in creating actual fakes or stubs or mocks? or may be spies? or may be they are dummies?
 The first answer to this question is: it depends. The second is: read this
-https://www.google.fr/search?tbm=isch&q=fake%20mock%20stub[great and detailed literature] on this subjet.
+https://www.google.fr/search?tbm=isch&q=fake%20mock%20stub[great and detailed literature] on this subject.
 endif::[]
 
 === Using stdin
 
-Here is an exemple, parameterizing fake with its _stdin_ to test that code fails when some process does not run and succeeds otherwise:
+Here is an example, parameterizing fake with its _stdin_ to test that code fails when some process does not run and succeeds otherwise:
 
 ```test
 code() {
@@ -649,7 +649,7 @@ It can also help in asserting the values of these parameters ... but this may be
 
 For instance, in our previous code that checks apache is running, we have an issue since our code does not use _ps_ with the appropriate parameters. So we will try to check that parameters given to ps are _ax_.
 
-To do that, the first naive approch would be:
+To do that, the first naive approach would be:
 
 ```test
 code() {
