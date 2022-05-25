@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+
+test_bash_unit_accepts_tap_format_option() {
+  assert "$BASH_UNIT -f tap"
+}
+
+test_bash_unit_rejects_invalid_format() {
+  assert_fails "$BASH_UNIT -f invalid_format"
+}
+
+test_tap_format_for_one_succesfull_test() {
+  assert_equals \
+"\
+# Running tests in code
+ok - test_ok\
+" \
+"$(bash_unit_out_for_code <<EOF
+  test_ok() {
+    assert true
+  }
+EOF
+)"
+}
+
+test_tap_format_for_one_failing_test() {
+   assert_equals \
+"\
+# Running tests in code
+not ok - test_not_ok
+# code:2:test_not_ok()\
+" \
+"$(bash_unit_out_for_code <<EOF
+  test_not_ok() {
+    assert false
+  }
+EOF
+)"
+}
+
+test_tap_format_for_one_pending_test() {
+   assert_equals \
+"\
+# Running tests in code
+ok - pending_not_yet_implemented # skip test to be written\
+" \
+"$(bash_unit_out_for_code <<EOF
+  pending_not_yet_implemented() {
+    assert false
+  }
+EOF
+)"
+}
+
+test_tap_format_for_failing_test_with_stdout_stderr_outputs() {
+   assert_equals \
+"\
+# Running tests in code
+not ok - test_not_ok
+# out> message on stdout
+# err> message on stderr
+# code:2:test_not_ok()\
+" \
+"$(bash_unit_out_for_code <<EOF
+  test_not_ok() {
+    assert_fails "echo message on stdout ; echo message on stderr >&2"
+  }
+EOF
+)"
+}
+
+test_assertion_message_is_tap_formatted() {
+   assert_equals \
+"\
+# Running tests in code
+not ok - test_not_ok
+# obvious failure
+# code:2:test_not_ok()\
+" \
+"$(bash_unit_out_for_code <<EOF
+  test_not_ok() {
+    assert_fails true "obvious failure"
+  }
+EOF
+)"
+}
+
+test_multi_lines_assertion_message_is_tap_formatted() {
+   assert_equals \
+"\
+# Running tests in code
+not ok - test_not_ok
+# obvious failure
+# on multiple lines
+# code:2:test_not_ok()\
+" \
+"$(bash_unit_out_for_code <<EOF
+  test_not_ok() {
+    assert_fails true "obvious failure\non multiple lines"
+  }
+EOF
+)"
+}
+
+bash_unit_out_for_code() {
+  $BASH_UNIT -f tap <(cat) | sed -e 's:/dev/fd/[0-9]*:code:' -e 's/[0-9]*:/code:/'
+}
+
+BASH_UNIT="eval FORCE_COLOR=false ../bash_unit"
