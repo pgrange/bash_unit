@@ -149,7 +149,7 @@ assert_no_diff() {
   local message=${3:-}
   [[ -z $message ]] || message="$message\n"
 
-  diff "${expected}" "${actual}" >/dev/null || \
+  diff -u "${expected}" "${actual}" >/dev/null || \
     fail "$message expected '${actual}' to be identical to '${expected}' but was different"
 }
 
