@@ -114,6 +114,7 @@ Running tests in tests/test_core.sh
 	Running test_fake_echo_stdin_when_no_params ... SUCCESS
 	Running test_fake_exports_faked_in_subshells ... SUCCESS
 	Running test_fake_transmits_params_to_fake_code ... SUCCESS
+	Running test_fake_transmits_params_to_fake_code_as_array ... SUCCESS
 	Running test_should_pretty_format_even_when_LANG_is_unset ... SUCCESS
 Overall result: SUCCESS
 ```
@@ -185,6 +186,7 @@ ok - test_fake_can_fake_inline
 ok - test_fake_echo_stdin_when_no_params
 ok - test_fake_exports_faked_in_subshells
 ok - test_fake_transmits_params_to_fake_code
+ok - test_fake_transmits_params_to_fake_code_as_array
 ok - test_should_pretty_format_even_when_LANG_is_unset
 ```
 
