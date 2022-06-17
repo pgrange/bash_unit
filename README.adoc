@@ -114,6 +114,7 @@ Running tests in tests/test_core.sh
 	Running test_fake_echo_stdin_when_no_params ... SUCCESS
 	Running test_fake_exports_faked_in_subshells ... SUCCESS
 	Running test_fake_transmits_params_to_fake_code ... SUCCESS
+	Running test_fake_transmits_params_to_fake_code_as_array ... SUCCESS
 	Running test_should_pretty_format_even_when_LANG_is_unset ... SUCCESS
 Overall result: SUCCESS
 ```
@@ -185,6 +186,7 @@ ok - test_fake_can_fake_inline
 ok - test_fake_echo_stdin_when_no_params
 ok - test_fake_exports_faked_in_subshells
 ok - test_fake_transmits_params_to_fake_code
+ok - test_fake_transmits_params_to_fake_code_as_array
 ok - test_should_pretty_format_even_when_LANG_is_unset
 ```
 
@@ -664,7 +666,7 @@ test_code_gives_ps_appropriate_parameters() {
 24162 pts/7    00:00:00 ps
  8387 ?            0:00 /usr/sbin/apache2 -k start
 EOF
-    assert_equals ax "$FAKE_PARAMS"
+    assert_equals ax "${FAKE_PARAMS[@]}"
   }
   export -f _ps
   fake ps _ps
@@ -698,7 +700,7 @@ code() {
 
 test_code_gives_ps_appropriate_parameters() {
   _ps() {
-    assert_equals ax "$FAKE_PARAMS"
+    assert_equals ax "${FAKE_PARAMS[@]}"
   }
   export -f _ps
   fake ps _ps
@@ -728,7 +730,7 @@ code() {
 
 test_code_gives_ps_appropriate_parameters() {
   _ps() {
-    echo $FAKE_PARAMS > /tmp/fake_params
+    echo ${FAKE_PARAMS[@]} > /tmp/fake_params
   }
   export -f _ps
   fake ps _ps
@@ -763,7 +765,7 @@ code() {
 }
 
 test_code_gives_ps_appropriate_parameters() {
-  fake ps 'echo $FAKE_PARAMS >/tmp/fake_params'
+  fake ps 'echo ${FAKE_PARAMS[@]} >/tmp/fake_params'
 
   code || true
 
@@ -792,7 +794,7 @@ test_get_data_from_fake() {
   #Fasten you seat belt ...
   coproc cat
   exec {test_channel}>&${COPROC[1]}
-  fake ps 'echo $FAKE_PARAMS >&$test_channel'
+  fake ps 'echo ${FAKE_PARAMS[@]} >&$test_channel'
 
   code || true
 

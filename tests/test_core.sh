@@ -164,6 +164,16 @@ test_fake_transmits_params_to_fake_code() {
   ps aux
 }
 
+test_fake_transmits_params_to_fake_code_as_array() {
+  function _ps() {
+    assert_equals "1" "${#FAKE_PARAMS[@]}"
+  }
+  export -f _ps
+  fake ps _ps
+
+  ps "hello world"
+}
+
 test_fake_echo_stdin_when_no_params() {
   fake ps << EOF
   PID TTY          TIME CMD
