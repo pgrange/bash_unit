@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: bash_unit
 .\"    Author: [see the "AUTHOR(S)" section]
-.\" Generator: Asciidoctor 2.0.16
-.\"      Date: 2022-01-05
+.\" Generator: Asciidoctor 2.0.17
+.\"      Date: 2022-06-17
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "BASH_UNIT" "1" "2022-01-05" "\ \&" "\ \&"
+.TH "BASH_UNIT" "1" "2022-06-17" "\ \&" "\ \&"
 .ie \n(.g .ds Aq \(aq
 .el       .ds Aq '
 .ss \n[.ss] 0
@@ -110,6 +110,7 @@ Running tests in tests/test_core.sh
         Running test_fake_echo_stdin_when_no_params ... SUCCESS
         Running test_fake_exports_faked_in_subshells ... SUCCESS
         Running test_fake_transmits_params_to_fake_code ... SUCCESS
+        Running test_fake_transmits_params_to_fake_code_as_array ... SUCCESS
         Running test_should_pretty_format_even_when_LANG_is_unset ... SUCCESS
 Overall result: SUCCESS
 .fam
@@ -199,6 +200,7 @@ ok \- test_fake_can_fake_inline
 ok \- test_fake_echo_stdin_when_no_params
 ok \- test_fake_exports_faked_in_subshells
 ok \- test_fake_transmits_params_to_fake_code
+ok \- test_fake_transmits_params_to_fake_code_as_array
 ok \- test_should_pretty_format_even_when_LANG_is_unset
 .fam
 .fi
@@ -607,12 +609,37 @@ doc:2:test_obvious_matching_with_assert_not_matches()
 .if n .RS 4
 .nf
 .fam C
-assert_no_diff <expected\-file> <actual\-file> [message]
+assert_no_diff <expected> <actual> [message]
 .fam
 .fi
 .if n .RE
 .sp
-Asserts that the content of \f(CRexpected\-file\fP matches the content of \f(CRactual\-file\fP.
+Asserts that the content of the file \fIactual\fP does not have any differences to the one \fIexpected\fP.
+.sp
+.if n .RS 4
+.nf
+.fam C
+test_obvious_notmatching_with_assert_no_diff(){
+  assert_no_diff bash_unit README.adoc "content of \*(AqREADME.adoc\*(Aq should be the same as \*(Aqbash_unit\*(Aq"
+}
+test_obvious_matching_with_assert_assert_no_diff(){
+  assert_no_diff bash_unit bash_unit
+}
+.fam
+.fi
+.if n .RE
+.sp
+.if n .RS 4
+.nf
+.fam C
+        Running test_obvious_matching_with_assert_assert_no_diff ... SUCCESS
+        Running test_obvious_notmatching_with_assert_no_diff ... FAILURE
+content of \*(AqREADME.adoc\*(Aq should be the same as \*(Aqbash_unit\*(Aq
+ expected \*(AqREADME.adoc\*(Aq to be identical to \*(Aqbash_unit\*(Aq but was different
+doc:2:test_obvious_notmatching_with_assert_no_diff()
+.fam
+.fi
+.if n .RE
 .SH "\fBFAKE\fP FUNCTION"
 .sp
 .if n .RS 4
@@ -668,7 +695,7 @@ hello world
 .if n .RE
 .SS "Using stdin"
 .sp
-Here is an exemple, parameterizing fake with its \fIstdin\fP to test that code fails when some process does not run and succeeds otherwise:
+Here is an example, parameterizing fake with its \fIstdin\fP to test that code fails when some process does not run and succeeds otherwise:
 .sp
 .if n .RS 4
 .nf
@@ -819,7 +846,7 @@ It can also help in asserting the values of these parameters ... but this may be
 .sp
 For instance, in our previous code that checks apache is running, we have an issue since our code does not use \fIps\fP with the appropriate parameters. So we will try to check that parameters given to ps are \fIax\fP.
 .sp
-To do that, the first naive approch would be:
+To do that, the first naive approach would be:
 .sp
 .if n .RS 4
 .nf
@@ -836,7 +863,7 @@ test_code_gives_ps_appropriate_parameters() {
 24162 pts/7    00:00:00 ps
  8387 ?            0:00 /usr/sbin/apache2 \-k start
 EOF
-    assert_equals ax "$FAKE_PARAMS"
+    assert_equals ax "${FAKE_PARAMS[@]}"
   }
   export \-f _ps
   fake ps _ps
@@ -882,7 +909,7 @@ code() {
 
 test_code_gives_ps_appropriate_parameters() {
   _ps() {
-    assert_equals ax "$FAKE_PARAMS"
+    assert_equals ax "${FAKE_PARAMS[@]}"
   }
   export \-f _ps
   fake ps _ps
@@ -920,7 +947,7 @@ code() {
 
 test_code_gives_ps_appropriate_parameters() {
   _ps() {
-    echo $FAKE_PARAMS > /tmp/fake_params
+    echo ${FAKE_PARAMS[@]} > /tmp/fake_params
   }
   export \-f _ps
   fake ps _ps
@@ -962,7 +989,7 @@ code() {
 }
 
 test_code_gives_ps_appropriate_parameters() {
-  fake ps \*(Aqecho $FAKE_PARAMS >/tmp/fake_params\*(Aq
+  fake ps \*(Aqecho ${FAKE_PARAMS[@]} >/tmp/fake_params\*(Aq
 
   code || true
 
@@ -999,7 +1026,7 @@ test_get_data_from_fake() {
   #Fasten you seat belt ...
   coproc cat
   exec {test_channel}>&${COPROC[1]}
-  fake ps \*(Aqecho $FAKE_PARAMS >&$test_channel\*(Aq
+  fake ps \*(Aqecho ${FAKE_PARAMS[@]} >&$test_channel\*(Aq
 
   code || true
 
