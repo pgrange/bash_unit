@@ -2,12 +2,12 @@
 .\"     Title: bash_unit
 .\"    Author: [see the "AUTHOR(S)" section]
 .\" Generator: Asciidoctor 2.0.17
-.\"      Date: 2022-06-17
+.\"      Date: 2022-09-28
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "BASH_UNIT" "1" "2022-06-17" "\ \&" "\ \&"
+.TH "BASH_UNIT" "1" "2022-09-28" "\ \&" "\ \&"
 .ie \n(.g .ds Aq \(aq
 .el       .ds Aq '
 .ss \n[.ss] 0
@@ -620,7 +620,7 @@ Asserts that the content of the file \fIactual\fP does not have any differences 
 .nf
 .fam C
 test_obvious_notmatching_with_assert_no_diff(){
-  assert_no_diff bash_unit README.adoc "content of \*(AqREADME.adoc\*(Aq should be the same as \*(Aqbash_unit\*(Aq"
+  assert_no_diff <(echo foo) <(echo bar)
 }
 test_obvious_matching_with_assert_assert_no_diff(){
   assert_no_diff bash_unit bash_unit
@@ -634,8 +634,11 @@ test_obvious_matching_with_assert_assert_no_diff(){
 .fam C
         Running test_obvious_matching_with_assert_assert_no_diff ... SUCCESS
         Running test_obvious_notmatching_with_assert_no_diff ... FAILURE
-content of \*(AqREADME.adoc\*(Aq should be the same as \*(Aqbash_unit\*(Aq
- expected \*(AqREADME.adoc\*(Aq to be identical to \*(Aqbash_unit\*(Aq but was different
+ expected \*(Aqdoc\*(Aq to be identical to \*(Aqdoc\*(Aq but was different
+out> 1c1
+out> < foo
+out> \-\-\-
+out> > bar
 doc:2:test_obvious_notmatching_with_assert_no_diff()
 .fam
 .fi
