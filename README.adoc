@@ -481,7 +481,7 @@ Asserts that the content of the file _actual_ does not have any differences to t
 
 ```test
 test_obvious_notmatching_with_assert_no_diff(){
-  assert_no_diff bash_unit README.adoc "content of 'README.adoc' should be the same as 'bash_unit'"
+  assert_no_diff <(echo foo) <(echo bar)
 }
 test_obvious_matching_with_assert_assert_no_diff(){
   assert_no_diff bash_unit bash_unit
@@ -492,8 +492,11 @@ test_obvious_matching_with_assert_assert_no_diff(){
 ```output
 	Running test_obvious_matching_with_assert_assert_no_diff ... SUCCESS
 	Running test_obvious_notmatching_with_assert_no_diff ... FAILURE
-content of 'README.adoc' should be the same as 'bash_unit'
- expected 'README.adoc' to be identical to 'bash_unit' but was different
+ expected 'doc' to be identical to 'doc' but was different
+out> 1c1
+out> < foo
+out> ---
+out> > bar
 doc:2:test_obvious_notmatching_with_assert_no_diff()
 ```
 
