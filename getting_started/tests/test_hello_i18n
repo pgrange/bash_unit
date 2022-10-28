@@ -1,13 +1,13 @@
 # In this example, we want to test the specific functions of a script.
 # So we source this script in setup_suite.
 # However, we don't want the script to be executed when sourcing it,
-# we are only interested in having access to the functions to tests
+# we are only interested in having access to the functions to test
 # them.
-# To do so, we adapt the script under test so that it's main code
+# To do so, we adapt the script under test so that its main code
 # is not executed when sourcing it.
-# See ../hello_i18n how we define a main function to encapsulate
+# See in ../hello_i18n how we define a main function to encapsulate
 # all the main code and the main function is only called when the
-# script itself is launched, not when it is sourced
+# script itself is launched, not when it is sourced.
 
 test_can_say_hi_in_french() {
   assert_equals "Bonjour le monde" "$(hello fr)"
