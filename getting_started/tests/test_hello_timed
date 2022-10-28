@@ -5,8 +5,10 @@
 # That way, we can fake the current hour in the test.
 # Unfortunately, we also need to adapt the script under
 # test so that, when the current_time function is already
-# defined, it does not override it. Otherwise, the fake created
-# in the test would never be used. See ../hello_timed
+# defined, the script does not override this definition.
+# Otherwise, the fake created in the test would never be
+# used.
+# See ../hello_timed
 
 
 test_can_say_good_morning() {
