@@ -1,0 +1,32 @@
+# In this example, we want to test a script which depends on
+# the external world (here, the current time). To do so,
+# we decide to adapt the script by extracting the time
+# querying in a dedicated function named current_hour.
+# That way, we can fake the current hour in the test.
+# Unfortunately, we also need to adapt the script under
+# test so that, when the current_time function is already
+# defined, it does not override it. Otherwise, the fake created
+# in the test would never be used. See ../hello_timed
+
+
+test_can_say_good_morning() {
+  it_is_o_clock 10
+  assert_equals "Good morning World!" "$(../hello_timed)"
+}
+
+test_can_say_good_evening() {
+  it_is_o_clock 18
+  assert_equals "Good evening World!" "$(../hello_timed)"
+}
+
+test_can_say_hello() {
+  it_is_o_clock 12
+  assert_equals "Hello World!" "$(../hello_timed)"
+}
+
+it_is_o_clock() {
+  local hour="$1"
+  fake current_hour << EOF
+$hour
+EOF
+}

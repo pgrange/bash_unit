@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+declare -F current_hour >/dev/null || current_hour() {
+  date +%H
+}
+
+if (( "$(current_hour)" < 11 ))
+then
+  echo "Good morning World!"
+else if (( "$(current_hour)" > 17 ))
+then
+  echo "Good evening World!"
+else
+  echo "Hello World!"
+fi ; fi

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+main() {
+  hello "$1"
+}
+
+hello() {
+  case "$1" in
+    fr) echo Bonjour le monde
+        ;;
+     *) echo we only speak french for the moment, sorry >&2
+        ;;
+  esac
+}
+
+# do not run main when sourcing the script
+[[ "$0" == "${BASH_SOURCE[0]}" ]] && main "$@" || true
