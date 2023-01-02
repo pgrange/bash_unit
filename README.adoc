@@ -106,6 +106,8 @@ Running tests in tests/test_core.sh
 	Running test_assert_status_code_fails ... SUCCESS
 	Running test_assert_status_code_succeeds ... SUCCESS
 	Running test_assert_succeeds ... SUCCESS
+	Running test_assert_within_delta_fails ... SUCCESS
+	Running test_assert_within_delta_succeeds ... SUCCESS
 	Running test_fail_fails ... SUCCESS
 	Running test_fail_prints_failure_message ... SUCCESS
 	Running test_fail_prints_where_is_error ... SUCCESS
@@ -147,6 +149,8 @@ Running tests in tests/test_core.sh
 	Running test_assert_status_code_fails ... SUCCESS
 	Running test_assert_status_code_succeeds ... SUCCESS
 	Running test_assert_succeeds ... SUCCESS
+	Running test_assert_within_delta_fails ... SUCCESS
+	Running test_assert_within_delta_succeeds ... SUCCESS
 	Running test_fail_fails ... SUCCESS
 Overall result: SUCCESS
 ```
@@ -178,6 +182,8 @@ ok - test_assert_shows_stdout_on_failure
 ok - test_assert_status_code_fails
 ok - test_assert_status_code_succeeds
 ok - test_assert_succeeds
+ok - test_assert_within_delta_fails
+ok - test_assert_within_delta_succeeds
 ok - test_fail_fails
 ok - test_fail_prints_failure_message
 ok - test_fail_prints_where_is_error
@@ -471,6 +477,35 @@ test_obvious_notmatching_with_assert_not_matches(){
  expected regex [a str.*] should not match but matched [a string]
 doc:2:test_obvious_matching_with_assert_not_matches()
 	Running test_obvious_notmatching_with_assert_not_matches ... SUCCESS
+```
+
+=== *assert_within_delta*
+
+    assert_within_delta <expected num> <actual num> <max delta> [message]
+
+Asserts that the expected num matches the actual num up to a given max delta.
+This function only support integers.
+Given an expectation of 5 and a delta of 2 this would match 3, 4, 5, 6, and 7:
+
+```test
+test_matches_within_delta(){
+  assert_within_delta 5 3 2
+  assert_within_delta 5 4 2
+  assert_within_delta 5 5 2
+  assert_within_delta 5 6 2
+  assert_within_delta 5 7 2
+}
+test_does_not_match_within_delta(){
+  assert_within_delta 5 2 2
+}
+
+```
+
+```output
+	Running test_does_not_match_within_delta ... FAILURE
+ expected value [5] to match [2] with a maximum delta of [2]
+doc:9:test_does_not_match_within_delta()
+	Running test_matches_within_delta ... SUCCESS
 ```
 
 === *assert_no_diff*

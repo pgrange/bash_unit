@@ -81,6 +81,36 @@ test_assert_not_equals_succeeds_when_not_equal() {
     'assert_not_equals should succeed'
 }
 
+test_assert_within_delta_succeeds() {
+  assert \
+    "assert_within_delta 12 10 3"\
+    'assert_within_delta should succeed'
+  assert \
+    "assert_within_delta 10 12 3"\
+    'assert_within_delta should succeed'
+  assert \
+    "assert_within_delta 10 12 2"\
+    'assert_within_delta should succeed'
+  assert \
+    "assert_within_delta 10 10 0"\
+    'assert_within_delta should succeed'
+}
+
+test_assert_within_delta_fails() {
+  assert_fails \
+    "assert_within_delta 13 10 2"\
+    'assert_within_delta should fail'
+  assert_fails \
+    "assert_within_delta 10 13 2"\
+    'assert_within_delta should fail'
+  assert_fails \
+    "assert_within_delta 11 10 0"\
+    'assert_within_delta should fail'
+  assert_fails \
+    "assert_within_delta eleven 10 0"\
+    'assert_within_delta should fail'
+}
+
 test_assert_no_diff_succeeds_when_no_diff() {
   assert \
     "assert_no_diff <(echo foo) <(echo foo)" \
