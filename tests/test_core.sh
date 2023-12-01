@@ -220,7 +220,7 @@ test_should_pretty_format_even_when_LANG_is_unset() {
   assert "echo foo | pretty_format GREEN I"
 }
 
-if [[ "${STICK_TO_CWD}" != true ]]
+if [[ "${STICK_TO_CWD:-}" != true ]]
 then
   # do not test for cwd if STICK_TO_CWD is true
   test_bash_unit_changes_cwd_to_current_test_file_directory() {

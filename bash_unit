@@ -472,7 +472,7 @@ do
   (
     set -e # Ensure bash_unit will exit with failure
            # in case of syntax error.
-    if [[ "${STICK_TO_CWD}" != true ]]
+    if [[ "${STICK_TO_CWD:-}" != true ]]
     then
       cd "$(dirname "$test_file")"
       source "$(basename "$test_file")"
