@@ -138,8 +138,6 @@ setup() {
   # using $SED or $CAT in the tests)
   fake cat :
   fake sed :
-  CAT="$(which cat)"
-  SED="$(which sed)"
 }
 
 line() {

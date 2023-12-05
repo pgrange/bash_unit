@@ -310,9 +310,6 @@ unmute_logs() {
   notify_test_failed   () { echo "FAILURE" ; echo $2 ; }
 }
 
-CAT="$(which cat)"
-GREP="$(which grep)"
-
 unmute_stack() {
   notify_stack() { "$CAT" ; }
 }
