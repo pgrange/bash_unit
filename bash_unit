@@ -26,11 +26,11 @@ YELLOW="${ESCAPE}[93m"
 BLUE="${ESCAPE}[94m"
 
 # Make bash_unit immune to some basic unix commands faking
-CAT="$(which cat)"
-SED="$(which sed)"
-GREP="$(which grep)"
-RM="$(which rm)"
-SHUF="$(which shuf)"
+CAT="$(type -P cat)"
+SED="$(type -P sed)"
+GREP="$(type -P grep)"
+RM="$(type -P rm)"
+SHUF="$(type -P shuf)"
 
 fail() {
   local message=${1:-}
@@ -472,7 +472,7 @@ do
   (
     set -e # Ensure bash_unit will exit with failure
            # in case of syntax error.
-    if [[ "${STICK_TO_CWD}" != true ]]
+    if [[ "${STICK_TO_CWD:-}" != true ]]
     then
       cd "$(dirname "$test_file")"
       source "$(basename "$test_file")"

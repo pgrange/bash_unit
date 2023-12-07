@@ -7,7 +7,7 @@ cd $(dirname $0)
 check_can_release() {
   local version="$1"
 
-  which asciidoctor >/dev/null 2>&1 || usage "You need asciidoctor to make releases"
+  type -P asciidoctor >/dev/null || usage "You need asciidoctor to make releases"
 
   if [ ! -z "$(git status --porcelain)" ]
   then
