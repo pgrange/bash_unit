@@ -45,6 +45,37 @@ fail() {
   exit 1
 }
 
+_notify_trace() {
+  local caller_shift=$1
+  local message=${2}
+  local stdout=${3:-}
+  local stderr=${4:-}
+
+  [ -z $trace_file ] && return
+
+  caller_hdr=""
+  cl=$((caller_shift + 2))
+
+  if [ -n ${BASH_SOURCE[$cl]} ]
+  then
+      caller_hdr="${BASH_SOURCE[$cl]}:${BASH_LINENO[$((cl-1))]}"
+  fi
+  echo "trace:${caller_hdr}>  $message"  >> $trace_file
+  [[ ! -z $stdout ]] && [ -s "$stdout" ] && "$SED" 's:^:trace-out> :' < "$stdout" >> $trace_file
+  [[ ! -z $stderr ]] && [ -s "$stderr" ] && "$SED" 's:^:trace-err> :' < "$stderr" >> $trace_file
+}
+
+notify_trace_dbg() {
+    _notify_trace 0 "$1"
+}
+
+notify_trace_info() {
+  [ -z $trace_file ] && return
+
+  local message=${1:-}
+  echo "info> $message"  >> $trace_file
+}
+
 assert() {
   local assertion=$1
   local message=${2:-}
@@ -92,6 +123,8 @@ _assert_expression() {
 
     local status
     eval "($assertion)" >"$stdout" 2>"$stderr" && status=$? || status=$?
+    _notify_trace 1 "assert_expression:  exp: '$assertion', cond: '$condition', status: '$status'" "$stdout" "$stderr"
+
     if ! eval "$condition"
     then
       fail "$(eval echo $message)" "$stdout" "$stderr"
@@ -105,6 +138,7 @@ assert_equals() {
   local message=${3:-}
   [[ -z $message ]] || message="$message\n"
   
+  notify_trace_dbg "assert_equals '$expected' == '$actual'"
   if [ "$expected" != "$actual" ]
   then
     fail "$message expected [$expected] but was [$actual]"
@@ -112,12 +146,13 @@ assert_equals() {
 }
 
 assert_not_equals() {
-  local unexpected=$1
-  local actual=$2
+  local unexpected="$1"
+  local actual="$2"
   local message=${3:-}
   [[ -z $message ]] || message="$message\n"
 
-  [ "$unexpected" != "$actual" ] || \
+ notify_trace_dbg "assert_not_equals: '$unexpected' != '$actual'"
+ [ "$unexpected" != "$actual" ] || \
     fail "$message expected different value than [$unexpected] but was the same"
 }
 
@@ -127,6 +162,7 @@ assert_matches() {
   local message=${3:-}
   [[ -z $message ]] || message="$message\n"
 
+  notify_trace_dbg "assert_matches: '$actual' =~ '$expected'"
   if [[ ! "${actual}" =~ ${expected} ]]; then
     fail "$message expected regex [$expected] to match [$actual]"
   fi
@@ -138,6 +174,7 @@ assert_not_matches() {
   local message=${3:-}
   [[ -z $message ]] || message="$message\n"
 
+  _notify_trace 0 "assert_not_matches: ! '$actual' =~ '$unexpected'"
   if [[ "${actual}" =~ ${unexpected} ]]; then
     fail "$message expected regex [$unexpected] should not match but matched [$actual]"
   fi
@@ -332,26 +369,63 @@ is_terminal() {
   [ -t 1 ] || [[ "${FORCE_COLOR:-}" == true ]]
 }
 
+trace_suite_starting() {
+    local test_file="$1"
+    notify_trace_info "Running tests in $test_file"
+  }
+trace_test_starting() {
+    local test="$1"
+    notify_trace_info "Running $test"
+}
+trace_test_pending() {
+    local test="$1"
+    notify_trace_info "Pending $test"
+}
+
+trace_test_succeeded() {
+    local test="$1"
+    notify_trace_info "Success $test"
+}
+trace_test_failed() {
+    local test="$1"
+    local message="$2"
+    notify_trace_info "$test with message: $message"
+}
+trace_suites_succeded() {
+    notify_trace_info  "Overall result: SUCCESS"
+}
+trace_suites_failed() {
+    notify_trace_info "Overall result: FAILURE"
+}
+
 text_format() {
   notify_suite_starting() {
     local test_file="$1"
+    trace_suite_starting $test_file
     echo "Running tests in $test_file"
   }
   notify_test_starting() {
     local test="$1"
+    trace_test_starting $test
     echo -e -n "\tRunning $test ... " | color "$BLUE"
   }
   notify_test_pending() {
+    local test="$1"
+    trace_test_pending "$test"
     echo -n "PENDING" | pretty_warning
     echo
   }
 
   notify_test_succeeded() {
+    local test="$1"
+    trace_test_succeeded "$test"
     echo -n "SUCCESS" | pretty_success
     echo
   }
   notify_test_failed() {
+    local test="$1"
     local message="$2"
+    trace_test_failed "$test" "$message"
     echo -n "FAILURE" | pretty_failure
     echo
     [[ -z $message  ]] || printf -- "$message\n"
@@ -366,10 +440,12 @@ text_format() {
     color "$YELLOW"
   }
   notify_suites_succeded() {
+    trace_suites_succeded
     echo -n "Overall result: SUCCESS" | pretty_success
     echo
   }
   notify_suites_failed() {
+    trace_suites_failed
     echo -n "Overall result: FAILURE" | pretty_failure
     echo
   }
@@ -378,25 +454,29 @@ text_format() {
 tap_format() {
   notify_suite_starting() {
     local test_file="$1"
+    trace_suite_starting
     echo "# Running tests in $test_file"
   }
   notify_test_starting() {
-    :
+    trace_test_starting $1
   }
   notify_test_pending() {
     local test="$1"
+    trace_test_pending "$test"
     echo -n "ok" | pretty_warning -
     echo -n "$test" | color "$BLUE"
     echo " # skip test to be written" | color "$YELLOW"
   }
   notify_test_succeeded() {
     local test="$1"
+    trace_test_succeeded "$test"
     echo -n "ok" | pretty_success -
     echo "$test" | color "$BLUE"
   }
   notify_test_failed() {
     local test="$1"
     local message="$2"
+    trace_test_failed "$test" "$message"
     echo -n "not ok" | pretty_failure -
     echo "$test" | color "$BLUE"
     [[ -z $message  ]] || printf -- "$message\n" | "$SED" -u -e 's/^/# /'
@@ -411,23 +491,28 @@ tap_format() {
     "$SED" 's:^:# :' | color "$YELLOW"
   }
   notify_suites_succeded() {
-    :
+    trace_suites_succeded
   }
   notify_suites_failed() {
-    :
+    trace_suites_failed
   }
 }
 
 output_format=text
 test_pattern=""
+trace_file=""
 separator=""
 randomise=0
-while getopts "vp:f:r" option
+while getopts "vp:t:f:r" option
 do
   case "$option" in
     p)
       test_pattern="${test_pattern}${separator}${OPTARG}"
       separator="|"
+      ;;
+    t)
+      trace_file="$(realpath ${OPTARG})"
+      truncate -s0 "$trace_file"
       ;;
     f)
       output_format="${OPTARG}"
