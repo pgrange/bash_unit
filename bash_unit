@@ -274,7 +274,7 @@ usage() {
   exit 1
 }
 
-# Formating
+# Formatting
 
 pretty_success() {
   pretty_format "$GREEN" "\u2713" "${1:-}"

@@ -238,7 +238,7 @@ Test to do are not executed and do not impact the global status of your test sui
 .sp
 \fBbash_unit\fP changes the current working directory to the one of the running test file. If you need to access files from your test code, for instance the script under test, use path relative to the test file.
 .sp
-You may need to change the behavior of some commands to create conditions for your code under test to behave as expected. The \fBfake\fP function may help you to do that, see bellow.
+You may need to change the behavior of some commands to create conditions for your code under test to behave as expected. The \fBfake\fP function may help you to do that, see below.
 .SH "TEST FUNCTIONS"
 .sp
 \fBbash_unit\fP supports several shell oriented assertion functions.
@@ -293,7 +293,7 @@ In case of failure, the standard output and error of the evaluated \fIassertion\
 .nf
 .fam C
 test_assert_fails() {
-  assert false "this test failed, obvioulsy"
+  assert false "this test failed, obviously"
 }
 test_assert_succeed() {
   assert true
@@ -306,7 +306,7 @@ test_assert_succeed() {
 .nf
 .fam C
         Running test_assert_fails ... FAILURE
-this test failed, obvioulsy
+this test failed, obviously
 doc:2:test_assert_fails()
         Running test_assert_succeed ... SUCCESS
 .fam
@@ -788,7 +788,7 @@ EOF
 .if n .RE
 .SS "Using a function"
 .sp
-In a previous exemple, we faked \fIps\fP by specifying code inline:
+In a previous example, we faked \fIps\fP by specifying code inline:
 .sp
 .if n .RS 4
 .nf
@@ -829,7 +829,7 @@ hello world
 .fi
 .if n .RE
 .sp
-Be carefull however that your _ps function is not exported to sub\-processes. It means that, depending on how your code under test works, _ps may not be defined in the context where ps will be called. For instance:
+Be careful however that your _ps function is not exported to sub\-processes. It means that, depending on how your code under test works, _ps may not be defined in the context where ps will be called. For instance:
 .sp
 .if n .RS 4
 .nf
@@ -878,7 +878,7 @@ hello world
 .sp
 \fBfake\fP is also limited by the fact that it defines a \fIbash\fP function to
 override the actual command. In some context the command can not be
-overriden by a function. For instance if your code under test relies on \fIexec\fP to launch \fIps\fP, \fBfake\fP will have no effect.
+overridden by a function. For instance if your code under test relies on \fIexec\fP to launch \fIps\fP, \fBfake\fP will have no effect.
 .sp
 \fBfake\fP may also imply strange behaviors from bash_unit when you try to
 fake really basic stuff. bash_unit tries to be as much immune to this as
@@ -1015,7 +1015,7 @@ setup() {
 .if n .RE
 .sp
 Here our fake writes to \fI/tmp/fake\fP. We delete this file in \fBsetup\fP to be
-sure that we do not get inapropriate data from a previous test. We assert
+sure that we do not get inappropriate data from a previous test. We assert
 that the first line of \fI/tmp/fake\fP equals \fIax\fP. Also, note that we know
 that \fIcode\fP will fail and write this to ignore the error: \f(CRcode || true\fP.
 .sp

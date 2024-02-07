@@ -225,12 +225,12 @@ then
   # do not test for cwd if STICK_TO_CWD is true
   test_bash_unit_changes_cwd_to_current_test_file_directory() {
     assert "ls ../tests/$(basename "$BASH_SOURCE")" \
-      "bash_unit should change current working directory to match the directory of the currenlty running test"
+      "bash_unit should change current working directory to match the directory of the currently running test"
   }
 
   #the following assertion is out of any test on purpose
   assert "ls ../tests/$(basename "$BASH_SOURCE")" \
-  "bash_unit should change current working directory to match the directory of the currenlty running test before sourcing test file"
+  "bash_unit should change current working directory to match the directory of the currently running test before sourcing test file"
 fi
 
 setup() {
