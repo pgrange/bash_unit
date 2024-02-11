@@ -1,0 +1,18 @@
+# Define hooks that this repository provides for pre-commit
+- id: bash-unit
+  name: Run tests with `bash_unit`
+  description: This hook runs tests using `bash_unit`
+  entry: ./bash_unit
+  language: script
+  files: ^tests/(.*/)?test_.*\.sh$
+  types: [shell]
+  pass_filenames: true
+# Duplicated with different id name for convienience
+- id: bash_unit
+  name: Run tests with `bash_unit`
+  description: This hook runs tests using `bash_unit`
+  entry: ./bash_unit
+  language: script
+  files: ^tests/(.*/)?test_.*\.sh$
+  types: [shell]
+  pass_filenames: true

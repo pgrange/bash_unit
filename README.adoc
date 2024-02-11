@@ -78,6 +78,50 @@ You can also download it from the https://github.com/pgrange/bash_unit/releases[
 
 endif::[]
 
+== pre-commit hook
+
+You can run `+bash_unit+` as a pre-commit hook.
+
+Add the following to your pre-commit configuration. By default it will run scripts that are identified as shell scripts that match the path `+^tests/(.*/)?test_.*\.sh$+`.
+
+[.pre-commit-config,yaml]
+----
+repos:
+  - repo: https://github.com/pgrange/bash_unit
+    rev: v1.7.0
+    hooks:
+      - id: bash-unit
+----
+
+== Running `+bash_unit+` in the test script
+
+In some cases you want to run `+bash_unit+` from inside the test script.
+
+One example is this project’s `+test_doc.sh+` test script.
+
+One method to define a `+BASH_UNIT+` variable is shown below:
+
+[test_script,bash]
+----
+# Function to recursively search upwards for file
+_find_file() {
+    local dir="$1"
+    local file="$2"
+    while [ "${dir}" != "/" ]; do
+        if [ -f "${dir}/${file}" ]; then
+            echo "${dir}/${file}"
+            return 0
+        fi
+        dir=$(dirname "${dir}")
+    done
+    return 1
+}
+
+B_U=$(_find_file "$(dirname "$(realpath "$0")")" bash_unit)
+# shellcheck disable=2089
+BASH_UNIT="eval FORCE_COLOR=false \"$B_U\""
+----
+
 == How to run tests
 
 To run tests, simply call *bash_unit* with all your tests files as parameter. For instance to run some *bash_unit* tests, from *bash_unit* directory:
@@ -846,4 +890,5 @@ test_get_data_from_fake() {
  expected [ax] but was [a]
 doc:13:test_get_data_from_fake()
 ```
+
 
