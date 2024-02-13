@@ -39,7 +39,7 @@ See [how to contribute code](CONTRIBUTING_CODE.md).
 # Donate
 
 bash_unit is free software I develop during my (not so) free time. If you feel
-bash_unit is helpfull enough to you that you want to compensate for some of
+bash_unit is helpful enough to you that you want to compensate for some of
 the time spent developing or promoting it, you can contribute with your money
 on liberapay:
 
