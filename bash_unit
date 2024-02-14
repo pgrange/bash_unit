@@ -228,7 +228,7 @@ run_setup_suite() {
 
 maybe_shuffle() {
   # shellcheck disable=2015  # A && B || C. C may run when A is true.
-  ((randomise)) && $SHUF || $CAT
+  ((randomize)) && $SHUF || $CAT
 }
 
 run_tests() {
@@ -427,7 +427,7 @@ tap_format() {
 output_format=text
 test_pattern=""
 separator=""
-randomise=0
+randomize=0
 while getopts "vp:f:r" option
 do
   case "$option" in
@@ -439,7 +439,7 @@ do
       output_format="${OPTARG}"
       ;;
     r)
-      randomise=1
+      randomize=1
       ;;
     v)
       echo "bash_unit $VERSION"
