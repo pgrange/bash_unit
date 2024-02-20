@@ -1,0 +1,30 @@
+# This test demonstrates some test skipping logic that
+# one can implement with bash_unit
+
+todo_will_always_be_siped() {
+  fail "This test is always skipped"
+}
+
+if uname | grep Linux
+then
+  test_proc_exists() {
+    assert "ls /proc/" "there should exist /proc on Linux"
+  }
+  test_another_test_to_run_only_on_linux() {
+    assert "mkdir /tmp/foo/bar -p"
+  }
+fi
+
+test_that_always_run() {
+  assert true
+}
+
+if uname | grep Darwin
+then
+  test_proc_does_not_exist() {
+    assert_fail "ls /proc/" "there should not exist /proc on Darwin"
+  }
+  test_another_test_to_run_only_on_darwin() {
+    assert "mkdir -p /tmp/foo/bar"
+  }
+fi
