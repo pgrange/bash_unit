@@ -437,6 +437,16 @@ tap_format() {
   }
 }
 
+skip_if() {
+  local condition="$1"
+  local pattern="$2"
+  if eval $condition >/dev/null 2>&1
+  then
+    skip_pattern="${skip_pattern}${skip_pattern_separator}${pattern}"
+    skip_pattern_separator="|"
+  fi
+}
+
 output_format=text
 test_pattern=""
 test_pattern_separator=""
