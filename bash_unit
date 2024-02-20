@@ -240,8 +240,19 @@ run_tests() {
     notify_test_pending "$pending_test"
   done
 
+  if [[ -n "$skip_pattern" ]]
+  then
+    for skipped_test in $(set | "$GREP"  -E '^test.* \(\)' | "$GREP" -E "$test_pattern" | "$GREP" -E "$skip_pattern" | "$SED" -e 's: .*::')
+    do
+      notify_test_starting "$skipped_test"
+      notify_test_pending "$skipped_test"
+    done
+    local tests_to_run="$(set | "$GREP"  -E '^test.* \(\)' | "$GREP" -E "$test_pattern" | "$GREP" -v -E "$skip_pattern" | "$SED" -e 's: .*::' | maybe_shuffle)"
+  else
+    local tests_to_run="$(set | "$GREP"  -E '^test.* \(\)' | "$GREP" -E "$test_pattern" |  "$SED" -e 's: .*::' | maybe_shuffle)"
+  fi
 
-  for test in $(set | "$GREP"  -E '^test.* \(\)' | "$GREP" -E "$test_pattern" | "$SED" -e 's: .*::' | maybe_shuffle)
+  for test in $tests_to_run
   do
     (
       local status=0
@@ -270,9 +281,10 @@ run_teardown_suite() {
 
 usage() {
   echo "$1" >&2
-  echo "$0 [-f <output format>] [-p <pattern1>] [-p <pattern2>] [-r] ... <test_file1> <test_file2> ..." >&2
+  echo "$0 [-f <output format>] [-p <pattern1>] [-p <pattern2>] [-s <skip_pattern1>] [-s <skip_pattern2>] [-r] ... <test_file1> <test_file2> ..." >&2
   echo >&2
   echo "Runs tests in test files that match <pattern>s" >&2
+  echo "Test that match the skip patterns are skipped and displayed as PENDING" >&2
   echo "<output format> is optional only supported value is tap" >&2
   echo "-r to execute test cases in random order" >&2
   echo "-v to get current version information" >&2
@@ -427,14 +439,20 @@ tap_format() {
 
 output_format=text
 test_pattern=""
-separator=""
-randomize=0
-while getopts "vp:f:r" option
+test_pattern_separator=""
+skip_pattern=""
+skip_pattern_separator=""
+randomise=0
+while getopts "vp:s:f:r" option
 do
   case "$option" in
     p)
-      test_pattern="${test_pattern}${separator}${OPTARG}"
-      separator="|"
+      test_pattern="${test_pattern}${test_pattern_separator}${OPTARG}"
+      test_pattern_separator="|"
+      ;;
+    s)
+      skip_pattern="${skip_pattern}${skip_pattern_separator}${OPTARG}"
+      skip_pattern_separator="|"
       ;;
     f)
       output_format="${OPTARG}"

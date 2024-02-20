@@ -12,7 +12,7 @@ bash_unit - bash unit testing enterprise edition framework for professionals!
 
 == Synopsis
 
-*bash_unit* [-f tap] [-p <pattern>] [-r] [test_file]
+*bash_unit* [-f tap] [-p <pattern>] [-s <pattern>] [-r] [test_file]
 
 == Description
 
@@ -35,6 +35,12 @@ _(by the way, the documentation you are reading is itself tested with bash-unit)
   filters tests to run based on the given pattern.
   You can specify several patterns by repeating this option
   for each pattern.
+
+*-s* _pattern_::
+  skip tests which name matches the given pattern.
+  You can specify several patterns by repeating this option
+  for each pattern.
+  Tests will appear in *bash_unit* output as _pending_.
 
 *-r*::
   executes test cases in random order.
@@ -192,6 +198,39 @@ Running tests in tests/test_core.sh
 	Running test_assert_shows_stdout_on_failure ... SUCCESS
 	Running test_assert_status_code_fails ... SUCCESS
 	Running test_assert_status_code_succeeds ... SUCCESS
+	Running test_assert_succeeds ... SUCCESS
+	Running test_assert_within_delta_fails ... SUCCESS
+	Running test_assert_within_delta_succeeds ... SUCCESS
+	Running test_fail_fails ... SUCCESS
+Overall result: SUCCESS
+```
+
+You can combine the _-p_ option with _-s_ to skip some of the tests. This option accepts a pattern
+as parameter and mark as pending any test function which matches this pattern.
+
+```test
+./bash_unit -p fail_fails -p assert -s no -s status tests/test_core.sh
+```
+
+```output
+Running tests in tests/test_core.sh
+	Running test_assert_equals_fails_when_not_equal ... PENDING
+	Running test_assert_matches_fails_when_not_matching ... PENDING
+	Running test_assert_no_diff_fails_when_diff ... PENDING
+	Running test_assert_no_diff_succeeds_when_no_diff ... PENDING
+	Running test_assert_not_equals_fails_when_equal ... PENDING
+	Running test_assert_not_equals_succeeds_when_not_equal ... PENDING
+	Running test_assert_not_matches_fails_when_matching ... PENDING
+	Running test_assert_not_matches_succeed_when_not_matching ... PENDING
+	Running test_assert_status_code_fails ... PENDING
+	Running test_assert_status_code_succeeds ... PENDING
+	Running test_assert_equals_succeed_when_equal ... SUCCESS
+	Running test_assert_fails ... SUCCESS
+	Running test_assert_fails_fails ... SUCCESS
+	Running test_assert_fails_succeeds ... SUCCESS
+	Running test_assert_matches_succeed_when_matching ... SUCCESS
+	Running test_assert_shows_stderr_on_failure ... SUCCESS
+	Running test_assert_shows_stdout_on_failure ... SUCCESS
 	Running test_assert_succeeds ... SUCCESS
 	Running test_assert_within_delta_fails ... SUCCESS
 	Running test_assert_within_delta_succeeds ... SUCCESS
