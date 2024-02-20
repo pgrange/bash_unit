@@ -88,19 +88,26 @@ Overall result: SUCCESS" \
 test_do_not_run_skipped_tests() {
   assert "$BASH_UNIT -s two \
     <(echo 'test_one() { echo -n ; }
-            test_two() { fail ; }') \
+            test_two() { fail ; }
+            test_three() { fail ; }
+            skip_if true three
+            ') \
   "
 }
 
 test_skipped_tests_appear_in_output() {
   bash_unit_output=$($BASH_UNIT -s two \
     <(echo 'test_one() { echo -n ; }
-            test_two() { fail ; }') \
+            test_two() { fail ; }
+            test_three() { fail ; }
+            skip_if true three
+            ') \
     | "$SED" -e 's:/dev/fd/[0-9]*:test_file:' \
   )
 
   assert_equals "\
 Running tests in test_file
+	Running test_three ... PENDING
 	Running test_two ... PENDING
 	Running test_one ... SUCCESS
 Overall result: SUCCESS" \

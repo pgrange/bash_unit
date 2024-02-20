@@ -41,6 +41,7 @@ _(by the way, the documentation you are reading is itself tested with bash-unit)
   You can specify several patterns by repeating this option
   for each pattern.
   Tests will appear in *bash_unit* output as _pending_.
+  (see also _skip_if_)
 
 *-r*::
   executes test cases in random order.
@@ -616,6 +617,33 @@ out> < foo
 out> ---
 out> > bar
 doc:2:test_obvious_notmatching_with_assert_no_diff()
+```
+
+== *skip_if* function
+
+    skip_if <condition> <pattern>
+
+If _condition_ is true, will skip all the tests in the current file which match the given _pattern_.
+
+This can be useful when one has tests that are dependent on system environment, for instance:
+
+```test
+skip_if "uname | grep Darwin" linux
+skip_if "uname | grep Linux" darwin
+
+test_linux_proc_exists() {
+  assert "ls /proc/" "there should exist /proc on Linux"
+}
+test_darwin_proc_does_not_exist() {
+  assert_fail "ls /proc/" "there should not exist /proc on Darwin"
+}
+```
+
+will output, on a Linux system:
+
+```output
+	Running test_darwin_proc_does_not_exist ... PENDING
+	Running test_linux_proc_exists ... SUCCESS
 ```
 
 == *fake* function
