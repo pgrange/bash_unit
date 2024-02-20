@@ -142,7 +142,7 @@ setup() {
 
 line() {
   line_nb=$1
-  tail -n +$line_nb | head -1
+  tail -n +"$line_nb" | head -1
 }
 
 bash_unit_out_for_code() {
