@@ -16,6 +16,9 @@
 #
 #  https://github.com/pgrange/bash_unit
 
+# shellcheck disable=2317  # Ignore unreachable - most function are not called.
+# shellcheck disable=2155  # Ignore Declare and assign separately
+
 VERSION=v2.1.0
 
 ESCAPE=$(printf "\033")
@@ -37,9 +40,10 @@ fail() {
   local stdout=${2:-}
   local stderr=${3:-}
 
+  # shellcheck disable=2154
   notify_test_failed "$__bash_unit_current_test__" "$message"
-  [[ ! -z $stdout ]] && [ -s "$stdout" ] && notify_stdout < "$stdout"
-  [[ ! -z $stderr ]] && [ -s "$stderr" ] && notify_stderr < "$stderr"
+  [[ -n "$stdout" ]] && [ -s "$stdout" ] && notify_stdout < "$stdout"
+  [[ -n "$stderr" ]] && [ -s "$stderr" ] && notify_stderr < "$stderr"
 
   stacktrace | notify_stack
   exit 1
@@ -88,13 +92,14 @@ _assert_expression() {
   (
     local stdout=$(mktemp)
     local stderr=$(mktemp)
+    # shellcheck disable=2064 # Use single quotes, expands now, not when signalled.
     trap "$RM  -f \"$stdout\" \"$stderr\"" EXIT
 
     local status
     eval "($assertion)" >"$stdout" 2>"$stderr" && status=$? || status=$?
     if ! eval "$condition"
     then
-      fail "$(eval echo $message)" "$stdout" "$stderr"
+      fail "$(eval echo "$message")" "$stdout" "$stderr"
     fi
   ) || exit $?
 }
@@ -104,7 +109,7 @@ assert_equals() {
   local actual=$2
   local message=${3:-}
   [[ -z $message ]] || message="$message\n"
-  
+
   if [ "$expected" != "$actual" ]
   then
     fail "$message expected [$expected] but was [$actual]"
@@ -151,7 +156,7 @@ assert_within_delta() {
   }
   function is_number() {
     local value=$1
-    test $value -eq $value 2>/dev/null
+    test "$value" -eq "$value" 2>/dev/null
   }
   local expected=$1
   local actual=$2
@@ -162,9 +167,9 @@ assert_within_delta() {
   local message=${4:-}
   [[ -z $message ]] || message="$message\n"
 
-  local actual_delta="$(abs $(($expected - $actual)))"
+  local actual_delta="$(abs $((expected - actual)))"
 
-  if (( $actual_delta > $max_delta )); then
+  if (( actual_delta > max_delta )); then
     fail "$message expected value [$expected] to match [$actual] with a maximum delta of [$max_delta]"
   fi
 }
@@ -173,10 +178,10 @@ assert_no_diff() {
   local expected=$1
   local actual=$2
   local message=${3:-}
-  [[ -z $message ]] || message="$message\n"
+  [[ -z "$message" ]] || message="$message\n"
 
-  assert 'diff '"${expected}"' '"${actual}"  \
-         "$message expected '"${actual}"' to be identical to '"${expected}"' but was different"
+  assert "diff '${expected}' '${actual}'"  \
+    "$message expected '${actual}' to be identical to '${expected}' but was different"
 }
 
 fake() {
@@ -193,9 +198,9 @@ fake() {
 
 stacktrace() {
   local i=1
-  while ! [ -z "${BASH_SOURCE[$i]:-}" ]
+  while [ -n "${BASH_SOURCE[$i]:-}" ]
   do
-    echo ${BASH_SOURCE[$i]}:${BASH_LINENO[$((i-1))]}:${FUNCNAME[$i]}\(\)
+    echo "${BASH_SOURCE[$i]}:${BASH_LINENO[$((i-1))]}:${FUNCNAME[$i]}()"
     i=$((i + 1))
   done | "$GREP" -v "^$BASH_SOURCE"
 }
@@ -222,7 +227,8 @@ run_setup_suite() {
 }
 
 maybe_shuffle() {
-  ((randomise)) && $SHUF || $CAT
+  # shellcheck disable=2015  # A && B || C. C may run when A is true.
+  ((randomize)) && $SHUF || $CAT
 }
 
 run_tests() {
@@ -293,7 +299,7 @@ pretty_format() {
   local pretty_symbol="$2"
   local alt_symbol="${3:-}"
   local term_utf8=false
-#env
+  #env
   if is_terminal && [[ "${LANG:-}" =~ .*UTF-8.* ]]
   then
     term_utf8=true
@@ -304,7 +310,7 @@ pretty_format() {
     then
       echo -en " $pretty_symbol "
     else
-      [[ ! -z "$alt_symbol" ]] && echo -en " $alt_symbol "
+      [[ -n "$alt_symbol" ]] && echo -en " $alt_symbol "
     fi
   ) | color "$color"
 }
@@ -321,7 +327,7 @@ color() {
   _start_color
   if [ $# -gt 0 ]
   then
-    echo $*
+    echo "$*"
   else
     $CAT
   fi
@@ -354,7 +360,7 @@ text_format() {
     local message="$2"
     echo -n "FAILURE" | pretty_failure
     echo
-    [[ -z $message  ]] || printf -- "$message\n"
+    [[ -z "$message" ]] || printf -- "$message\n"
   }
   notify_stdout() {
     "$SED" 's:^:out> :' | color "$GREEN"
@@ -399,7 +405,7 @@ tap_format() {
     local message="$2"
     echo -n "not ok" | pretty_failure -
     echo "$test" | color "$BLUE"
-    [[ -z $message  ]] || printf -- "$message\n" | "$SED" -u -e 's/^/# /'
+    [[ -z "$message" ]] || printf -- "$message\n" | "$SED" -u -e 's/^/# /'
   }
   notify_stdout() {
     "$SED" 's:^:# out> :' | color "$GREEN"
@@ -421,7 +427,7 @@ tap_format() {
 output_format=text
 test_pattern=""
 separator=""
-randomise=0
+randomize=0
 while getopts "vp:f:r" option
 do
   case "$option" in
@@ -433,13 +439,13 @@ do
       output_format="${OPTARG}"
       ;;
     r)
-      randomise=1
+      randomize=1
       ;;
     v)
       echo "bash_unit $VERSION"
       exit
       ;;
-    ?|:)
+    ?)
       usage
       ;;
   esac
@@ -470,13 +476,17 @@ for test_file in "$@"
 do
   notify_suite_starting "$test_file"
   (
-    set -e # Ensure bash_unit will exit with failure
-           # in case of syntax error.
+    # Ensure bash_unit will exit with failure
+    # in case of syntax error.
+    set -e
+
     if [[ "${STICK_TO_CWD:-}" != true ]]
     then
       cd "$(dirname "$test_file")"
+      # shellcheck disable=1090
       source "$(basename "$test_file")"
     else
+      # shellcheck disable=1090
       source "$test_file"
     fi
     set +e
