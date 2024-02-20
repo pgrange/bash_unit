@@ -4,26 +4,6 @@ TEST_PATTERN='```test'
 OUTPUT_PATTERN='```output'
 LANG=C.UTF-8
 
-# Function to recursively search upwards for file
-_find_file() {
-  local dir="$1"
-  local file="$2"
-  while [ "${dir}" != "/" ]; do
-    if [ -f "${dir}/${file}" ]; then
-      echo "${dir}/${file}"
-      return 0
-    fi
-    dir=$(dirname "${dir}")
-  done
-  return 1
-}
-
-README_adoc=$(_find_file "$(dirname "$(realpath "$0")")" /README.adoc)
-# shellcheck disable=2181 # Use 'if ! mycmd;'
-if [ $? != 0 ] ; then
-   README_adoc=$(_find_file "$(dirname "$(realpath "${BASH_SOURCE[0]}")")" /README.adoc)
-fi
-
 export STICK_TO_CWD=true
 BASH_UNIT="eval FORCE_COLOR=false ./bash_unit"
 
@@ -34,12 +14,11 @@ prepare_tests() {
   local swap=/tmp/$$/swap
   local test_output=/tmp/$$/test_output
   local expected_output=/tmp/$$/expected_output
-  cat "$README_adoc" > "$remaining"
+  cat README.adoc > "$remaining"
 
   while grep -E "^${TEST_PATTERN}$" "$remaining" >/dev/null
   do
     ((++block))
-    run_doc_test  "$remaining" "$swap"
     run_doc_test  "$remaining" "$swap" |& sed "\$a\\" | work_around_github_action_problem > "$test_output$block"
     doc_to_output "$remaining" "$swap" > "$expected_output$block"
     eval 'function test_block_'"$(printf "%02d" "$block")"'() {
