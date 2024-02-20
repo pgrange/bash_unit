@@ -78,11 +78,11 @@ You can also download it from the https://github.com/pgrange/bash_unit/releases[
 
 endif::[]
 
-== pre-commit hook
+=== https://pre-commit.com[pre-commit] hook
 
-You can run `+bash_unit+` as a pre-commit hook.
+You can run `+bash_unit+` as a https://pre-commit.com[pre-commit] hook.
 
-Add the following to your pre-commit configuration. By default it will run scripts that are identified as shell scripts that match the path `+^tests/(.*/)?test_.*\.sh$+`.
+Add the following to your https://pre-commit.com[pre-commit] configuration. By default it will run scripts that are identified as shell scripts that match the path `+^tests/(.*/)?test_.*\.sh$+`.
 
 [.pre-commit-config,yaml]
 ----
