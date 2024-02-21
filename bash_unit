@@ -299,7 +299,7 @@ pretty_success() {
 }
 
 pretty_warning() {
-  pretty_format "$YELLOW" "\u2717" "$1"
+  pretty_format "$YELLOW" "\u2717" "${1:-}"
 }
 
 pretty_failure() {
