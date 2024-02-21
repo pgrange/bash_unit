@@ -40,7 +40,7 @@ _(by the way, the documentation you are reading is itself tested with bash-unit)
   skip tests which name matches the given pattern.
   You can specify several patterns by repeating this option
   for each pattern.
-  Tests will appear in *bash_unit* output as _pending_.
+  Tests will appear in *bash_unit* output as _skipped_.
   (see also _skip_if_)
 
 *-r*::
@@ -207,7 +207,7 @@ Overall result: SUCCESS
 ```
 
 You can combine the _-p_ option with _-s_ to skip some of the tests. This option accepts a pattern
-as parameter and mark as pending any test function which matches this pattern.
+as parameter and mark as skipped any test function which matches this pattern.
 
 ```test
 ./bash_unit -p fail_fails -p assert -s no -s status tests/test_core.sh
@@ -215,16 +215,16 @@ as parameter and mark as pending any test function which matches this pattern.
 
 ```output
 Running tests in tests/test_core.sh
-	Running test_assert_equals_fails_when_not_equal ... PENDING
-	Running test_assert_matches_fails_when_not_matching ... PENDING
-	Running test_assert_no_diff_fails_when_diff ... PENDING
-	Running test_assert_no_diff_succeeds_when_no_diff ... PENDING
-	Running test_assert_not_equals_fails_when_equal ... PENDING
-	Running test_assert_not_equals_succeeds_when_not_equal ... PENDING
-	Running test_assert_not_matches_fails_when_matching ... PENDING
-	Running test_assert_not_matches_succeed_when_not_matching ... PENDING
-	Running test_assert_status_code_fails ... PENDING
-	Running test_assert_status_code_succeeds ... PENDING
+	Running test_assert_equals_fails_when_not_equal ... SKIPPED
+	Running test_assert_matches_fails_when_not_matching ... SKIPPED
+	Running test_assert_no_diff_fails_when_diff ... SKIPPED
+	Running test_assert_no_diff_succeeds_when_no_diff ... SKIPPED
+	Running test_assert_not_equals_fails_when_equal ... SKIPPED
+	Running test_assert_not_equals_succeeds_when_not_equal ... SKIPPED
+	Running test_assert_not_matches_fails_when_matching ... SKIPPED
+	Running test_assert_not_matches_succeed_when_not_matching ... SKIPPED
+	Running test_assert_status_code_fails ... SKIPPED
+	Running test_assert_status_code_succeeds ... SKIPPED
 	Running test_assert_equals_succeed_when_equal ... SUCCESS
 	Running test_assert_fails ... SUCCESS
 	Running test_assert_fails_fails ... SUCCESS
@@ -642,7 +642,7 @@ test_darwin_proc_does_not_exist() {
 will output, on a Linux system:
 
 ```output
-	Running test_darwin_proc_does_not_exist ... PENDING
+	Running test_darwin_proc_does_not_exist ... SKIPPED
 	Running test_linux_proc_exists ... SUCCESS
 ```
 

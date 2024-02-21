@@ -41,7 +41,7 @@ test_tap_format_for_one_pending_test() {
    assert_equals \
 "\
 # Running tests in code
-ok - pending_not_yet_implemented # skip test to be written\
+ok - pending_not_yet_implemented # todo test to be written\
 " \
 "$(bash_unit_out_for_code <<EOF
   pending_not_yet_implemented() {
