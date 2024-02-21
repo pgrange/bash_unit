@@ -32,7 +32,14 @@ jobs:
         run: |
           set -o pipefail
           pre-commit gc
+          # Run default pre-commit hooks
           pre-commit run --show-diff-on-failure --color=always --all-files | tee ${RAW_LOG}
+          # Run manual pre-commit hook that runs bash_unit@rev
+          #  defined in .pre-commit-config.yaml
+          pre-commit run bash-unit --hook-stage manual -a | tee -a ${RAW_LOG}
+          # Run this version of bash_unit using it's current pre-commit-hook.yaml config
+          #   Useful for testing that the current version works
+          pre-commit try-repo . --verbose --all-files | tee -a ${RAW_LOG}
       - name: Convert Raw Log to annotations
         uses: mdeweerd/logToCheckStyle@v2024.2.3
         if: ${{ failure() }}

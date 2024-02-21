@@ -83,3 +83,11 @@ repos:
         language: system
         entry: bash -c "./bash_unit tests/*"
         pass_filenames: false
+
+  - repo: https://github.com/pgrange/bash_unit
+    rev: 308c139639269b89c26911098b7739ee2400fcbd
+    hooks:
+      - id: bash-unit
+        stages: [manual]
+        always_run: true
+        verbose: true
