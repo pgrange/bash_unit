@@ -754,7 +754,7 @@ bad, don't do that.
 Moreover, *assert_equals* output is captured by _ps_ and this just messes with the display of our test results:
 
 ```shell
-	Running test_code_gives_ps_appropriate_parameters ... 
+	Running test_code_gives_ps_appropriate_parameters ...
 ```
 
 The only correct alternative is for the fake _ps_ to write _FAKE_PARAMS_ in a file descriptor
@@ -846,4 +846,3 @@ test_get_data_from_fake() {
  expected [ax] but was [a]
 doc:13:test_get_data_from_fake()
 ```
-

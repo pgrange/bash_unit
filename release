@@ -18,11 +18,11 @@ check_can_release() {
 
   [[ -z "$version" ]] && usage "No version specified on command line"
   echo "$version" | grep -E '^v[0-9]*\.[0-9]*\.[0-9]*$' >/dev/null || usage "Invalid format for version: $version"
-  [ -r "$token_file" ] || usage "'$token_file' file does not exist" 
-  
+  [ -r "$token_file" ] || usage "'$token_file' file does not exist"
+
   # shellcheck disable=1090
   source "$token_file"
-  
+
   [[ -z "$user" ]]  && usage "user not found in file '$token_file'"
   [[ -z "$token" ]] && usage "token not found in file '$token_file'"
   true #avoid error on last instruction of function (see bash -e)
@@ -66,7 +66,7 @@ publish_release() {
   curl  -u "$user:$token" -XPOST https://api.github.com/repos/pgrange/bash_unit/releases -d "
 {
   \"tag_name\": \"$version\"
-}"
+  }"
 }
 
 usage() {

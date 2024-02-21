@@ -92,7 +92,7 @@ _assert_expression() {
   (
     local stdout=$(mktemp)
     local stderr=$(mktemp)
-    # shellcheck disable=2064 # Use single quotes, expands now, not when signalled.
+    # shellcheck disable=2064 # Use single quotes, expands now, not when signaled.
     trap "$RM  -f \"$stdout\" \"$stderr\"" EXIT
 
     local status
