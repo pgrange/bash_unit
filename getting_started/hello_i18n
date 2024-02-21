@@ -7,9 +7,9 @@ main() {
 hello() {
   case "$1" in
     fr) echo Bonjour le monde
-        ;;
-     *) echo we only speak french for the moment, sorry >&2
-        ;;
+      ;;
+    *) echo we only speak french for the moment, sorry >&2
+      ;;
   esac
 }
 

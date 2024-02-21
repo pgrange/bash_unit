@@ -16,4 +16,3 @@ test_can_say_hi_in_french() {
 setup_suite() {
   source ../hello_i18n
 }
-

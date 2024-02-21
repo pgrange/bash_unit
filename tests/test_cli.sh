@@ -93,7 +93,7 @@ test_display_usage_when_test_file_does_not_exist() {
   bash_unit_output=$($BASH_UNIT /not_exist/not_exist 2>&1 >/dev/null | line 1)
 
   assert_equals "file does not exist: /not_exist/not_exist"\
-                "$bash_unit_output" 
+                "$bash_unit_output"
 }
 
 test_bash_unit_succeed_when_no_failure_even_if_no_teardown() {
@@ -142,7 +142,7 @@ setup() {
 
 line() {
   line_nb=$1
-  tail -n +$line_nb | head -1
+  tail -n +"$line_nb" | head -1
 }
 
 bash_unit_out_for_code() {

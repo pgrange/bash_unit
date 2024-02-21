@@ -2,28 +2,29 @@
 
 token_file=token
 
-cd $(dirname $0)
+cd "$(dirname "$0")" || exit
 
 check_can_release() {
   local version="$1"
 
   type -P asciidoctor >/dev/null || usage "You need asciidoctor to make releases"
 
-  if [ ! -z "$(git status --porcelain)" ]
+  if [ -n "$(git status --porcelain)" ]
   then
     git status >&2
     echo >&2
     usage "Please commit your pending changes first"
   fi
 
-  [[ -z $version ]] && usage "No version specified on command line"
-  echo $version | grep -E '^v[0-9]*\.[0-9]*\.[0-9]*$' >/dev/null || usage "Invalid format for version: $version"
-  [ -r $token_file ] || usage "$token_file file does not exist" 
-  
-  source $token_file
-  
-  [[ -z $user ]]  && usage "user not found in file $token_file"
-  [[ -z $token ]] && usage "token not found in file $token_file"
+  [[ -z "$version" ]] && usage "No version specified on command line"
+  echo "$version" | grep -E '^v[0-9]*\.[0-9]*\.[0-9]*$' >/dev/null || usage "Invalid format for version: $version"
+  [ -r "$token_file" ] || usage "'$token_file' file does not exist"
+
+  # shellcheck disable=1090
+  source "$token_file"
+
+  [[ -z "$user" ]]  && usage "user not found in file '$token_file'"
+  [[ -z "$token" ]] && usage "token not found in file '$token_file'"
   true #avoid error on last instruction of function (see bash -e)
 }
 
@@ -62,10 +63,10 @@ publish_release() {
 
   git push
   git push --tags
-  curl  -u $user:$token -XPOST https://api.github.com/repos/pgrange/bash_unit/releases -d "
+  curl  -u "$user:$token" -XPOST https://api.github.com/repos/pgrange/bash_unit/releases -d "
 {
   \"tag_name\": \"$version\"
-}"
+  }"
 }
 
 usage() {
