@@ -406,7 +406,7 @@ tap_format() {
     local message="$2"
     echo -n "not ok" | pretty_failure -
     echo "$test" | color "$BLUE"
-    [[ -z "$message" ]] || printf -- "$message\n" | "$SED" -u -e 's/^/# /'
+    [[ -z "$message" ]] || printf -- "%b\n" "$message" | "$SED" -u -e 's/^/# /'
   }
   notify_stdout() {
     "$SED" 's:^:# out> :' | color "$GREEN"
