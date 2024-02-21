@@ -14,4 +14,9 @@ hello() {
 }
 
 # do not run main when sourcing the script
-[[ "$0" == "${BASH_SOURCE[0]}" ]] && main "$@" || true
+if [[ "$0" == "${BASH_SOURCE[0]}" ]]
+then
+  main "$@"
+else
+  true
+fi
