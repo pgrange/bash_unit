@@ -14,7 +14,7 @@ test_fail_fails() {
 #fail can now be used in the following tests
 
 test_assert_fails_succeeds() {
-  (assert_fails false) || fail 'assert_fails should succeed' 
+  (assert_fails false) || fail 'assert_fails should succeed'
 }
 
 test_assert_fails_fails() {
