@@ -193,7 +193,7 @@ fake() {
   else
     eval "function $command() { echo \"$($CAT)\" ; }"
   fi
-  export -f $command
+  export -f "${command?}"
 }
 
 stacktrace() {
