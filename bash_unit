@@ -245,7 +245,7 @@ run_tests() {
     for skipped_test in $(set | "$GREP"  -E '^test.* \(\)' | "$GREP" -E "$test_pattern" | "$GREP" -E "$skip_pattern" | "$SED" -e 's: .*::')
     do
       notify_test_starting "$skipped_test"
-      notify_test_pending "$skipped_test"
+      notify_test_skipped "$skipped_test"
     done
     local tests_to_run="$(set | "$GREP"  -E '^test.* \(\)' | "$GREP" -E "$test_pattern" | "$GREP" -v -E "$skip_pattern" | "$SED" -e 's: .*::' | maybe_shuffle)"
   else
@@ -363,7 +363,10 @@ text_format() {
     echo -n "PENDING" | pretty_warning
     echo
   }
-
+  notify_test_skipped() {
+    echo -n "SKIPPED" | pretty_warning
+    echo
+  }
   notify_test_succeeded() {
     echo -n "SUCCESS" | pretty_success
     echo
@@ -406,7 +409,13 @@ tap_format() {
     local test="$1"
     echo -n "ok" | pretty_warning -
     echo -n "$test" | color "$BLUE"
-    echo " # skip test to be written" | color "$YELLOW"
+    echo " # todo test to be written" | color "$YELLOW"
+  }
+  notify_test_skipped() {
+    local test="$1"
+    echo -n "ok" | pretty_warning -
+    echo -n "$test" | color "$BLUE"
+    echo " # skip test not run" | color "$YELLOW"
   }
   notify_test_succeeded() {
     local test="$1"
@@ -440,7 +449,7 @@ tap_format() {
 skip_if() {
   local condition="$1"
   local pattern="$2"
-  if eval $condition >/dev/null 2>&1
+  if eval "$condition" >/dev/null 2>&1
   then
     skip_pattern="${skip_pattern}${skip_pattern_separator}${pattern}"
     skip_pattern_separator="|"
@@ -452,7 +461,7 @@ test_pattern=""
 test_pattern_separator=""
 skip_pattern=""
 skip_pattern_separator=""
-randomise=0
+randomize=0
 while getopts "vp:s:f:r" option
 do
   case "$option" in

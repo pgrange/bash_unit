@@ -107,8 +107,8 @@ test_skipped_tests_appear_in_output() {
 
   assert_equals "\
 Running tests in test_file
-	Running test_three ... PENDING
-	Running test_two ... PENDING
+	Running test_three ... SKIPPED
+	Running test_two ... SKIPPED
 	Running test_one ... SUCCESS
 Overall result: SUCCESS" \
   "$bash_unit_output"
