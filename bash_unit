@@ -360,6 +360,7 @@ text_format() {
     local message="$2"
     echo -n "FAILURE" | pretty_failure
     echo
+    # shellcheck disable=SC2059
     [[ -z "$message" ]] || printf -- "$message\n"
   }
   notify_stdout() {
