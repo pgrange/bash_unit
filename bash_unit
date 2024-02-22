@@ -284,7 +284,7 @@ usage() {
   echo "$0 [-f <output format>] [-p <pattern1>] [-p <pattern2>] [-s <skip_pattern1>] [-s <skip_pattern2>] [-r] ... <test_file1> <test_file2> ..." >&2
   echo >&2
   echo "Runs tests in test files that match <pattern>s" >&2
-  echo "Test that match the skip patterns are skipped and displayed as PENDING" >&2
+  echo "Test that match the skip patterns are skipped and displayed as SKIPPED" >&2
   echo "<output format> is optional only supported value is tap" >&2
   echo "-r to execute test cases in random order" >&2
   echo "-v to get current version information" >&2
