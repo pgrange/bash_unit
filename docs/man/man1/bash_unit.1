@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: bash_unit
 .\"    Author: [see the "AUTHOR(S)" section]
-.\" Generator: Asciidoctor 2.0.18
-.\"      Date: 2023-03-03
+.\" Generator: Asciidoctor 2.0.21
+.\"      Date: 2024-02-22
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "BASH_UNIT" "1" "2023-03-03" "\ \&" "\ \&"
+.TH "BASH_UNIT" "1" "2024-02-22" "\ \&" "\ \&"
 .ie \n(.g .ds Aq \(aq
 .el       .ds Aq '
 .ss \n[.ss] 0
@@ -31,7 +31,7 @@
 bash_unit \- bash unit testing enterprise edition framework for professionals!
 .SH "SYNOPSIS"
 .sp
-\fBbash_unit\fP [\-f tap] [\-p <pattern>] [\-r] [test_file]
+\fBbash_unit\fP [\-f tap] [\-p <pattern>] [\-s <pattern>] [\-r] [test_file]
 .SH "DESCRIPTION"
 .sp
 \fBbash_unit\fP allows you to write unit tests (functions starting with \fBtest\fP),
@@ -55,6 +55,15 @@ You can specify several patterns by repeating this option
 for each pattern.
 .RE
 .sp
+\fB\-s\fP \fIpattern\fP
+.RS 4
+skip tests which name matches the given pattern.
+You can specify several patterns by repeating this option
+for each pattern.
+Tests will appear in \fBbash_unit\fP output as \fIskipped\fP.
+(see also \fIskip_if\fP)
+.RE
+.sp
 \fB\-r\fP
 .RS 4
 executes test cases in random order.
@@ -68,6 +77,58 @@ command line).
 specify an alternative output format.
 The only supported value is \fBtap\fP.
 .RE
+.SS "\c .URL "https://pre\-commit.com" "pre\-commit" hook"
+.sp
+You can run \f(CRbash_unit\fP as a \c
+.URL "https://pre\-commit.com" "pre\-commit" ""
+hook.
+.sp
+Add the following to your \c
+.URL "https://pre\-commit.com" "pre\-commit" ""
+configuration. By default it will run scripts that are identified as shell scripts that match the path \f(CR^tests/(.*/)?test_.*\(rs.sh$\fP.
+.sp
+.if n .RS 4
+.nf
+.fam C
+repos:
+  \- repo: https://github.com/pgrange/bash_unit
+    rev: v1.7.0
+    hooks:
+      \- id: bash\-unit
+.fam
+.fi
+.if n .RE
+.SH "RUNNING \f(CRbash_unit\fP IN THE TEST SCRIPT"
+.sp
+In some cases you want to run \f(CRbash_unit\fP from inside the test script.
+.sp
+One example is this project’s \f(CRtest_doc.sh\fP test script.
+.sp
+One method to define a \f(CRBASH_UNIT\fP variable is shown below:
+.sp
+.if n .RS 4
+.nf
+.fam C
+# Function to recursively search upwards for file
+_find_file() {
+    local dir="$1"
+    local file="$2"
+    while [ "${dir}" != "/" ]; do
+        if [ \-f "${dir}/${file}" ]; then
+            echo "${dir}/${file}"
+            return 0
+        fi
+        dir=$(dirname "${dir}")
+    done
+    return 1
+}
+
+B_U=$(_find_file "$(dirname "$(realpath "$0")")" bash_unit)
+# shellcheck disable=2089
+BASH_UNIT="eval FORCE_COLOR=false \(rs"$B_U\(rs""
+.fam
+.fi
+.if n .RE
 .SH "HOW TO RUN TESTS"
 .sp
 To run tests, simply call \fBbash_unit\fP with all your tests files as parameter. For instance to run some \fBbash_unit\fP tests, from \fBbash_unit\fP directory:
@@ -152,6 +213,47 @@ Running tests in tests/test_core.sh
         Running test_assert_shows_stdout_on_failure ... SUCCESS
         Running test_assert_status_code_fails ... SUCCESS
         Running test_assert_status_code_succeeds ... SUCCESS
+        Running test_assert_succeeds ... SUCCESS
+        Running test_assert_within_delta_fails ... SUCCESS
+        Running test_assert_within_delta_succeeds ... SUCCESS
+        Running test_fail_fails ... SUCCESS
+Overall result: SUCCESS
+.fam
+.fi
+.if n .RE
+.sp
+You can combine the \fI\-p\fP option with \fI\-s\fP to skip some of the tests. This option accepts a pattern
+as parameter and mark as skipped any test function which matches this pattern.
+.sp
+.if n .RS 4
+.nf
+.fam C
+\&./bash_unit \-p fail_fails \-p assert \-s no \-s status tests/test_core.sh
+.fam
+.fi
+.if n .RE
+.sp
+.if n .RS 4
+.nf
+.fam C
+Running tests in tests/test_core.sh
+        Running test_assert_equals_fails_when_not_equal ... SKIPPED
+        Running test_assert_matches_fails_when_not_matching ... SKIPPED
+        Running test_assert_no_diff_fails_when_diff ... SKIPPED
+        Running test_assert_no_diff_succeeds_when_no_diff ... SKIPPED
+        Running test_assert_not_equals_fails_when_equal ... SKIPPED
+        Running test_assert_not_equals_succeeds_when_not_equal ... SKIPPED
+        Running test_assert_not_matches_fails_when_matching ... SKIPPED
+        Running test_assert_not_matches_succeed_when_not_matching ... SKIPPED
+        Running test_assert_status_code_fails ... SKIPPED
+        Running test_assert_status_code_succeeds ... SKIPPED
+        Running test_assert_equals_succeed_when_equal ... SUCCESS
+        Running test_assert_fails ... SUCCESS
+        Running test_assert_fails_fails ... SUCCESS
+        Running test_assert_fails_succeeds ... SUCCESS
+        Running test_assert_matches_succeed_when_matching ... SUCCESS
+        Running test_assert_shows_stderr_on_failure ... SUCCESS
+        Running test_assert_shows_stdout_on_failure ... SUCCESS
         Running test_assert_succeeds ... SUCCESS
         Running test_assert_within_delta_fails ... SUCCESS
         Running test_assert_within_delta_succeeds ... SUCCESS
@@ -687,6 +789,46 @@ out> < foo
 out> \-\-\-
 out> > bar
 doc:2:test_obvious_notmatching_with_assert_no_diff()
+.fam
+.fi
+.if n .RE
+.SH "\fBSKIP_IF\fP FUNCTION"
+.sp
+.if n .RS 4
+.nf
+.fam C
+skip_if <condition> <pattern>
+.fam
+.fi
+.if n .RE
+.sp
+If \fIcondition\fP is true, will skip all the tests in the current file which match the given \fIpattern\fP.
+.sp
+This can be useful when one has tests that are dependent on system environment, for instance:
+.sp
+.if n .RS 4
+.nf
+.fam C
+skip_if "uname | grep Darwin" linux
+skip_if "uname | grep Linux" darwin
+
+test_linux_proc_exists() {
+  assert "ls /proc/" "there should exist /proc on Linux"
+}
+test_darwin_proc_does_not_exist() {
+  assert_fail "ls /proc/" "there should not exist /proc on Darwin"
+}
+.fam
+.fi
+.if n .RE
+.sp
+will output, on a Linux system:
+.sp
+.if n .RS 4
+.nf
+.fam C
+        Running test_darwin_proc_does_not_exist ... SKIPPED
+        Running test_linux_proc_exists ... SUCCESS
 .fam
 .fi
 .if n .RE
