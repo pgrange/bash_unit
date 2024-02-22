@@ -1,2 +1,5 @@
 *.swp
 token
+
+# BSD sed generated files
+*-e

@@ -3,8 +3,6 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
-      - id: no-commit-to-branch
-        args: [--branch, master]
       - id: check-yaml
         args: [--unsafe]
       - id: check-json
@@ -12,6 +10,7 @@ repos:
       - id: trailing-whitespace
         exclude_types: [markdown]
       - id: end-of-file-fixer
+        exclude: ^docs/man/.*$
       - id: check-merge-conflict
       - id: check-executables-have-shebangs
       - id: check-shebang-scripts-are-executable
