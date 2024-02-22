@@ -95,9 +95,10 @@ Add the following to your https://pre-commit.com[pre-commit] configuration. By d
 ----
 repos:
   - repo: https://github.com/pgrange/bash_unit
-    rev: v1.7.0
+    rev: v2.2.0
     hooks:
       - id: bash-unit
+        always-run: true
 ----
 
 == Running `+bash_unit+` in the test script
