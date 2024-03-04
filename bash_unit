@@ -41,7 +41,8 @@ fail() {
   local stderr=${3:-}
 
   # shellcheck disable=2154
-  notify_test_failed "$__bash_unit_current_test__" "$message"
+  notify_test_failed "$__bash_unit_current_test__"
+  notify_message "$message"
   [[ -n "$stdout" ]] && [ -s "$stdout" ] && notify_stdout < "$stdout"
   [[ -n "$stderr" ]] && [ -s "$stderr" ] && notify_stderr < "$stderr"
 
@@ -372,12 +373,15 @@ text_format() {
     echo
   }
   notify_test_failed() {
-    local message="$2"
     echo -n "FAILURE" | pretty_failure
     echo
+  }
+  notify_message() {
+    local message="$1"
     # shellcheck disable=SC2059
     [[ -z "$message" ]] || printf -- "$message\n"
   }
+
   notify_stdout() {
     "$SED" 's:^:out> :' | color "$GREEN"
   }
@@ -424,9 +428,11 @@ tap_format() {
   }
   notify_test_failed() {
     local test="$1"
-    local message="$2"
     echo -n "not ok" | pretty_failure -
     echo "$test" | color "$BLUE"
+  }
+  notify_message() {
+    local message="$1"
     [[ -z "$message" ]] || printf -- "%b\n" "$message" | "$SED" -u -e 's/^/# /'
   }
   notify_stdout() {
@@ -446,6 +452,21 @@ tap_format() {
   }
 }
 
+quiet_mode() {
+  notify_message() {
+    :
+  }
+  notify_stdout() {
+    :
+  }
+  notify_stderr() {
+    :
+  }
+  notify_stack() {
+    :
+  }
+}
+
 skip_if() {
   local condition="$1"
   local pattern="$2"
@@ -457,12 +478,13 @@ skip_if() {
 }
 
 output_format=text
+verbosity=normal
 test_pattern=""
 test_pattern_separator=""
 skip_pattern=""
 skip_pattern_separator=""
 randomize=0
-while getopts "vp:s:f:r" option
+while getopts "vp:s:f:rq" option
 do
   case "$option" in
     p)
@@ -482,6 +504,9 @@ do
     v)
       echo "bash_unit $VERSION"
       exit
+      ;;
+    q)
+      verbosity=quiet
       ;;
     ?)
       usage
@@ -507,6 +532,11 @@ case "$output_format" in
     usage "unsupported output format: $output_format"
     ;;
 esac
+
+if [[ "$verbosity" == quiet ]]
+then
+  quiet_mode
+fi
 
 #run tests received as parameters
 failure=0

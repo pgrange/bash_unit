@@ -53,6 +53,11 @@ _(by the way, the documentation you are reading is itself tested with bash-unit)
   specify an alternative output format.
   The only supported value is *tap*.
 
+*-q*::
+  quiet mode.
+  Will only output the status of each test with no further
+  information even in case of failure.
+
 ifndef::backend-manpage[]
 
 == How to install *bash_unit*
