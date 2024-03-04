@@ -114,6 +114,24 @@ Overall result: SUCCESS" \
   "$bash_unit_output"
 }
 
+test_can_have_a_quiet_output() {
+  bash_unit_output=$($BASH_UNIT -q \
+    <(echo 'test_one() { echo -n ; }
+            test_two() { fail "this test fails" ; }
+            test_three() { fail ; }
+            ') \
+    | "$SED" -e 's:/dev/fd/[0-9]*:test_file:' \
+  )
+
+  assert_equals "\
+Running tests in test_file
+	Running test_one ... SUCCESS
+	Running test_three ... FAILURE
+	Running test_two ... FAILURE
+Overall result: FAILURE" \
+  "$bash_unit_output"
+}
+
 test_fails_when_test_file_does_not_exist() {
   assert_fails "$BASH_UNIT /not_exist/not_exist"
 }

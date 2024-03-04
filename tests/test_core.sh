@@ -313,7 +313,8 @@ unmute_logs() {
   notify_suite_starting() { echo "Running tests in $1" ; }
   notify_test_starting () { echo -e -n "\tRunning $1... " ; }
   notify_test_succeeded() { echo "SUCCESS" ; }
-  notify_test_failed   () { echo "FAILURE" ; echo "$2" ; }
+  notify_test_failed   () { echo "FAILURE" ; }
+  notify_message       () { echo "$1" ; }
 }
 
 unmute_stack() {
@@ -333,6 +334,7 @@ mute() {
   notify_test_starting () { echo -n ; }
   notify_test_succeeded() { echo -n ; }
   notify_test_failed   () { echo -n ; }
+  notify_message       () { echo -n ; }
   notify_stack         () { echo -n ; }
   notify_stdout        () { echo -n ; }
   notify_stderr        () { echo -n ; }
