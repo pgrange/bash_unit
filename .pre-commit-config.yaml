@@ -84,10 +84,16 @@ repos:
         entry: bash -c "./bash_unit tests/*"
         pass_filenames: false
 
-  - repo: https://github.com/pgrange/bash_unit
-    rev: 308c139639269b89c26911098b7739ee2400fcbd
-    hooks:
-      - id: bash-unit
-        stages: [manual]
-        always_run: true
-        verbose: true
+  # This is how one can use bash_unit with pre-commit
+  # Only for documentation purpose as it can't be
+  # used in bash_unit itself: we always want to test
+  # bash_unit with the last version of bash_unit.
+  # Otherwise tests would always fail when we introduce
+  # a new feature.
+  # - repo: https://github.com/pgrange/bash_unit
+  #   rev: v2.2.0
+  #   hooks:
+  #     - id: bash-unit
+  #       stages: [manual]
+  #       always_run: true
+  # verbose: true
