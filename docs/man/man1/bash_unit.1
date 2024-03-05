@@ -2,12 +2,12 @@
 .\"     Title: bash_unit
 .\"    Author: [see the "AUTHOR(S)" section]
 .\" Generator: Asciidoctor 2.0.21
-.\"      Date: 2024-02-22
+.\"      Date: 2024-03-05
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "BASH_UNIT" "1" "2024-02-22" "\ \&" "\ \&"
+.TH "BASH_UNIT" "1" "2024-03-05" "\ \&" "\ \&"
 .ie \n(.g .ds Aq \(aq
 .el       .ds Aq '
 .ss \n[.ss] 0
@@ -77,6 +77,13 @@ command line).
 specify an alternative output format.
 The only supported value is \fBtap\fP.
 .RE
+.sp
+\fB\-q\fP
+.RS 4
+quiet mode.
+Will only output the status of each test with no further
+information even in case of failure.
+.RE
 .SS "\c .URL "https://pre\-commit.com" "pre\-commit" hook"
 .sp
 You can run \f(CRbash_unit\fP as a \c
@@ -92,9 +99,10 @@ configuration. By default it will run scripts that are identified as shell scrip
 .fam C
 repos:
   \- repo: https://github.com/pgrange/bash_unit
-    rev: v1.7.0
+    rev: v2.2.0
     hooks:
       \- id: bash\-unit
+        always\-run: true
 .fam
 .fi
 .if n .RE
