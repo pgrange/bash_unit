@@ -335,7 +335,7 @@ mute() {
   notify_test_succeeded() { : ; }
   notify_test_failed   () { : ; }
   notify_message       () { : ; }
-  notify_stack         () { : ; }
+  notify_stack         () { $CAT >/dev/null ; }
   notify_stdout        () { : ; }
   notify_stderr        () { : ; }
   notify_suites_succeded () { : ; }
