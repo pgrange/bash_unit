@@ -330,14 +330,14 @@ unmute_err() {
 }
 
 mute() {
-  notify_suite_starting() { echo -n ; }
-  notify_test_starting () { echo -n ; }
-  notify_test_succeeded() { echo -n ; }
-  notify_test_failed   () { echo -n ; }
-  notify_message       () { echo -n ; }
-  notify_stack         () { echo -n ; }
-  notify_stdout        () { echo -n ; }
-  notify_stderr        () { echo -n ; }
-  notify_suites_succeded () { echo -n ; }
-  notify_suites_failed   () { echo -n ; }
+  notify_suite_starting() { : ; }
+  notify_test_starting () { : ; }
+  notify_test_succeeded() { : ; }
+  notify_test_failed   () { : ; }
+  notify_message       () { : ; }
+  notify_stack         () { : ; }
+  notify_stdout        () { : ; }
+  notify_stderr        () { : ; }
+  notify_suites_succeded () { : ; }
+  notify_suites_failed   () { : ; }
 }
