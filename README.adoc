@@ -84,7 +84,7 @@ ifndef::backend-manpage[]
 
 This will install *bash_unit* in your current working directory:
 
-    bash <(curl -s https://raw.githubusercontent.com/pgrange/bash_unit/master/install.sh)
+    curl -s https://raw.githubusercontent.com/pgrange/bash_unit/master/install.sh | bash
 
 You can also download it from the https://github.com/pgrange/bash_unit/releases[release page].
 
