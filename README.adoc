@@ -38,6 +38,10 @@ The following functions are available in your tests (see below for detailed docu
 * `skip_if <condition> <pattern>`
 * `fake <command> [replacement code]`
 
+ifndef::backend-manpage[]
+image::img/demo.gif[demo]
+endif::[]
+
 _(by the way, the documentation you are reading is itself tested with bash-unit)_
 
 *bash_unit* is free software you may contribute to. See link:CONTRIBUTING.md[CONTRIBUTING.md].
