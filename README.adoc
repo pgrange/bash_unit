@@ -131,11 +131,11 @@ test:
 
 See this bash_unit https://gitlab.com/pgrange/bash_unit_getting_started[getting started gitlab project] for a working example.
 
-=== https://pre-commit.com[pre-commit] hook
+=== pre-commit hook
 
 You can run `+bash_unit+` as a https://pre-commit.com[pre-commit] hook.
 
-Add the following to your https://pre-commit.com[pre-commit] configuration. By default it will run scripts that are identified as shell scripts that match the path `+^tests/(.*/)?test_.*\.sh$+`.
+Add the following to your pre-commit configuration. By default it will run scripts that are identified as shell scripts that match the path `+^tests/(.*/)?test_.*\.sh$+`.
 
 [.pre-commit-config,yaml]
 ----
