@@ -185,6 +185,16 @@ assert_no_diff() {
     "$message expected '${actual}' to be identical to '${expected}' but was different"
 }
 
+skip_if() {
+  local condition="$1"
+  local pattern="$2"
+  if eval "$condition" >/dev/null 2>&1
+  then
+    skip_pattern="${skip_pattern}${skip_pattern_separator}${pattern}"
+    skip_pattern_separator="|"
+  fi
+}
+
 fake() {
   local command=$1
   shift
@@ -465,16 +475,6 @@ quiet_mode() {
   notify_stack() {
     :
   }
-}
-
-skip_if() {
-  local condition="$1"
-  local pattern="$2"
-  if eval "$condition" >/dev/null 2>&1
-  then
-    skip_pattern="${skip_pattern}${skip_pattern_separator}${pattern}"
-    skip_pattern_separator="|"
-  fi
 }
 
 output_format=text

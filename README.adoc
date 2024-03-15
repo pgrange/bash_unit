@@ -23,11 +23,25 @@ with source file and line number indications to locate the problem.
 You might want to take a look at link:getting_started[how to get started]
 before continuing reading this documentation.
 
+The following functions are available in your tests (see below for detailed documentation):
+
+* `fail [message]`
+* `assert <assertion> [message]`
+* `assert_fail <assertion> [message]`
+* `assert_status_code <expected_status_code> <assertion> [message]`
+* `assert_equals <expected> <actual> [message]`
+* `assert_not_equals <unexpected> <actual> [message]`
+* `assert_matches <expected-regex> <actual> [message]`
+* `assert_not_matches <unexpected-regex> <actual> [message]`
+* `assert_within_delta <expected num> <actual num> <max delta> [message]`
+* `assert_no_diff <expected> <actual> [message]`
+* `skip_if <condition> <pattern>`
+* `fake <command> [replacement code]`
+
 _(by the way, the documentation you are reading is itself tested with bash-unit)_
 
 *bash_unit* is free software you may contribute to. See link:CONTRIBUTING.md[CONTRIBUTING.md].
 
-:toc:
 
 == Options
 
@@ -115,7 +129,7 @@ jobs:
 
 See this bash_unit https://github.com/pgrange/bash_unit_getting_started[getting started gitlab project] for a working example.
 
-== GitLab CI
+=== GitLab CI
 
 Here is an example of how you could integrate *bash_unit* with https://docs.gitlab.com/ee/ci/[GitLab CI]:
 
@@ -138,43 +152,14 @@ You can run `+bash_unit+` as a https://pre-commit.com[pre-commit] hook.
 Add the following to your pre-commit configuration. By default it will run scripts that are identified as shell scripts that match the path `+^tests/(.*/)?test_.*\.sh$+`.
 
 [.pre-commit-config,yaml]
-----
+```
 repos:
   - repo: https://github.com/pgrange/bash_unit
     rev: v2.2.0
     hooks:
       - id: bash-unit
         always-run: true
-----
-
-== Running `+bash_unit+` in the test script
-
-In some cases you want to run `+bash_unit+` from inside the test script.
-
-One example is this project’s `+test_doc.sh+` test script.
-
-One method to define a `+BASH_UNIT+` variable is shown below:
-
-[test_script,bash]
-----
-# Function to recursively search upwards for file
-_find_file() {
-    local dir="$1"
-    local file="$2"
-    while [ "${dir}" != "/" ]; do
-        if [ -f "${dir}/${file}" ]; then
-            echo "${dir}/${file}"
-            return 0
-        fi
-        dir=$(dirname "${dir}")
-    done
-    return 1
-}
-
-B_U=$(_find_file "$(dirname "$(realpath "$0")")" bash_unit)
-# shellcheck disable=2089
-BASH_UNIT="eval FORCE_COLOR=false \"$B_U\""
-----
+```
 
 == How to run tests
 
