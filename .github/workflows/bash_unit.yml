@@ -1,6 +1,9 @@
-name: bash_unit CI
+name: bash_unit tests
 on:
   push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   ubuntu:
