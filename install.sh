@@ -4,7 +4,8 @@ set -euo pipefail
 
 echo "downloading bash_unit"
 current_working_dir=$PWD
-tarball_url=$(curl -s https://api.github.com/repos/pgrange/bash_unit/releases | grep tarball_url | head -n 1 | cut -d '"' -f 4)
+tarball_urls=$(curl -s https://api.github.com/repos/pgrange/bash_unit/releases | grep tarball_url)
+tarball_url=$(echo "$tarball_urls" | head -n 1 | cut -d '"' -f 4)
 tmp_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'tmpdir')
 cd "$tmp_dir" || exit
 curl -Ls "$tarball_url" | tar -xz -f -
