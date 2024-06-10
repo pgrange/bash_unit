@@ -19,12 +19,14 @@ repos:
       - id: check-case-conflict
 
   # Beautify shell scripts
-  - repo: https://github.com/lovesegfault/beautysh.git
-    rev: v6.2.1
-    hooks:
-      - id: beautysh
-        exclude: (?x)^(tests/test_(.*))$
-        args: [-i, "2"]
+  # Deactivated because of an issue with deprecated python dependencies.
+  # See https://github.com/lovesegfault/beautysh/issues/248 and its fix to re-activate
+  # - repo: https://github.com/lovesegfault/beautysh.git
+  #   rev: v6.2.1
+  #   hooks:
+  #     - id: beautysh
+  #       exclude: (?x)^(tests/test_(.*))$
+  #       args: [-i, "2"]
 
   # Run local script
   - repo: local
