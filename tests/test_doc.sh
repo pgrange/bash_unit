@@ -3,6 +3,7 @@
 TEST_PATTERN='```test'
 OUTPUT_PATTERN='```output'
 LANG=C.UTF-8
+unset LC_ALL LANGUAGE
 
 export STICK_TO_CWD=true
 BASH_UNIT="eval FORCE_COLOR=false ./bash_unit"
