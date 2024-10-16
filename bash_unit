@@ -33,7 +33,7 @@ CAT="$(type -P cat)"
 SED="$(type -P sed)"
 GREP="$(type -P grep)"
 RM="$(type -P rm)"
-SHUF="$(type -P shuf)"
+SHUF="$(type -P sort) -R"
 TEMPFILE=$$.tmp
 
 fail() {
