@@ -33,7 +33,8 @@ CAT="$(type -P cat)"
 SED="$(type -P sed)"
 GREP="$(type -P grep)"
 RM="$(type -P rm)"
-SHUF="$(type -P sort) -R"
+SHUF="$(type -P shuf)"
+TEMPFILE=$$.tmp
 
 fail() {
   local message=${1:-}
@@ -185,16 +186,6 @@ assert_no_diff() {
     "$message expected '${actual}' to be identical to '${expected}' but was different"
 }
 
-skip_if() {
-  local condition="$1"
-  local pattern="$2"
-  if eval "$condition" >/dev/null 2>&1
-  then
-    skip_pattern="${skip_pattern}${skip_pattern_separator}${pattern}"
-    skip_pattern_separator="|"
-  fi
-}
-
 fake() {
   local command=$1
   shift
@@ -263,6 +254,7 @@ run_tests() {
     local tests_to_run="$(set | "$GREP"  -E '^test.* \(\)' | "$GREP" -E "$test_pattern" |  "$SED" -e 's: .*::' | maybe_shuffle)"
   fi
 
+  test_count=$(cat $TEMPFILE)
   for test in $tests_to_run
   do
     (
@@ -273,7 +265,10 @@ run_tests() {
       exit $status
     )
     failure=$(( $? || failure))
+    ((test_count++))
   done
+  echo $test_count > $TEMPFILE
+
   return $failure
 }
 
@@ -455,10 +450,12 @@ tap_format() {
     "$SED" 's:^:# :' | color "$YELLOW"
   }
   notify_suites_succeded() {
-    :
+    local message="$1"
+    echo "1..$message"
   }
   notify_suites_failed() {
-    :
+    local message="$1"
+    echo "1..$message"
   }
 }
 
@@ -475,6 +472,16 @@ quiet_mode() {
   notify_stack() {
     :
   }
+}
+
+skip_if() {
+  local condition="$1"
+  local pattern="$2"
+  if eval "$condition" >/dev/null 2>&1
+  then
+    skip_pattern="${skip_pattern}${skip_pattern_separator}${pattern}"
+    skip_pattern_separator="|"
+  fi
 }
 
 output_format=text
@@ -540,6 +547,7 @@ fi
 
 #run tests received as parameters
 failure=0
+echo 0 > $TEMPFILE
 for test_file in "$@"
 do
   notify_suite_starting "$test_file"
@@ -562,12 +570,13 @@ do
   )
   failure=$(( $? || failure))
 done
-
+  
 if ((failure))
 then
-  notify_suites_failed
+  notify_suites_failed $(cat $TEMPFILE)
 else
-  notify_suites_succeded
+  notify_suites_succeded $(cat $TEMPFILE)
 fi
 
+unlink $TEMPFILE
 exit $failure
