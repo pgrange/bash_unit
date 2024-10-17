@@ -214,7 +214,7 @@ test_fake_echo_stdin_when_no_params() {
  7818 pts/9    00:00:00 ps
 EOF
 
-  assert_equals 2 "$(ps | "$GREP" pts | wc -l)"
+  assert_equals 2 "$(ps | "$GREP" pts | wc -l| tr -d ' ')"
 }
 
 test_should_pretty_format_even_when_LANG_is_unset() {
