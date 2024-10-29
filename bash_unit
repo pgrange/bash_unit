@@ -34,7 +34,7 @@ SED="$(type -P sed)"
 GREP="$(type -P grep)"
 RM="$(type -P rm)"
 SHUF="$(type -P sort) -R"
-TEMPFILE=$$.tmp
+TEMPFILE="$(pwd)/$$.tmp"
 
 fail() {
   local message=${1:-}
@@ -267,7 +267,7 @@ run_tests() {
     failure=$(( $? || failure))
     ((test_count++))
   done
-  echo $test_count > $TEMPFILE
+  echo "${test_count}" > $TEMPFILE
 
   return $failure
 }
@@ -573,9 +573,9 @@ done
   
 if ((failure))
 then
-  notify_suites_failed $(cat $TEMPFILE)
+  notify_suites_failed $(cat "${TEMPFILE}")
 else
-  notify_suites_succeded $(cat $TEMPFILE)
+  notify_suites_succeded $(cat "${TEMPFILE}")
 fi
 
 unlink $TEMPFILE
