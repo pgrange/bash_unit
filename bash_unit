@@ -254,7 +254,7 @@ run_tests() {
     local tests_to_run="$(set | "$GREP"  -E '^test.* \(\)' | "$GREP" -E "$test_pattern" |  "$SED" -e 's: .*::' | maybe_shuffle)"
   fi
 
-  test_count=$(cat $TEMPFILE)
+  test_count=$(cat "${TEMPFILE}")
   for test in $tests_to_run
   do
     (
@@ -267,7 +267,7 @@ run_tests() {
     failure=$(( $? || failure))
     ((test_count++))
   done
-  echo "${test_count}" > $TEMPFILE
+  echo "${test_count}" > "${TEMPFILE}"
 
   return $failure
 }
@@ -547,7 +547,7 @@ fi
 
 #run tests received as parameters
 failure=0
-echo 0 > $TEMPFILE
+echo 0 > "${TEMPFILE}"
 for test_file in "$@"
 do
   notify_suite_starting "$test_file"
