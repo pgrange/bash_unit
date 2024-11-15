@@ -314,6 +314,7 @@ ok - test_fake_exports_faked_in_subshells
 ok - test_fake_transmits_params_to_fake_code
 ok - test_fake_transmits_params_to_fake_code_as_array
 ok - test_should_pretty_format_even_when_LANG_is_unset
+1..30
 ```
 
 == How to write tests
