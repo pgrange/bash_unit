@@ -34,7 +34,13 @@ SED="$(type -P sed)"
 GREP="$(type -P grep)"
 RM="$(type -P rm)"
 SHUF="$(type -P sort) -R"
-TEMPFILE="$(pwd)/$$.tmp"
+
+# Store the number of tests run in a file so that the value is available
+# from the parent process. This will become an issue if we start considering
+# parallel test execution in the future.
+TEST_COUNT_FILE="$(mktemp)"
+# shellcheck disable=2064 # Use single quotes, expands now, not when signaled.
+trap "$RM  -f \"$TEST_COUNT_FILE\"" EXIT
 
 fail() {
   local message=${1:-}
@@ -246,9 +252,9 @@ run_tests() {
     local tests_to_run="$(set | "$GREP"  -E '^test.* \(\)' | "$GREP" -E "$test_pattern" |  "$SED" -e 's: .*::' | maybe_shuffle)"
   fi
 
-  local test_count=$(cat "${TEMPFILE}")
+  local test_count=$(cat "${TEST_COUNT_FILE}")
   test_count=$((test_count + $(count "$pending_tests") + $(count "$tests_to_run") + $(count "$skipped_tests")))
-  echo "${test_count}" > "${TEMPFILE}"
+  echo "${test_count}" > "${TEST_COUNT_FILE}"
 
   for pending_test in $pending_tests
   do
@@ -561,7 +567,7 @@ fi
 
 #run tests received as parameters
 failure=0
-echo 0 > "${TEMPFILE}"
+echo 0 > "${TEST_COUNT_FILE}"
 for test_file in "$@"
 do
   notify_suite_starting "$test_file"
@@ -587,10 +593,9 @@ done
 
 if ((failure))
 then
-  notify_suites_failed "$(cat "${TEMPFILE}")"
+  notify_suites_failed "$(cat "${TEST_COUNT_FILE}")"
 else
-  notify_suites_succeded "$(cat "${TEMPFILE}")"
+  notify_suites_succeded "$(cat "${TEST_COUNT_FILE}")"
 fi
 
-unlink "$TEMPFILE"
 exit $failure
