@@ -236,25 +236,32 @@ maybe_shuffle() {
 run_tests() {
   local failure=0
 
-  for pending_test in $(set | "$GREP"  -E '^(pending|todo).* \(\)' | "$GREP" -E "$test_pattern" | "$SED" -e 's: .*::')
+  local pending_tests=$(set | "$GREP"  -E '^(pending|todo).* \(\)' | "$GREP" -E "$test_pattern" | "$SED" -e 's: .*::')
+  if [[ -n "$skip_pattern" ]]
+  then
+    local skipped_tests=$(set | "$GREP"  -E '^test.* \(\)' | "$GREP" -E "$test_pattern" | "$GREP" -E "$skip_pattern" | "$SED" -e 's: .*::')
+    local tests_to_run="$(set | "$GREP"  -E '^test.* \(\)' | "$GREP" -E "$test_pattern" | "$GREP" -v -E "$skip_pattern" | "$SED" -e 's: .*::' | maybe_shuffle)"
+  else
+    local skipped_tests=""
+    local tests_to_run="$(set | "$GREP"  -E '^test.* \(\)' | "$GREP" -E "$test_pattern" |  "$SED" -e 's: .*::' | maybe_shuffle)"
+  fi
+
+  local test_count=$(cat "${TEMPFILE}")
+  test_count=$((test_count + $(count "$pending_tests") + $(count "$tests_to_run") + $(count "$skipped_tests")))
+  echo "${test_count}" > "${TEMPFILE}"
+
+  for pending_test in $pending_tests
   do
     notify_test_starting "$pending_test"
     notify_test_pending "$pending_test"
   done
 
-  if [[ -n "$skip_pattern" ]]
-  then
-    for skipped_test in $(set | "$GREP"  -E '^test.* \(\)' | "$GREP" -E "$test_pattern" | "$GREP" -E "$skip_pattern" | "$SED" -e 's: .*::')
-    do
-      notify_test_starting "$skipped_test"
-      notify_test_skipped "$skipped_test"
-    done
-    local tests_to_run="$(set | "$GREP"  -E '^test.* \(\)' | "$GREP" -E "$test_pattern" | "$GREP" -v -E "$skip_pattern" | "$SED" -e 's: .*::' | maybe_shuffle)"
-  else
-    local tests_to_run="$(set | "$GREP"  -E '^test.* \(\)' | "$GREP" -E "$test_pattern" |  "$SED" -e 's: .*::' | maybe_shuffle)"
-  fi
+  for skipped_test in $skipped_tests
+  do
+    notify_test_starting "$skipped_test"
+    notify_test_skipped "$skipped_test"
+  done
 
-  test_count=$(cat "${TEMPFILE}")
   for test in $tests_to_run
   do
     (
@@ -265,9 +272,7 @@ run_tests() {
       exit $status
     )
     failure=$(( $? || failure))
-    ((test_count++))
   done
-  echo "${test_count}" > "${TEMPFILE}"
 
   return $failure
 }
@@ -484,6 +489,15 @@ skip_if() {
   fi
 }
 
+count() {
+  local tests="$1"
+  if [[ -z "$tests" ]]; then
+    echo 0
+  else
+    echo "$tests" | wc -l
+  fi
+}
+
 output_format=text
 verbosity=normal
 test_pattern=""
@@ -570,13 +584,13 @@ do
   )
   failure=$(( $? || failure))
 done
-  
+
 if ((failure))
 then
-  notify_suites_failed $(cat "${TEMPFILE}")
+  notify_suites_failed "$(cat "${TEMPFILE}")"
 else
-  notify_suites_succeded $(cat "${TEMPFILE}")
+  notify_suites_succeded "$(cat "${TEMPFILE}")"
 fi
 
-unlink $TEMPFILE
+unlink "$TEMPFILE"
 exit $failure

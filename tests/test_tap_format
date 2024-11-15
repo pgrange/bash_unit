@@ -42,13 +42,29 @@ test_tap_format_for_one_pending_test() {
 "\
 # Running tests in code
 ok - pending_not_yet_implemented # todo test to be written
-1..0" \
+1..1" \
 "$(bash_unit_out_for_code <<EOF
   pending_not_yet_implemented() {
     assert false
   }
 EOF
 )"
+}
+
+test_tap_format_with_skipped_tests() {
+  bash_unit_output="$(bash_unit_out_for_code <<EOF
+    test_one() { echo -n ; }
+    test_two() { fail ; }
+    skip_if true two
+EOF
+  )"
+
+  assert_equals "\
+# Running tests in code
+ok - test_two # skip test not run
+ok - test_one
+1..2" \
+  "$bash_unit_output"
 }
 
 test_tap_format_for_failing_test_with_stdout_stderr_outputs() {
