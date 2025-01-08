@@ -131,7 +131,7 @@ jobs:
         FORCE_COLOR=true ./bash_unit tests/test_*
 ```
 
-See this bash_unit https://github.com/pgrange/bash_unit_getting_started[getting started gitlab project] for a working example.
+See this bash_unit https://github.com/pgrange/bash_unit_getting_started[getting started github project] for a working example.
 
 === GitLab CI
 
