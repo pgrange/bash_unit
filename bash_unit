@@ -19,7 +19,7 @@
 # shellcheck disable=2317  # Ignore unreachable - most function are not called.
 # shellcheck disable=2155  # Ignore Declare and assign separately
 
-VERSION=v2.3.1
+VERSION=v2.3.2
 
 ESCAPE=$(printf "\033")
 NOCOLOR="${ESCAPE}[0m"

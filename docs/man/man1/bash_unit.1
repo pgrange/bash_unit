@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: bash_unit
 .\"    Author: [see the "AUTHOR(S)" section]
-.\" Generator: Asciidoctor 2.0.21
-.\"      Date: 2024-03-05
+.\" Generator: Asciidoctor 2.0.23
+.\"      Date: 2025-01-08
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "BASH_UNIT" "1" "2024-03-05" "\ \&" "\ \&"
+.TH "BASH_UNIT" "1" "2025-01-08" "\ \&" "\ \&"
 .ie \n(.g .ds Aq \(aq
 .el       .ds Aq '
 .ss \n[.ss] 0
@@ -41,6 +41,140 @@ with source file and line number indications to locate the problem.
 You might want to take a look at \c
 .URL "getting_started" "how to get started"
 before continuing reading this documentation.
+.sp
+The following functions are available in your tests (see below for detailed documentation):
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRfail [message]\fP
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRassert <assertion> [message]\fP
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRassert_fail <assertion> [message]\fP
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRassert_status_code <expected_status_code> <assertion> [message]\fP
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRassert_equals <expected> <actual> [message]\fP
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRassert_not_equals <unexpected> <actual> [message]\fP
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRassert_matches <expected\-regex> <actual> [message]\fP
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRassert_not_matches <unexpected\-regex> <actual> [message]\fP
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRassert_within_delta <expected num> <actual num> <max delta> [message]\fP
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRassert_no_diff <expected> <actual> [message]\fP
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRskip_if <condition> <pattern>\fP
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRfake <command> [replacement code]\fP
+.RE
 .sp
 \fI(by the way, the documentation you are reading is itself tested with bash\-unit)\fP
 .sp
@@ -84,15 +218,66 @@ quiet mode.
 Will only output the status of each test with no further
 information even in case of failure.
 .RE
-.SS "\c .URL "https://pre\-commit.com" "pre\-commit" hook"
+.SS "GitHub Actions"
+.sp
+Here is an example of how you could integrate \fBbash_unit\fP with \c
+.URL "https://docs.github.com/fr/actions" "GitHub Actions" ":"
+.sp
+.if n .RS 4
+.nf
+.fam C
+name: bash_unit tests
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ubuntu:
+    runs\-on: ubuntu\-latest
+    steps:
+    \- uses: actions/checkout@v4
+    \- name: Unit testing with bash_unit
+      run: |
+        curl \-s https://raw.githubusercontent.com/pgrange/bash_unit/master/install.sh | bash
+        FORCE_COLOR=true ./bash_unit tests/test_*
+.fam
+.fi
+.if n .RE
+.sp
+See this bash_unit \c
+.URL "https://github.com/pgrange/bash_unit_getting_started" "getting started gitlab project" ""
+for a working example.
+.SS "GitLab CI"
+.sp
+Here is an example of how you could integrate \fBbash_unit\fP with \c
+.URL "https://docs.gitlab.com/ee/ci/" "GitLab CI" ":"
+.sp
+.if n .RS 4
+.nf
+.fam C
+test:
+  image: debian
+  script:
+    \- apt\-get update
+    \- apt\-get install \-\-no\-install\-recommends \-y curl ca\-certificates
+    \- curl \-s https://raw.githubusercontent.com/pgrange/bash_unit/master/install.sh | bash
+    \- FORCE_COLOR=true ./bash_unit tests/test_*
+.fam
+.fi
+.if n .RE
+.sp
+See this bash_unit \c
+.URL "https://gitlab.com/pgrange/bash_unit_getting_started" "getting started gitlab project" ""
+for a working example.
+.SS "pre\-commit hook"
 .sp
 You can run \f(CRbash_unit\fP as a \c
 .URL "https://pre\-commit.com" "pre\-commit" ""
 hook.
 .sp
-Add the following to your \c
-.URL "https://pre\-commit.com" "pre\-commit" ""
-configuration. By default it will run scripts that are identified as shell scripts that match the path \f(CR^tests/(.*/)?test_.*\(rs.sh$\fP.
+Add the following to your pre\-commit configuration. By default it will run scripts that are identified as shell scripts that match the path \f(CR^tests/(.*/)?test_.*\(rs.sh$\fP.
 .sp
 .if n .RS 4
 .nf
@@ -103,37 +288,6 @@ repos:
     hooks:
       \- id: bash\-unit
         always\-run: true
-.fam
-.fi
-.if n .RE
-.SH "RUNNING \f(CRbash_unit\fP IN THE TEST SCRIPT"
-.sp
-In some cases you want to run \f(CRbash_unit\fP from inside the test script.
-.sp
-One example is this project’s \f(CRtest_doc.sh\fP test script.
-.sp
-One method to define a \f(CRBASH_UNIT\fP variable is shown below:
-.sp
-.if n .RS 4
-.nf
-.fam C
-# Function to recursively search upwards for file
-_find_file() {
-    local dir="$1"
-    local file="$2"
-    while [ "${dir}" != "/" ]; do
-        if [ \-f "${dir}/${file}" ]; then
-            echo "${dir}/${file}"
-            return 0
-        fi
-        dir=$(dirname "${dir}")
-    done
-    return 1
-}
-
-B_U=$(_find_file "$(dirname "$(realpath "$0")")" bash_unit)
-# shellcheck disable=2089
-BASH_UNIT="eval FORCE_COLOR=false \(rs"$B_U\(rs""
 .fam
 .fi
 .if n .RE
@@ -318,6 +472,7 @@ ok \- test_fake_exports_faked_in_subshells
 ok \- test_fake_transmits_params_to_fake_code
 ok \- test_fake_transmits_params_to_fake_code_as_array
 ok \- test_should_pretty_format_even_when_LANG_is_unset
+1..30
 .fam
 .fi
 .if n .RE
@@ -906,10 +1061,10 @@ code() {
 
 test_code_succeeds_if_apache_runs() {
   fake ps <<EOF
-  PID TTY          TIME CMD
-13525 pts/7    00:00:01 bash
-24162 pts/7    00:00:00 ps
- 8387 ?            0:00 /usr/sbin/apache2 \-k start
+  PID TTY\&          TIME CMD
+13525 pts/7\&    00:00:01 bash
+24162 pts/7\&    00:00:00 ps
+ 8387 ?\&            0:00 /usr/sbin/apache2 \-k start
 EOF
 
   assert code "code should succeed when apache is running"
@@ -917,9 +1072,9 @@ EOF
 
 test_code_fails_if_apache_does_not_run() {
   fake ps <<EOF
-  PID TTY          TIME CMD
-13525 pts/7    00:00:01 bash
-24162 pts/7    00:00:00 ps
+  PID TTY\&          TIME CMD
+13525 pts/7\&    00:00:01 bash
+24162 pts/7\&    00:00:00 ps
 EOF
 
   assert_fails code "code should fail when apache is not running"
@@ -1058,10 +1213,10 @@ code() {
 test_code_gives_ps_appropriate_parameters() {
   _ps() {
     cat <<EOF
-  PID TTY          TIME CMD
-13525 pts/7    00:00:01 bash
-24162 pts/7    00:00:00 ps
- 8387 ?            0:00 /usr/sbin/apache2 \-k start
+  PID TTY\&          TIME CMD
+13525 pts/7\&    00:00:01 bash
+24162 pts/7\&    00:00:00 ps
+ 8387 ?\&            0:00 /usr/sbin/apache2 \-k start
 EOF
     assert_equals ax "${FAKE_PARAMS[@]}"
   }
