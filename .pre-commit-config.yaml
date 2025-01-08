@@ -68,6 +68,7 @@ repos:
           - --ignore-words-list=master,als
           - --builtin=clear,rare,informal,usage,code,names,en-GB_to_en-US
         exclude_types: [image]
+        exclude: ^docs/man/.*$
 
   # Check some shell scripts
   - repo: https://github.com/shellcheck-py/shellcheck-py
